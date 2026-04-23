@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary]
+stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary, step-03-success]
 inputDocuments:
   - '_bmad-output/brainstorming/brainstorming-session-2026-04-20.md'
 workflowType: 'prd'
@@ -35,3 +35,70 @@ Two prediction types create layered depth: **Match Moments** (will it happen? e.
 - **Domain:** Gaming / Entertainment (sports prediction)
 - **Complexity:** Medium — no real-money transactions or gambling regulation, but requires external API integration (odds + match events), scoring engine, and social features
 - **Project Context:** Greenfield — new product, no existing codebase
+
+## Success Criteria
+
+### User Success
+
+- **First gameweek completion:** New user understands the rules, fills their 20-token squad during the Match Builder window, and submits predictions without confusion or abandonment
+- **The reveal moment:** User checks end-of-gameweek results — sees points calculated per moment, exact minute hits highlighted, streak multipliers applied — and feels the payoff of their strategic choices
+- **Social hook:** User creates or joins a mini-league within their first 2 gameweeks; shares and discusses picks during the Match Builder window
+- **Return behaviour:** User comes back for gameweek 2 — simple rules, strategic agency, and social competition make it worth repeating
+- **Skill progression:** By gameweek 3-4, users make deliberate strategic choices (balancing Match Moments vs Precision Picks, sizing windows, picking captain, choosing players) — they feel clever, not lucky
+
+### Business Success
+
+- **3-month target:** Consistent weekly active users returning gameweek-over-gameweek; mini-leagues with 3+ members showing organic social growth
+- **Season target:** Organic word-of-mouth growth via mini-leagues and Match Story shareables; retained user base that returns next season
+- **Growth signal:** Users inviting friends to mini-leagues unprompted — the product is its own acquisition channel
+- **Monetization (deferred):** Revenue model explicitly out of MVP scope — ads, sponsorship, or premium features explored once engagement is validated
+
+### Technical Success
+
+- **Scoring accuracy:** 100% correct calculation — odds-derived values, timing bonuses, player bonuses, streak multipliers, captain doubling all reliable
+- **API reliability:** Odds fetched and locked when Match Builder window opens; match event data (including player-level events) processed accurately post-match
+- **Performance:** Predictions submit without friction; results reveal loads quickly with full gameweek data
+- **Data integrity:** No lost predictions, no scoring errors, no leaderboard inconsistencies
+
+### Measurable Outcomes
+
+| Metric | Target | Timeframe |
+|---|---|---|
+| Gameweek completion rate | >80% of registered users submit predictions | Per gameweek |
+| Retention (GW1 → GW2) | >60% of first-time users return | First month |
+| Mini-league creation | >50% of users in at least one league | First month |
+| Scoring accuracy | 100% — zero calculation errors | Ongoing |
+| Onboarding completion | >90% complete tutorial and submit first squad | Ongoing |
+
+## Product Scope
+
+### MVP - Minimum Viable Product
+
+- **Two prediction types:**
+  - **Match Moments** — match-level outcomes (BTTS, Over/Under, Match Result, Clean Sheet, etc.). Binary, flat odds-derived points.
+  - **Precision Picks** — team event + player + minute + window (±5/10/15 min). Three scoring layers: event points + timing bonus + player bonus. Player bonus is additive (wrong player still earns event + timing points).
+- 20 tokens per gameweek, free spread across all PL matches, any mix of types
+- **Match Builder window:** opens ~3-4 days before first kickoff; odds fetched from API and locked as points at window open; deadline = first kickoff
+- Captain Moment (2x on one chosen moment, any type)
+- Cross-match streaks on Precision Picks (ordered by real-world event time)
+- End-of-gameweek score reveal
+- Weekly + season cumulative leaderboards
+- Mini-leagues (create/join with friends)
+- Quick Pick auto-fill
+- Guided onboarding tutorial
+- Moment catalog UI with filterable cards
+- No caps on event type usage — scoring self-balances via odds
+
+### Growth Features (Post-MVP)
+
+- Match Story shareable cards (post-gameweek visual for social sharing)
+- Live scoring during matches
+- Mini-league enhancements / Moment Duels
+- Push notification system (gameweek reminders, reveal alerts)
+- Sponsored weekly prizes from partner brands
+- Event type caps if user behaviour warrants it
+
+### Vision (Future)
+
+- Brand/betting partnership — e.g., betting company sponsor translates top picks into a real accumulator; sponsored prizes
+- Broadcaster white-label partnership (B2B)
