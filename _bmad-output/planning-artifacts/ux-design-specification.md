@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-core-experience, step-04-emotional-response]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-core-experience, step-04-emotional-response, step-05-inspiration, step-06-design-system, step-07-defining-experience]
 inputDocuments:
   - '_bmad-output/planning-artifacts/prd.md'
   - '_bmad-output/brainstorming/brainstorming-session-2026-04-20.md'
@@ -153,5 +153,262 @@ The Match Builder must feel like assembling a betting accumulator: each card add
 4. **Social fuel, not social pressure** — Mini-leagues and shareability create banter and competition, not obligation. Missing a gameweek means missing out, not letting people down.
 
 5. **The clock decides** — The deadline lock is an emotional design feature, not just a rule. The moment your picks freeze creates committed anticipation that lasts until the reveal. The app doesn't ask "are you sure?" — the whistle blows and you're in.
+
+## UX Pattern Analysis & Inspiration
+
+### Inspiring Products Analysis
+
+#### Betting Apps (Bet365, Sky Bet, Paddy Power)
+
+**What they nail:**
+- **Bet slip as accumulator builder** — adding selections is one tap. The slip grows at the bottom of the screen. Running total always visible. This is the closest UX analogue to our Match Builder.
+- **Information density done right** — odds, markets, and match info packed into scannable rows without feeling cluttered. Users process a lot of data quickly because the hierarchy is consistent and learnable.
+- **Speed of interaction** — experienced users can build a 10-leg accumulator in under a minute. No unnecessary confirmation steps, no animations blocking the flow.
+- **No gamification** — betting apps don't need bouncing icons or achievement badges. The content IS the engagement. The odds, the potential payout, the risk. Clean and functional.
+
+**What to adopt:** Bet slip interaction model for the Match Builder. Persistent squad summary (like a bet slip) anchored at the bottom or accessible via a tab. One-tap adds for Match Moments. Running token count always visible.
+
+**What to avoid:** Betting apps are visually dense and assume expertise. Our onboarding needs to be gentler without patronising.
+
+#### Fantasy Premier League (FPL)
+
+**What they nail:**
+- **Ritual engagement** — weekly deadline, squad management, transfer decisions. Users come back on a rhythm because the gameweek cycle creates natural return triggers.
+- **Leaderboard obsession** — mini-leagues are FPL's stickiest feature. The product is social competition disguised as fantasy football.
+- **Depth without forced complexity** — a casual user can pick 11 players and play. A hardcore user can track xG, fixture difficulty, and differential ownership. Same app, different depths.
+- **Clean, functional UI** — not beautiful, not ugly. It works. Information is where you expect it. No surprises.
+- **Data-rich player cards** — tap a player and see form, fixtures, ownership %, points history. Data guides selection without being forced on the user.
+
+**What to adopt:** Mini-league structure, gameweek rhythm, depth-on-demand philosophy. The "same app, different depths" approach maps exactly to Jake vs Priya. Data-informed selection via drill-down cards.
+
+**What to avoid:** FPL's onboarding is poor — new users face a squad builder with no guidance, budget constraints, and 600+ players. Our onboarding must be dramatically better. Also, FPL's results screen is flat — just numbers in a table. Our reveal must be more engaging.
+
+#### Sports News Apps (BBC Sport, Sky Sports, The Athletic)
+
+**What they nail:**
+- **Card-based content layout** — scannable, tappable, consistent. Match cards with scores, team badges, and key stats. This is the visual language football fans already read fluently.
+- **Match-centric navigation** — fixtures grouped by date/competition. Tap a match to drill into detail. This maps to our "browse by fixture" catalog navigation.
+- **Live/post-match distinction** — clear visual states for upcoming, live, and completed matches. We need similar states for open, locked, and scored gameweeks.
+
+**What to adopt:** Card-based layout for moment catalog and fixtures. Match-centric navigation for the build phase. Familiar football visual language (team badges, fixture formatting).
+
+### Transferable UX Patterns
+
+| Pattern | Source | Application in Our App |
+|---|---|---|
+| **Bet slip accumulator builder** | Betting apps | Match Builder — persistent squad summary, one-tap adds, running token count |
+| **Card-based match layout** | Sports apps | Moment catalog — filterable cards grouped by fixture, scannable point values |
+| **Mini-league leaderboards** | FPL | Direct adoption — create/join via link, weekly + cumulative tables |
+| **Depth-on-demand information** | FPL | Surface: point value on card. Drill: full scoring breakdown on tap |
+| **Data-informed selection cards** | FPL player cards | Moment card drill-down shows contextual historical data to guide picks (see below) |
+| **Consistent row/card hierarchy** | Betting apps | Moment cards follow a fixed layout: icon, event name, team, points. Always the same structure, always scannable. |
+| **Deadline countdown** | FPL + betting | Visible countdown to first kickoff. No surprises. |
+
+### Contextual Data Hints (Moment Card Drill-Down)
+
+**Concept:** When a user taps into a moment card detail view, show a one-line historical stat summary and a minimal visual (sparkline or dot history) to inform their decision. The surface stays clean; the depth is one tap away.
+
+**Examples:**
+- **BTTS — Chelsea vs Arsenal:** "BTTS hit in 7 of Chelsea's last 10 home matches" + dot chart (✓✓✗✓✓✓✗✓✓✓)
+- **Over 2.5 Goals — Liverpool vs Spurs:** "3+ goals in 5 of last 6 meetings" + sparkline of goals per meeting
+- **Yellow Cards — Arsenal match:** "Arsenal avg 2.1 yellows/match this season" + mini bar chart of recent matches
+- **First Goal — Man City:** "City scored first in 8 of last 10 home games" + dot history
+
+**Data Source:** The app already ingests match event data (goals, cards, corners, subs with player + minute) every gameweek for scoring. By storing this data, the app builds its own historical dataset over time — zero additional API cost. No external historical data API required. By gameweek 5-6, trends become meaningful. By mid-season, the data is genuinely useful for informed picks.
+
+**Visualisation:** Simple ✓/✗ dot sequence only. Did BTTS happen in Chelsea's last tracked matches? ✓✗✓✓✗. No percentages, no averages, no sparklines, no bar charts. Just dots — instant to read, no interpretation needed.
+
+**Design Rules:**
+- **Surface level (moment card):** Event name, team, point value only. Clean and scannable.
+- **One tap deep (card detail):** ✓/✗ dot history + full points breakdown. This is where Priya lives.
+- **Accumulate as you go:** Only show data the app has collected itself through its own scoring pipeline. No external history.
+- **Progressive richness:** Early in the season, data is sparse — show what's available without forcing it. As the season progresses, the cards get richer. The app improves with age.
+- **No data, no filler:** If insufficient history exists for a stat, don't show a placeholder. Just show the points breakdown.
+
+### Anti-Patterns to Avoid
+
+| Anti-Pattern | Why It Fails | Our Response |
+|---|---|---|
+| **Gamification for its own sake** | Spinning wheels, achievement badges, confetti — feels cheap and juvenile for this audience. Betting app users will reject it immediately. | Restrained celebration. Gold flash for jackpots, not fireworks. No badges, no streaks-of-using-the-app. |
+| **Gesture novelty without utility** | A pinch-to-scale window gesture sounds cool but may confuse users or feel fiddly on small screens. If it's not instantly intuitive, it's a liability. | Window selection (±5/10/15) uses a simple segmented control or toggle — the most boring, most reliable pattern. Only upgrade to gesture if user testing proves it's faster. |
+| **Complex onboarding flows** | FPL drops you into a 600-player squad builder with no guidance. Tutorial carousels that users skip. | Show-by-doing: first build includes inline hints. Quick Pick as immediate safety net. Five rules on one screen. |
+| **Hiding key information** | Some prediction apps hide scoring formulas, making results feel arbitrary. | Points visible on every card before selection. Scoring breakdown one tap away on results. |
+| **Over-animated transitions** | Slow transitions between screens kill the speed of squad building. Betting app users expect instant response. | Transitions are fast or instant. Animation budget is spent on the reveal screen, not navigation. |
+
+### Design Inspiration Strategy
+
+**What to Adopt (proven patterns, use directly):**
+- Bet slip interaction model for Match Builder
+- Card-based fixture layout from sports apps
+- Mini-league structure from FPL
+- Consistent information hierarchy from betting apps
+- Deadline countdown visibility
+- Data-informed selection via drill-down cards (FPL player card model)
+
+**What to Adapt (modify for our context):**
+- Betting app density → slightly more spacious for accessibility, since our audience includes non-bettors
+- FPL's depth-on-demand → apply to scoring breakdowns, streak visualisation, and historical data hints
+- Sports app match cards → extend to moment cards with point values and prediction type indicators
+- FPL player data cards → moment card drill-down with self-accumulated historical stats
+
+**What to Avoid (conflicts with our principles):**
+- Gamification tropes (badges, streaks-of-app-usage, spinning wheels)
+- Gesture novelty without proven utility (pinch, swipe, shake)
+- Heavy animation outside the reveal screen
+- Assuming user expertise — betting apps can; we can't for first-time users
+- Showing data that isn't there — no filler stats, no fake confidence
+
+**Design Philosophy Summary:**
+This app serves an audience fluent in betting apps and FPL. They expect **clean, fast, functional** interfaces. Every UX decision must be deliberate and justified by usability, not novelty. The interaction model borrows from betting (accumulator building) and FPL (gameweek rhythm, mini-leagues, data-informed selection) while solving the unique challenge of making two prediction types feel simple. The only screen that gets animation budget is the score reveal — because that's the emotional centrepiece. Everything else is fast, clean, and invisible. Historical match data — accumulated organically through the scoring pipeline — enriches moment cards over time, rewarding returning users with progressively better decision-support data.
+
+## Design System Foundation
+
+### Design System Choice
+
+**Themeable system with full visual control** — React Native + Expo + NativeWind (Tailwind CSS for React Native).
+
+This is a utility-first approach: no pre-built component library dictating visual style. Components are built from primitives and styled with Tailwind classes, giving complete control over the premium sports-app aesthetic while maintaining development speed.
+
+### Rationale for Selection
+
+| Factor | Decision Driver |
+|---|---|
+| **Solo developer** | Expo eliminates build toolchain complexity. One command to build, test, deploy. No Xcode/Android Studio required for most workflows. |
+| **Cross-platform** | Single TypeScript codebase for iOS + Android. No double work. |
+| **Visual control** | NativeWind (Tailwind) provides utility-first styling with zero opinions on visual design. No fighting against Material Design defaults to achieve the "sharp, not cute" aesthetic. |
+| **Speed** | Tailwind classes are fast to write and iterate on. Expo's hot reload means instant visual feedback. |
+| **Ecosystem** | TypeScript/React skills are broadly transferable. Largest community and package ecosystem in cross-platform mobile. |
+| **Push notifications** | Expo Notifications handles APNs (iOS) + FCM (Android) with a unified API. |
+| **Deep links** | Expo Router supports Universal Links and App Links natively — critical for mini-league invite flow. |
+| **App store deployment** | Expo EAS (Expo Application Services) handles builds and submissions for both stores. |
+
+### Implementation Approach
+
+**Core Stack:**
+- **Expo SDK** (latest) — managed workflow for build, deploy, and native API access
+- **Expo Router** — file-based navigation, deep link support
+- **NativeWind v4** — Tailwind CSS compiled to React Native StyleSheet
+- **TypeScript** — type safety across the codebase
+
+**UI Primitives (build, don't buy):**
+- Cards, buttons, toggles, segmented controls built from React Native `View`, `Text`, `Pressable`
+- Styled with Tailwind classes via NativeWind
+- No third-party component library — full visual ownership
+
+**Why no component library:**
+The "sharp, not cute" principle requires visual control that pre-built libraries (Paper, Gluestack) fight against. Building from primitives is more work upfront but means every component looks exactly right from day one. For a small app (limited screen count), this is manageable.
+
+### Customization Strategy
+
+**Design Tokens (defined in Tailwind config):**
+- Colour palette, typography scale, spacing, border radius, shadows — all defined once in `tailwind.config.js`
+- Dark mode support via Tailwind's `dark:` prefix (if pursued)
+- Team badge colours can be mapped as dynamic tokens
+
+**Component Patterns:**
+- **Moment Card** — the core reusable component. Fixed layout: icon + event name + team + points. Variant for Match Moment vs Precision Pick (visual distinction via colour/icon).
+- **Squad Summary** — persistent bottom sheet or tab showing current 20-token squad with running count.
+- **Segmented Control** — for window selection (±5/10/15 min). Simple, reliable, boring-on-purpose.
+- **Leaderboard Row** — consistent row with rank, name, score, position change indicator.
+- **Reveal Card** — animated variant of the moment card for the score reveal screen. This is the one component that gets animation budget.
+
+**Animation Strategy:**
+- Navigation transitions: instant or minimal (default Expo Router behaviour)
+- Score reveal: sequential card animation using `react-native-reanimated` — the only screen that justifies animation investment
+- Micro-interactions: subtle haptic feedback on card add/remove (Expo Haptics)
+- Everything else: static, fast, no decoration
+
+## Defining Experience
+
+### The One-Line Experience
+
+**"Pick your moments. Build your squad. Find out if you were right."**
+
+The defining interaction is the Match Builder — assembling a 20-token squad of predictions across all Premier League fixtures in a gameweek. Users describe it as: "It's like building a bet, but you're predicting when things happen, and it's free."
+
+### User Mental Model
+
+Users arrive with a **betting accumulator mental model**: browse markets, add selections to a slip, review, commit. This is the foundation we build on.
+
+| Mental Model Element | User Expectation | Our Mapping |
+|---|---|---|
+| Markets | Odds for different outcomes | Moment catalog with point values |
+| Bet slip | Selections stack up | Squad summary (20 tokens) |
+| Odds | Higher odds = higher payout | Higher points = harder prediction |
+| Accumulator | Multiple selections, all must hit | Squad of 20, each scored independently |
+| Cash out / edit | Change before kickoff | Edit freely until deadline lock |
+
+**Where the mental model breaks:** The Precision Pick flow (event → player → minute → window) has no direct analogue in betting. Users understand "Saka to score anytime" from betting, but "Saka to score at minute 23 ±5 min" is new. The minute + window mechanic must be introduced gently — the segmented control (±5/10/15) and minute picker need to feel as obvious as tapping an odds button.
+
+### Success Criteria
+
+| Criteria | Measurement |
+|---|---|
+| **Speed** | A returning user can build a full 20-token squad in under 5 minutes |
+| **First-time completion** | A new user completes their first squad (with Quick Pick help) without abandoning |
+| **Type distinction** | Users correctly understand the difference between Match Moments and Precision Picks by their second gameweek — without re-reading rules |
+| **No dead ends** | At no point during the build can the user get stuck or confused about what to do next |
+| **Token awareness** | User always knows how many tokens they've used (e.g., "14/20") and how many remain |
+| **Confidence** | User feels informed, not overwhelmed, when browsing the moment catalog |
+
+### Experience Mechanics — Match Builder Flow
+
+**1. Initiation — "GW{n} is open"**
+- Push notification: "Gameweek {n} is open! Build your squad before {deadline}."
+- User opens app → lands on Match Builder screen (or home screen with prominent "Build Squad" CTA)
+- Gameweek header shows: deadline countdown, token count (0/20)
+
+**2. Browse — Fixture-first navigation**
+- Fixtures listed as cards, sorted by kickoff time
+- Each fixture card shows: team badges, kickoff time, number of available moments
+- Tap a fixture → expands or navigates to that fixture's moment catalog
+- Moment catalog is filterable: by type (Match Moment / Precision Pick), by event category (goals, cards, corners)
+
+**3. Select — Two distinct flows**
+
+**Match Moment (one tap):**
+- User sees card: icon + event name + team(s) + point value
+- Tap → added to squad immediately. Card shows "Added ✓"
+- Token count updates: "1/20"
+
+**Precision Pick (guided micro-flow):**
+- User taps a Precision Pick event (e.g., "⚽ Arsenal score")
+- Step 1: Select player (scrollable list or search) — or "Any player" for team-level
+- Step 2: Pick minute (number input or scroll wheel, 1–90+)
+- Step 3: Set window (segmented control: ±5 | ±10 | ±15)
+- Points breakdown shown in real-time as user makes choices (base + timing bonus range)
+- Confirm → added to squad. Token count updates.
+
+**4. Review — Squad summary**
+- Accessible at any time (persistent bottom bar or tab)
+- Shows all selected moments, ordered by match kickoff then minute
+- Each card shows: event, team, type indicator, points, window (if Precision Pick)
+- Captain indicator (crown icon) on designated moment
+- Streak sequence preview for Precision Picks (ordered by predicted event time)
+- "Quick Pick" button fills remaining empty slots
+- Long-press any card → set as Captain or remove
+
+**5. Feedback — Continuous confidence signals**
+- Token counter always visible: "{n}/20 — {remaining} to go"
+- Added moments show "✓" in the catalog so users don't double-pick
+- Point total preview: "Potential points: {sum}" (max possible if everything hits)
+- Deadline countdown always visible
+
+**6. Completion — Deadline lock**
+- No submit button. User builds their squad. The deadline locks it.
+- If user has <20 tokens at deadline: empty slots are forfeited (0 points, not auto-filled)
+- If user has 0 tokens at deadline: they don't participate in that gameweek
+- Lock notification: "Your squad is locked. Good luck." (subtle, not dramatic)
+- Post-lock: squad is read-only. User can view but not edit.
+
+### Novel UX Patterns
+
+| Pattern | Status | Approach |
+|---|---|---|
+| **Precision Pick micro-flow** | Novel — no competitor has this | Guided 3-step flow (player → minute → window). Each step is one interaction. Real-time points preview keeps user informed. Feels like building a bet, not filling a form. |
+| **Two prediction types in one squad** | Novel — unique combination | Visually distinct cards (colour/icon). Moment catalog clearly separates types. Both add to the same 20-token squad with the same tap-to-add model. |
+| **Confidence window as segmented control** | Adapted — simple pattern applied to novel mechanic | ±5 / ±10 / ±15 as a 3-option segmented toggle. Points update live when user switches. No gesture novelty — just a clean, reliable control. |
+| **Squad auto-ordering by minute** | Novel — narrative timeline | Predictions sort by minute within match, matches sort by kickoff. Squad reads as a chronological gameweek narrative. |
+| **Streak sequence preview** | Novel — no competitor shows this | Squad summary view can toggle to show Precision Picks in real-world event time order, revealing the potential streak sequence. |
 
 <!-- UX design content will be appended sequentially through collaborative workflow steps -->
