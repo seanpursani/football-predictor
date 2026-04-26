@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UX Design — Locked Direction · football-prediction-app</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #080808;
+      --surface:   #141414;
+      --elevated:  #1C1C1C;
+      --text:      #FFFFFF;
+      --secondary: #7A7A7A;
+      --muted:     #404040;
+      --border:    #1E1E1E;
+      --lime:      #B4FF32;
+      --gold:      #FFD700;
+      --orange:    #FF6B35;
+      --violet:    #A78BFA;
+      --r-sm: 4px;
+      --r-md: 6px;
+      --r-lg: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      padding: 48px 40px 80px;
+    }
+
+    /* ── Page header ── */
+    .page-head { margin-bottom: 10px; }
+    .page-title { font-size: 20px; font-weight: 700; }
+    .page-locked {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(180,255,50,0.1); border: 1px solid rgba(180,255,50,0.25);
+      color: var(--lime); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 4px; margin-top: 8px;
+    }
+    .page-sub { font-size: 12px; color: var(--secondary); margin-top: 8px; line-height: 1.65; max-width: 680px; }
+
+    /* ── Flow map ── */
+    .flow-map {
+      margin: 32px 0 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      max-width: 900px;
+    }
+    .flow-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--secondary); margin-bottom: 14px; }
+    .flow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .flow-node {
+      background: var(--elevated); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 6px 12px;
+      font-size: 11px; font-weight: 600;
+    }
+    .flow-node.primary { border-color: rgba(180,255,50,0.4); color: var(--lime); }
+    .flow-node.secondary { border-color: rgba(167,139,250,0.4); color: var(--violet); }
+    .flow-arrow { font-size: 12px; color: var(--muted); }
+    .flow-label { font-size: 10px; color: var(--secondary); font-style: italic; }
+
+    /* ── Screen grid ── */
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 260px);
+      gap: 40px 28px;
+    }
+
+    /* ── Screen card ── */
+    .screen-card { display: flex; flex-direction: column; gap: 12px; }
+    .screen-num {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--lime);
+    }
+    .screen-name { font-size: 13px; font-weight: 700; margin-top: 1px; }
+    .screen-desc { font-size: 10px; color: var(--secondary); line-height: 1.6; }
+
+    /* ── Phone shell ── */
+    .phone {
+      width: 260px; height: 544px;
+      background: var(--bg);
+      border-radius: 28px;
+      border: 1.5px solid #252525;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.55);
+    }
+    .notch { height: 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .notch-pill { width: 64px; height: 18px; background: #161616; border-radius: 9px; }
+    .sbar { height: 17px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    .sbar-time { font-size: 10px; font-weight: 600; }
+    .sbar-icons { font-size: 9px; color: var(--secondary); }
+
+    /* ── App chrome ── */
+    .app-header {
+      padding: 10px 16px 6px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .app-title { font-size: 17px; font-weight: 700; }
+    .events-counter { font-size: 11px; font-weight: 700; color: var(--lime); }
+
+    /* Deadline strip — contextual */
+    .deadline-strip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 16px; flex-shrink: 0;
+      background: rgba(255,107,53,0.1);
+      border-top: 1px solid rgba(255,107,53,0.2);
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+    }
+    .dl-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+    .dl-text { font-size: 10px; color: var(--orange); font-weight: 600; }
+
+    /* Back nav */
+    .back-nav {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 16px 5px; flex-shrink: 0;
+    }
+    .back-arrow { font-size: 14px; color: var(--lime); }
+    .back-title { font-size: 14px; font-weight: 700; }
+
+    /* ── Fixture card ── */
+    .fixture-card {
+      margin: 0 14px 7px;
+      background: var(--surface);
+      border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .fixture-card.active { border-color: rgba(180,255,50,0.3); }
+    .fc-row {
+      display: flex; align-items: center;
+      padding: 11px 13px; gap: 8px;
+    }
+    .fc-teams { font-size: 12px; font-weight: 600; flex: 1; }
+    .fc-time { font-size: 9px; color: var(--secondary); }
+    .fc-badge {
+      font-size: 9px; font-weight: 700;
+      background: rgba(180,255,50,0.12);
+      color: var(--lime);
+      padding: 2px 7px; border-radius: 3px;
+    }
+    .fc-chevron { font-size: 10px; color: var(--muted); }
+
+    /* Expanded fixture body */
+    .fc-body { border-top: 1px solid var(--border); }
+    .fc-pick-row {
+      display: flex; align-items: center;
+      padding: 9px 13px; gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fc-pick-row:last-child { border-bottom: none; }
+    .pick-icon { font-size: 13px; flex-shrink: 0; width: 20px; text-align: center; }
+    .pick-name { font-size: 11px; font-weight: 500; flex: 1; }
+    .pick-crown { font-size: 11px; color: var(--gold); margin-right: 2px; }
+    .type-badge {
+      font-size: 8px; font-weight: 700;
+      padding: 2px 5px; border-radius: 3px; flex-shrink: 0;
+    }
+    .type-match  { background: rgba(180,255,50,0.12); color: var(--lime); }
+    .type-moment { background: rgba(167,139,250,0.15); color: var(--violet); }
+    .pick-pts { font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .pick-pts.match  { color: var(--lime); }
+    .pick-pts.moment { color: var(--violet); }
+    .add-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 13px;
+      border-top: 1px solid var(--border);
+    }
+    .add-plus {
+      width: 20px; height: 20px; border-radius: 3px;
+      border: 1px dashed #2A2A2A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--muted); flex-shrink: 0;
+    }
+    .add-label { font-size: 10px; color: var(--muted); }
+
+    /* Captain popup overlay */
+    .popup-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex; align-items: flex-end;
+      padding-bottom: 80px;
+    }
+    .popup {
+      width: 100%;
+      background: var(--elevated);
+      border-top: 1px solid #2A2A2A;
+      border-radius: 10px 10px 0 0;
+      padding: 16px 16px 8px;
+    }
+    .popup-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 0;
+      font-size: 13px; font-weight: 600;
+    }
+    .popup-item + .popup-item { border-top: 1px solid var(--border); }
+    .popup-icon { font-size: 16px; width: 22px; text-align: center; }
+    .popup-item.danger { color: #FF4444; }
+
+    /* ── Catalog ── */
+    .catalog-filter {
+      display: flex; gap: 5px; padding: 7px 14px;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .chip {
+      font-size: 9px; font-weight: 600;
+      padding: 4px 9px; border-radius: var(--r-sm);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .chip-on  { background: var(--lime); color: #000; }
+    .chip-off { background: var(--elevated); color: var(--secondary); }
+
+    .catalog-header {
+      display: flex; padding: 4px 14px 5px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .col-event { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; flex: 1; }
+    .col-type  { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; width: 54px; }
+    .col-pts   { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; width: 40px; text-align: right; }
+
+    .catalog-row {
+      display: flex; align-items: center;
+      padding: 0 14px; height: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .catalog-row.added { background: rgba(180,255,50,0.03); }
+    .cat-event { font-size: 12px; font-weight: 500; flex: 1; display: flex; align-items: center; gap: 7px; }
+    .cat-icon  { font-size: 14px; width: 20px; text-align: center; }
+    .cat-arrow { font-size: 10px; color: var(--muted); margin-left: 2px; }
+    .cat-check { font-size: 11px; color: var(--lime); margin-left: 2px; }
+    .cat-type  { width: 54px; }
+    .cat-pts   { width: 40px; text-align: right; font-size: 12px; font-weight: 700; }
+    .cat-pts.match  { color: var(--lime); }
+    .cat-pts.moment { color: var(--violet); }
+
+    /* ── Micro-flow ── */
+    .flow-step-title { padding: 4px 16px 10px; flex-shrink: 0; }
+    .fst-label { font-size: 10px; color: var(--secondary); margin-bottom: 3px; }
+    .fst-heading { font-size: 16px; font-weight: 700; }
+    .fst-bonus {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 5px;
+      font-size: 10px; font-weight: 600;
+      color: var(--violet);
+      background: rgba(167,139,250,0.12);
+      border: 1px solid rgba(167,139,250,0.2);
+      padding: 3px 8px; border-radius: 3px;
+    }
+
+    .player-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .player-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--elevated);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .player-info { flex: 1; }
+    .player-name { font-size: 12px; font-weight: 600; }
+    .player-meta { font-size: 9px; color: var(--secondary); margin-top: 1px; }
+    .player-pts  { font-size: 11px; font-weight: 700; color: var(--violet); }
+    .player-row.selected { background: rgba(167,139,250,0.06); border-left: 2px solid var(--violet); }
+
+    /* Minute / zone step */
+    .zone-section { padding: 10px 16px; flex-shrink: 0; }
+    .zone-label { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .minute-display {
+      background: var(--surface);
+      border-radius: var(--r-md);
+      border: 1px solid rgba(167,139,250,0.3);
+      padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .minute-num { font-size: 28px; font-weight: 700; color: var(--violet); }
+    .minute-label { font-size: 10px; color: var(--secondary); }
+    .minute-arrows { display: flex; flex-direction: column; gap: 4px; }
+    .min-arrow { font-size: 16px; color: var(--secondary); line-height: 1; cursor: pointer; }
+    .zone-chips { display: flex; gap: 6px; }
+    .zone-chip {
+      flex: 1; text-align: center;
+      padding: 8px 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: 11px; font-weight: 600;
+    }
+    .zone-chip.on {
+      background: rgba(167,139,250,0.12);
+      border-color: rgba(167,139,250,0.4);
+      color: var(--violet);
+    }
+    .zone-pts { font-size: 9px; color: var(--secondary); margin-top: 3px; }
+
+    .scroll-area { flex: 1; overflow: hidden; }
+
+    /* ── Moments view ── */
+    .mv-tabs {
+      display: flex; gap: 0;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .mv-tab {
+      padding: 10px 16px 9px;
+      font-size: 12px; font-weight: 600;
+      color: var(--secondary);
+      position: relative;
+    }
+    .mv-tab.active { color: var(--text); }
+    .mv-tab.active::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 16px; right: 16px;
+      height: 2px; background: var(--lime); border-radius: 1px;
+    }
+    .mv-share {
+      margin-left: auto;
+      padding: 7px 0 7px 12px;
+      font-size: 10px; font-weight: 700;
+      color: var(--lime);
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    .mv-match-hdr {
+      padding: 8px 16px 3px;
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .mv-pick-row {
+      display: flex; align-items: center;
+      padding: 10px 16px; gap: 9px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mv-icon {
+      width: 28px; height: 28px; border-radius: var(--r-sm);
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .mv-info { flex: 1; }
+    .mv-name { font-size: 11px; font-weight: 600; }
+    .mv-meta { font-size: 9px; color: var(--secondary); margin-top: 1px; }
+    .mv-pts  { font-size: 12px; font-weight: 700; color: var(--lime); }
+    .mv-pts.moment { color: var(--violet); }
+
+    /* ── Bottom action bars ── */
+    .save-bar {
+      height: 58px; flex-shrink: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 14px;
+    }
+    .save-btn {
+      flex: 1; background: var(--lime); color: #000;
+      font-size: 13px; font-weight: 700;
+      padding: 11px; border-radius: var(--r-md);
+      text-align: center;
+    }
+    .edit-btn {
+      flex: 1; background: var(--surface); color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 13px; font-weight: 600;
+      padding: 11px; border-radius: var(--r-md);
+      text-align: center;
+    }
+
+    /* ── Share card ── */
+    .share-section {
+      margin-top: 56px;
+      max-width: 860px;
+    }
+    .share-section-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .share-section-sub { font-size: 12px; color: var(--secondary); margin-bottom: 24px; line-height: 1.6; }
+
+    .share-card {
+      width: 340px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .share-card-header {
+      background: #0F0F0F;
+      padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .share-logo { font-size: 13px; font-weight: 800; color: var(--lime); letter-spacing: -0.02em; }
+    .share-gw { font-size: 10px; color: var(--secondary); }
+    .share-pick-row {
+      display: flex; align-items: center;
+      padding: 9px 16px; gap: 9px;
+      border-bottom: 1px solid var(--border);
+    }
+    .share-pick-row:last-child { border-bottom: none; }
+    .sp-icon { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; }
+    .sp-name { font-size: 11px; font-weight: 500; flex: 1; }
+    .sp-type { font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 3px; flex-shrink: 0; }
+    .sp-pts  { font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .share-footer {
+      background: #0F0F0F;
+      padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+    .sf-label { font-size: 9px; color: var(--secondary); }
+    .sf-pts { font-size: 12px; font-weight: 700; color: var(--lime); }
+
+    /* Divider between rows */
+    .grid-divider {
+      grid-column: 1 / -1;
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+    .row-label {
+      grid-column: 1 / -1;
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted);
+      padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="page-title">UX Design — Locked Direction</div>
+  <div class="page-locked">✓ Confirmed</div>
+  <div class="page-sub">
+    Complete user journey across all key screens. Two named views: <strong style="color:var(--lime)">Build View</strong> (pre-save, fixture-driven)
+    and <strong style="color:var(--violet)">Moments View</strong> (post-save, chronological). Prediction types: <strong style="color:var(--lime)">Match</strong> (one tap) and <strong style="color:var(--violet)">Moment</strong> (player → minute → zone micro-flow).
+  </div>
+</div>
+
+<!-- Flow map -->
+<div class="flow-map">
+  <div class="flow-title">Screen Flow</div>
+  <div class="flow-row">
+    <div class="flow-node primary">Build View</div>
+    <div class="flow-arrow">→ tap fixture →</div>
+    <div class="flow-node primary">Moment Catalog</div>
+    <div class="flow-arrow">→ tap Match type →</div>
+    <div class="flow-label">back to Build View</div>
+  </div>
+  <div class="flow-row">
+    <div style="width:90px;"></div>
+    <div class="flow-arrow">→ tap Moment type →</div>
+    <div class="flow-node secondary">Select Player</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node secondary">Minute + Zone</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-label">back to Build View</div>
+  </div>
+  <div class="flow-row" style="margin-top:6px;">
+    <div class="flow-node primary">Build View</div>
+    <div class="flow-arrow">→ tap expanded pick →</div>
+    <div class="flow-label">captain / remove popup</div>
+  </div>
+  <div class="flow-row">
+    <div class="flow-node primary">Build View</div>
+    <div class="flow-arrow">→ Save →</div>
+    <div class="flow-node secondary">Moments View</div>
+    <div class="flow-arrow">→ Edit →</div>
+    <div class="flow-node primary">Build View</div>
+  </div>
+</div>
+
+<!-- Screen grid -->
+<div class="screen-grid">
+
+  <!-- Row label -->
+  <div class="row-label">Build View — pre-save</div>
+
+  <!-- ─── Screen 1: Build View collapsed ─── -->
+  <div class="screen-card">
+    <div>
+      <div class="screen-num">Screen 1</div>
+      <div class="screen-name">Build View — default state</div>
+      <div class="screen-desc">Fixture cards collapsed. Cards with picks show a pick count badge. Empty fixtures show only team names and kickoff. Deadline strip appears contextually — shown here as under 1 hour (orange). Events counter always visible in header.</div>
+    </div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">9:41</span><span class="sbar-icons">●●● ▌</span></div>
+      <div class="app-header">
+        <span class="app-title">Build</span>
+        <span class="events-counter">14/20</span>
+      </div>
+      <!-- Deadline shown when < 1h -->
+      <div class="deadline-strip">
+        <div class="dl-dot"></div>
+        <span class="dl-text">Locks in 47 minutes</span>
+      </div>
+      <div class="scroll-area">
+        <!-- Fixture with picks -->
+        <div style="height:10px;"></div>
+        <div class="fixture-card">
+          <div class="fc-row">
+            <div class="fc-teams">Arsenal vs Chelsea</div>
+            <div class="fc-time">Sat 12:30</div>
+            <div class="fc-badge">3 picks</div>
+            <div class="fc-chevron">▾</div>
+          </div>
+        </div>
+        <div class="fixture-card">
+          <div class="fc-row">
+            <div class="fc-teams">Liverpool vs Man City</div>
+            <div class="fc-time">Sat 17:30</div>
+            <div class="fc-badge">5 picks</div>
+            <div class="fc-chevron">▾</div>
+          </div>
+        </div>
+        <div class="fixture-card">
+          <div class="fc-row">
+            <div class="fc-teams">Man Utd vs Spurs</div>
+            <div class="fc-time">Sun 14:00</div>
+            <div class="fc-chevron" style="margin-left:auto;">▸</div>
+          </div>
+        </div>
+        <div class="fixture-card">
+          <div class="fc-row">
+            <div class="fc-teams">Newcastle vs Wolves</div>
+            <div class="fc-time">Sun 14:00</div>
+            <div class="fc-badge">2 picks</div>
+            <div class="fc-chevron">▾</div>
+          </div>
+        </div>
+        <div class="fixture-card">
+          <div class="fc-row">
+            <div class="fc-teams">Everton vs Brighton</div>
+            <div class="fc-time">Sun 16:30</div>
+            <div class="fc-chevron" style="margin-left:auto;">▸</div>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <div class="save-btn">Save</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Screen 2: Build View expanded + captain popup ─── -->
+  <div class="screen-card">
+    <div>
+      <div class="screen-num">Screen 2</div>
+      <div class="screen-name">Build View — expanded card + captain</div>
+      <div class="screen-desc">Tapping a fixture card with picks expands it accordion-style. Each pick is a row. A "tap to add" placeholder sits below. Tapping any pick row opens a small popup: Select as Captain or Remove. Captain pick gets a crown icon.</div>
+    </div>
+    <div class="phone" style="position:relative;">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">9:41</span><span class="sbar-icons">●●● ▌</span></div>
+      <div class="app-header">
+        <span class="app-title">Build</span>
+        <span class="events-counter">14/20</span>
+      </div>
+      <div class="scroll-area">
+        <div style="height:8px;"></div>
+        <!-- Collapsed -->
+        <div class="fixture-card">
+          <div class="fc-row">
+            <div class="fc-teams">Arsenal vs Chelsea</div>
+            <div class="fc-time" style="margin-right:6px;">Sat 12:30</div>
+            <div class="fc-badge">3 picks</div>
+            <div class="fc-chevron">▾</div>
+          </div>
+        </div>
+        <!-- Expanded -->
+        <div class="fixture-card active">
+          <div class="fc-row">
+            <div class="fc-teams">Liverpool vs Man City</div>
+            <div class="fc-time" style="margin-right:6px;">Sat 17:30</div>
+            <div class="fc-badge">5 picks</div>
+            <div class="fc-chevron">▴</div>
+          </div>
+          <div class="fc-body">
+            <div class="fc-pick-row">
+              <div class="pick-icon">⚽</div>
+              <div class="pick-name"><span class="pick-crown">👑</span>Liverpool First Goal</div>
+              <div class="type-badge type-match">Match</div>
+              <div class="pick-pts match">180</div>
+            </div>
+            <div class="fc-pick-row" style="opacity:0.4;">
+              <div class="pick-icon">🎯</div>
+              <div class="pick-name">Salah Goal · 31 ±10</div>
+              <div class="type-badge type-moment">Moment</div>
+              <div class="pick-pts moment">420+</div>
+            </div>
+            <div class="fc-pick-row" style="opacity:0.4;">
+              <div class="pick-icon">📐</div>
+              <div class="pick-name">Over 2.5 Goals</div>
+              <div class="type-badge type-match">Match</div>
+              <div class="pick-pts match">195</div>
+            </div>
+            <div class="add-row">
+              <div class="add-plus">+</div>
+              <div class="add-label">Tap to add a pick</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Captain popup overlay -->
+      <div class="popup-overlay">
+        <div class="popup">
+          <div style="font-size:10px; color:var(--secondary); margin-bottom:4px; text-align:center;">Liverpool First Goal</div>
+          <div class="popup-item">
+            <span class="popup-icon">👑</span>
+            Select as Captain
+          </div>
+          <div class="popup-item danger">
+            <span class="popup-icon">✕</span>
+            Remove pick
+          </div>
+        </div>
+      </div>
+      <div class="save-bar" style="position:relative; z-index:2;">
+        <div class="save-btn">Save</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Screen 3: Moment Catalog ─── -->
+  <div class="screen-card">
+    <div>
+      <div class="screen-num">Screen 3</div>
+      <div class="screen-name">Moment Catalog — per fixture</div>
+      <div class="screen-desc">New screen per fixture. Table rows: Event | Type | Points. Match type rows tap directly back to Build View. Moment type rows show → to indicate a flow opens. Filter chips at top. Added picks show a ✓. Points show "420+" for Moment types to signal variable ceiling.</div>
+    </div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">9:41</span><span class="sbar-icons">●●● ▌</span></div>
+      <div class="back-nav">
+        <span class="back-arrow">‹</span>
+        <span class="back-title">Arsenal vs Chelsea</span>
+      </div>
+      <div class="catalog-filter">
+        <div class="chip chip-on">All</div>
+        <div class="chip chip-off" style="color:var(--lime); background:rgba(180,255,50,0.08); border:1px solid rgba(180,255,50,0.2);">Match</div>
+        <div class="chip chip-off" style="color:var(--violet); background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2);">Moment</div>
+      </div>
+      <div class="catalog-header">
+        <div class="col-event">Event</div>
+        <div class="col-type">Type</div>
+        <div class="col-pts">Pts</div>
+      </div>
+      <div class="scroll-area">
+        <div class="catalog-row added">
+          <div class="cat-event">
+            <span class="cat-icon">⚽</span> Goal
+            <span class="cat-check">✓</span>
+          </div>
+          <div class="cat-type"><div class="type-badge type-moment">Moment</div></div>
+          <div class="cat-pts moment">420+</div>
+        </div>
+        <div class="catalog-row">
+          <div class="cat-event">
+            <span class="cat-icon">🟨</span> BTTS
+          </div>
+          <div class="cat-type"><div class="type-badge type-match">Match</div></div>
+          <div class="cat-pts match">350</div>
+        </div>
+        <div class="catalog-row">
+          <div class="cat-event">
+            <span class="cat-icon">📐</span> Over 2.5
+          </div>
+          <div class="cat-type"><div class="type-badge type-match">Match</div></div>
+          <div class="cat-pts match">195</div>
+        </div>
+        <div class="catalog-row">
+          <div class="cat-event">
+            <span class="cat-icon">🚩</span> Corner
+            <span class="cat-arrow">→</span>
+          </div>
+          <div class="cat-type"><div class="type-badge type-moment">Moment</div></div>
+          <div class="cat-pts moment">280+</div>
+        </div>
+        <div class="catalog-row">
+          <div class="cat-event">
+            <span class="cat-icon">🔴</span> Red Card
+            <span class="cat-arrow">→</span>
+          </div>
+          <div class="cat-type"><div class="type-badge type-moment">Moment</div></div>
+          <div class="cat-pts moment">340+</div>
+        </div>
+        <div class="catalog-row">
+          <div class="cat-event">
+            <span class="cat-icon">🎯</span> Assist
+            <span class="cat-arrow">→</span>
+          </div>
+          <div class="cat-type"><div class="type-badge type-moment">Moment</div></div>
+          <div class="cat-pts moment">260+</div>
+        </div>
+        <div class="catalog-row">
+          <div class="cat-event">
+            <span class="cat-icon">🏆</span> First Goal
+          </div>
+          <div class="cat-type"><div class="type-badge type-match">Match</div></div>
+          <div class="cat-pts match">180</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2 label -->
+  <div class="row-label" style="margin-top:8px;">Moment Micro-flow (Moment type picks only)</div>
+
+  <!-- ─── Screen 4: Player selection ─── -->
+  <div class="screen-card">
+    <div>
+      <div class="screen-num">Screen 4</div>
+      <div class="screen-name">Micro-flow · Step 1 — Select player</div>
+      <div class="screen-desc">Slides in from right when user taps a Moment type row. Shows player list with bonus points per player. User can go back to the catalog. Selecting a player slides to Step 2.</div>
+    </div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">9:41</span><span class="sbar-icons">●●● ▌</span></div>
+      <div class="back-nav">
+        <span class="back-arrow">‹</span>
+        <span class="back-title">Goal — Arsenal</span>
+      </div>
+      <div class="flow-step-title">
+        <div class="fst-label">Step 1 of 2</div>
+        <div class="fst-heading">Select scorer</div>
+        <div class="fst-bonus">+ up to 100 pts for player selection</div>
+      </div>
+      <div class="scroll-area">
+        <div class="player-row selected">
+          <div class="player-avatar">🇬🇧</div>
+          <div class="player-info">
+            <div class="player-name">Bukayo Saka</div>
+            <div class="player-meta">Arsenal · RW</div>
+          </div>
+          <div class="player-pts">+100 pts</div>
+        </div>
+        <div class="player-row">
+          <div class="player-avatar">🇧🇷</div>
+          <div class="player-info">
+            <div class="player-name">Gabriel Martinelli</div>
+            <div class="player-meta">Arsenal · LW</div>
+          </div>
+          <div class="player-pts">+80 pts</div>
+        </div>
+        <div class="player-row">
+          <div class="player-avatar">🇳🇴</div>
+          <div class="player-info">
+            <div class="player-name">Leandro Trossard</div>
+            <div class="player-meta">Arsenal · LW</div>
+          </div>
+          <div class="player-pts">+60 pts</div>
+        </div>
+        <div class="player-row">
+          <div class="player-avatar">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+          <div class="player-info">
+            <div class="player-name">Kai Havertz</div>
+            <div class="player-meta">Arsenal · CF</div>
+          </div>
+          <div class="player-pts">+70 pts</div>
+        </div>
+        <div class="player-row">
+          <div class="player-avatar">🇧🇷</div>
+          <div class="player-info">
+            <div class="player-name">Gabriel Jesus</div>
+            <div class="player-meta">Arsenal · CF</div>
+          </div>
+          <div class="player-pts">+65 pts</div>
+        </div>
+        <div class="player-row">
+          <div class="player-avatar">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
+          <div class="player-info">
+            <div class="player-name">Any Arsenal player</div>
+            <div class="player-meta">No player bonus</div>
+          </div>
+          <div class="player-pts" style="color:var(--secondary);">+0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Screen 5: Minute + Zone ─── -->
+  <div class="screen-card">
+    <div>
+      <div class="screen-num">Screen 5</div>
+      <div class="screen-name">Micro-flow · Step 2 — Minute + zone</div>
+      <div class="screen-desc">Slides in from right after player selection. User picks a predicted minute and a confidence zone (±5/10/15). Points bonus shown per zone. Wider zone = fewer bonus points. After confirming, auto-returns to Build View with pick on the fixture card.</div>
+    </div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">9:41</span><span class="sbar-icons">●●● ▌</span></div>
+      <div class="back-nav">
+        <span class="back-arrow">‹</span>
+        <span class="back-title">Saka · Goal · Arsenal</span>
+      </div>
+      <div class="flow-step-title">
+        <div class="fst-label">Step 2 of 2</div>
+        <div class="fst-heading">Minute + zone</div>
+        <div class="fst-bonus">+ up to 50 pts for tighter window</div>
+      </div>
+      <div class="zone-section">
+        <div class="zone-label">Predicted minute</div>
+        <div class="minute-display">
+          <div>
+            <div class="minute-num">23</div>
+            <div class="minute-label">minute</div>
+          </div>
+          <div class="minute-arrows">
+            <div class="min-arrow">▲</div>
+            <div class="min-arrow">▼</div>
+          </div>
+        </div>
+        <div class="zone-label" style="margin-top:12px;">Confidence window</div>
+        <div class="zone-chips">
+          <div class="zone-chip on">
+            ±5 min
+            <div class="zone-pts">+50 pts</div>
+          </div>
+          <div class="zone-chip">
+            ±10 min
+            <div class="zone-pts">+25 pts</div>
+          </div>
+          <div class="zone-chip">
+            ±15 min
+            <div class="zone-pts">+0 pts</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 8px 16px; flex-shrink:0;">
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:10px 14px;">
+          <div style="font-size:9px; color:var(--secondary); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.06em;">Your pick</div>
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:600;">Saka · Goal · 23' ±5</div>
+            <div style="font-size:13px; font-weight:700; color:var(--violet);">570+</div>
+          </div>
+          <div style="font-size:9px; color:var(--secondary); margin-top:3px;">420 base + 100 player + 50 window</div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <div class="save-btn" style="background:var(--violet); color:#fff;">Confirm pick</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Screen 6: Moments View ─── -->
+  <div class="screen-card">
+    <div>
+      <div class="screen-num">Screen 6</div>
+      <div class="screen-name">Moments View — MM tab</div>
+      <div class="screen-desc">Post-save. Match picks grouped by fixture, matches sorted by kickoff. MM and PP tabs at top. Share button generates a designed graphic. Edit button always visible at bottom to return to Build View.</div>
+    </div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">9:41</span><span class="sbar-icons">●●● ▌</span></div>
+      <div class="app-header">
+        <span class="app-title">GW 29</span>
+        <span style="font-size:10px; color:var(--secondary);">Locked · Sat 12:30</span>
+      </div>
+      <div class="mv-tabs">
+        <div class="mv-tab active">Match</div>
+        <div class="mv-tab">Moment</div>
+        <div class="mv-share">Share ↗</div>
+      </div>
+      <div class="scroll-area">
+        <div class="mv-match-hdr">Arsenal vs Chelsea · Sat 12:30</div>
+        <div class="mv-pick-row">
+          <div class="mv-icon">⚽</div>
+          <div class="mv-info">
+            <div class="mv-name"><span style="color:var(--gold); margin-right:4px;">👑</span>Arsenal First Goal</div>
+            <div class="mv-meta">Match · Captain</div>
+          </div>
+          <div class="mv-pts">180</div>
+        </div>
+        <div class="mv-pick-row">
+          <div class="mv-icon">🟨</div>
+          <div class="mv-info">
+            <div class="mv-name">BTTS</div>
+            <div class="mv-meta">Match</div>
+          </div>
+          <div class="mv-pts">350</div>
+        </div>
+        <div class="mv-match-hdr">Liverpool vs Man City · Sat 17:30</div>
+        <div class="mv-pick-row">
+          <div class="mv-icon">📐</div>
+          <div class="mv-info">
+            <div class="mv-name">Over 2.5 Goals</div>
+            <div class="mv-meta">Match</div>
+          </div>
+          <div class="mv-pts">195</div>
+        </div>
+        <div class="mv-pick-row">
+          <div class="mv-icon">🏆</div>
+          <div class="mv-info">
+            <div class="mv-name">Liverpool First Goal</div>
+            <div class="mv-meta">Match</div>
+          </div>
+          <div class="mv-pts">180</div>
+        </div>
+        <div class="mv-match-hdr">Man Utd vs Spurs · Sun 14:00</div>
+        <div class="mv-pick-row">
+          <div class="mv-icon">🟨</div>
+          <div class="mv-info">
+            <div class="mv-name">BTTS</div>
+            <div class="mv-meta">Match</div>
+          </div>
+          <div class="mv-pts">290</div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <div class="edit-btn">Edit picks</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Share card section -->
+<div class="share-section">
+  <div class="share-section-title">Share Graphic — generated on tap of Share ↗</div>
+  <div class="share-section-sub">
+    A designed card — not a raw screenshot. Generated programmatically from the user's picks.
+    Shareable to WhatsApp, iMessage, Instagram. Distinct from the app UI — feels like a proper broadcast graphic.
+  </div>
+  <div style="display:flex; gap:24px; flex-wrap:wrap;">
+    <!-- MM share card -->
+    <div>
+      <div style="font-size:10px; font-weight:700; color:var(--lime); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;">Match picks</div>
+      <div class="share-card">
+        <div class="share-card-header">
+          <div class="share-logo">Predictify</div>
+          <div class="share-gw">GW 29 · Match picks · Sean</div>
+        </div>
+        <div class="share-pick-row">
+          <span class="sp-icon">👑</span>
+          <span class="sp-name">Arsenal First Goal</span>
+          <div class="sp-type type-match" style="font-size:8px; padding:2px 5px; border-radius:3px; background:rgba(180,255,50,0.12); color:var(--lime);">Match</div>
+          <span class="sp-pts" style="color:var(--lime);">180</span>
+        </div>
+        <div class="share-pick-row">
+          <span class="sp-icon">🟨</span>
+          <span class="sp-name">BTTS — Arsenal vs Chelsea</span>
+          <div class="sp-type type-match" style="font-size:8px; padding:2px 5px; border-radius:3px; background:rgba(180,255,50,0.12); color:var(--lime);">Match</div>
+          <span class="sp-pts" style="color:var(--lime);">350</span>
+        </div>
+        <div class="share-pick-row">
+          <span class="sp-icon">📐</span>
+          <span class="sp-name">Over 2.5 — Liverpool vs City</span>
+          <div class="sp-type type-match" style="font-size:8px; padding:2px 5px; border-radius:3px; background:rgba(180,255,50,0.12); color:var(--lime);">Match</div>
+          <span class="sp-pts" style="color:var(--lime);">195</span>
+        </div>
+        <div class="share-footer">
+          <span class="sf-label">8 match picks · max potential</span>
+          <span class="sf-pts">2,340 pts</span>
+        </div>
+      </div>
+    </div>
+    <!-- PP share card -->
+    <div>
+      <div style="font-size:10px; font-weight:700; color:var(--violet); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;">Moment picks</div>
+      <div class="share-card">
+        <div class="share-card-header">
+          <div class="share-logo">Predictify</div>
+          <div class="share-gw">GW 29 · Moment picks · Sean</div>
+        </div>
+        <div class="share-pick-row">
+          <span class="sp-icon">🎯</span>
+          <span class="sp-name">Saka · Goal · 23' ±5</span>
+          <div class="sp-type" style="font-size:8px; padding:2px 5px; border-radius:3px; background:rgba(167,139,250,0.15); color:var(--violet);">Moment</div>
+          <span class="sp-pts" style="color:var(--violet);">570+</span>
+        </div>
+        <div class="share-pick-row">
+          <span class="sp-icon">🎯</span>
+          <span class="sp-name">Salah · Goal · 31' ±10</span>
+          <div class="sp-type" style="font-size:8px; padding:2px 5px; border-radius:3px; background:rgba(167,139,250,0.15); color:var(--violet);">Moment</div>
+          <span class="sp-pts" style="color:var(--violet);">495+</span>
+        </div>
+        <div class="share-pick-row">
+          <span class="sp-icon">🎯</span>
+          <span class="sp-name">De Bruyne · Assist · 44' ±5</span>
+          <div class="sp-type" style="font-size:8px; padding:2px 5px; border-radius:3px; background:rgba(167,139,250,0.15); color:var(--violet);">Moment</div>
+          <span class="sp-pts" style="color:var(--violet);">480+</span>
+        </div>
+        <div class="share-footer">
+          <span class="sf-label">6 moment picks · max potential</span>
+          <span class="sf-pts">3,280+ pts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

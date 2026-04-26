@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-core-experience, step-04-emotional-response, step-05-inspiration, step-06-design-system, step-07-defining-experience]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-core-experience, step-04-emotional-response, step-05-inspiration, step-06-design-system, step-07-defining-experience, step-08-visual-foundation, step-09-design-directions, step-10-user-journeys]
 inputDocuments:
   - '_bmad-output/planning-artifacts/prd.md'
   - '_bmad-output/brainstorming/brainstorming-session-2026-04-20.md'
@@ -410,5 +410,414 @@ Users arrive with a **betting accumulator mental model**: browse markets, add se
 | **Confidence window as segmented control** | Adapted — simple pattern applied to novel mechanic | ±5 / ±10 / ±15 as a 3-option segmented toggle. Points update live when user switches. No gesture novelty — just a clean, reliable control. |
 | **Squad auto-ordering by minute** | Novel — narrative timeline | Predictions sort by minute within match, matches sort by kickoff. Squad reads as a chronological gameweek narrative. |
 | **Streak sequence preview** | Novel — no competitor shows this | Squad summary view can toggle to show Precision Picks in real-world event time order, revealing the potential streak sequence. |
+
+## Visual Design Foundation
+
+### Color System
+
+**Theme: OLED Sharp — Black + Electric Lime**
+
+True black backgrounds are battery-efficient on OLED screens and create maximum contrast for the electric lime accent. Lime is unused territory in the sports prediction and betting space — immediate differentiation from Betfair (amber), Sky Bet (purple/yellow), Bet365 (green/black), and FPL (purple/green).
+
+**Base Palette:**
+
+| Token | Description | Hex |
+|---|---|---|
+| `bg-primary` | OLED black | `#080808` |
+| `bg-surface` | Card layer | `#141414` |
+| `bg-elevated` | Panel / modal layer | `#1C1C1C` |
+| `text-primary` | Pure white | `#FFFFFF` |
+| `text-secondary` | Mid grey | `#7A7A7A` |
+| `text-muted` | Dark grey | `#404040` |
+| `border-subtle` | Card borders | `#1E1E1E` |
+| `border-active` | Selected state | `#B4FF32` |
+
+**Semantic Colours:**
+
+| Token | Purpose | Hex |
+|---|---|---|
+| `accent` | Brand / interactive | `#B4FF32` |
+| `success` | Hit (prediction correct) | `#B4FF32` |
+| `jackpot` | Exact-minute hit | `#FFD700` |
+| `miss` | Prediction missed | `#303030` |
+| `deadline` | Countdown / urgency | `#FF6B35` |
+| `streak` | Streak chain / link | `#A78BFA` |
+| `captain` | Captain indicator | `#FFD700` |
+
+**Semantic Rationale:**
+- `accent` and `success` share lime — lime = good outcome. Users learn this without being told.
+- `jackpot` and `captain` share gold — both are maximum-reward states. Shared colour reinforces their elevated status.
+- `deadline` orange is warm and urgent but visually distinct from lime — reads as "time pressure", not "success."
+- `streak` violet is the only cool-toned semantic colour, making it visually distinctive as the chain builds during the reveal sequence.
+
+**Dark mode only.** No light mode in MVP.
+
+### Typography System
+
+**Primary Typeface: Inter**
+
+Geometric, screen-optimised, excellent tabular number rendering — critical for point values, minute inputs, and token counts. Free and open source via Expo Google Fonts.
+
+**Type Scale:**
+
+| Token | Size | Weight | Line Height | Usage |
+|---|---|---|---|---|
+| `display` | 32px | 700 | 38px | Gameweek headers, reveal score |
+| `heading-1` | 24px | 700 | 30px | Screen titles, section headers |
+| `heading-2` | 18px | 600 | 24px | Card titles, fixture names |
+| `body` | 15px | 400 | 22px | Descriptions, onboarding copy |
+| `label` | 13px | 500 | 18px | Card labels, event names |
+| `caption` | 11px | 400 | 16px | Secondary info, timestamps |
+| `mono-number` | 20px | 700 | 24px | Point values, token counter, minute input |
+
+**Numeric rendering:** All point values, token counts (14/20), minute inputs, and countdown timers use Inter with `fontVariant: ['tabular-nums']` — fixed-width numbers prevent layout shifts as values change.
+
+**Font loading:** `@expo-google-fonts/inter` loaded at app startup. Fallback: system default (SF Pro / Roboto) during load.
+
+### Spacing & Layout Foundation
+
+**Base unit: 8px.** All spacing derived from multiples of 8.
+
+| Token | Value | Usage |
+|---|---|---|
+| `space-1` | 4px | Icon-to-label tight gaps |
+| `space-2` | 8px | Default inner padding |
+| `space-3` | 12px | Small gaps between elements |
+| `space-4` | 16px | Standard card inner padding |
+| `space-5` | 24px | Section spacing |
+| `space-6` | 32px | Screen-level padding |
+| `space-8` | 48px | Hero / display spacing |
+
+**Corner Radius:**
+
+| Token | Value | Usage |
+|---|---|---|
+| `radius-sm` | 4px | Chips, tags, badges |
+| `radius-md` | 6px | Cards, buttons |
+| `radius-lg` | 8px | Bottom sheets, modals |
+| `radius-full` | 9999px | Quick Pick pill button only |
+
+**Layout Density by Context:**
+
+| Context | Density | Approach |
+|---|---|---|
+| Moment catalog | Dense | 56px row height, 8px vertical gap — bet builder list feel |
+| Squad view (20 cards) | Spacious | 80px card height, 12px gap — room for event, team, points, captain indicator |
+| Precision Pick flow | Spacious | Full-screen steps, one interaction per screen, no competing elements |
+| Leaderboard rows | Medium | 64px row height — rank, name, score, movement all visible at once |
+| Reveal cards | Spacious | Cards expand from catalog row height during animation |
+
+**Screen layout constants:**
+- Horizontal screen padding: 16px on all screens
+- Bottom sheet height: 60–85% of screen height
+- Tab bar height: 56px
+- Safe area insets respected via Expo `SafeAreaProvider`
+
+### Accessibility Considerations
+
+| Consideration | Approach |
+|---|---|
+| **Contrast — text on black** | White on `#080808` = 21:1 (WCAG AAA). Lime `#B4FF32` on black = ~12:1 (AAA). Secondary grey `#7A7A7A` = 4.6:1 (AA pass). |
+| **Contrast — text on surface** | White on `#141414` = 17:1 (AAA). |
+| **Touch targets** | All interactive elements minimum 44×44px (Apple HIG). |
+| **Dynamic Type** | Inter scales with iOS Dynamic Type and Android font size preferences. |
+| **Colour-only states** | Hit/miss states use colour + icon (✓/✗) — never colour alone. Colour-blind safe. |
+| **Lime on non-dark surfaces** | Lime is accent/highlight only — never used as text on light backgrounds. Dark-mode-only app, so this cannot occur. |
+
+## Design Direction Decision
+
+### Design Directions Explored
+
+Six layout directions were explored and evaluated through Advanced Elicitation and Party Mode, covering: Bet Slip (persistent squad strip), Token Grid (squad-first), Match Cards (fixture-first), Tab Native (standard mobile navigation), Split Panel (catalog + squad always visible), and Linear Flow (step-by-step wizard).
+
+Three personas stress-tested the directions: Jake (casual, needs clarity and low friction), Priya (strategist, needs depth and streak visibility), Dan (social, needs shareability and readable squad summary).
+
+### Chosen Direction
+
+**Fixture-First with accordion expansion, per-fixture Moment Catalog, and post-save Moments View.**
+
+Two named views:
+
+- **Build View** — pre-save, fixture-driven. The main building screen.
+- **Moments View** — post-save, chronological. The in-play and sharing screen.
+
+### Design Rationale
+
+The fixture-driven approach maps directly to how football fans think: by match, not by event type. Grouping picks under fixture cards makes it immediately obvious which games a user has covered and which they haven't. The accordion expansion pattern keeps the main screen uncluttered while giving full pick detail on demand.
+
+The Moment Catalog table (per fixture) mirrors the FPL player selection model that target users already know — a clean, scannable table they can filter and act on quickly. Immediate return to Build View after each selection (no confirmation dialogs) keeps the flow fast and frictionless, matching betting app interaction speed.
+
+The post-save Moments View separates the *building* experience from the *in-play* experience cleanly. Users are in a different mental mode when they're watching football — they want to see their picks in event-time order, not by fixture. The Match/Moment tab split in the Moments View serves both casual users (Match tab, simple list) and strategists (Moment tab, chronological streak sequence).
+
+### Implementation Approach
+
+**Build View — Fixture Cards**
+
+- Fixture cards listed sorted by kickoff time
+- Collapsed state: team names, kickoff time, pick count badge ("3 picks") when picks exist
+- Expanded state (tap populated card): accordion opens inline, showing each pick as a row with event name, type badge, and points. A "tap to add a pick" placeholder row sits below existing picks.
+- Tapping a collapsed card with no picks navigates to the Moment Catalog screen for that fixture
+- Tapping the "tap to add" placeholder in an expanded card also navigates to the Moment Catalog
+
+**Build View — Events Counter + Deadline**
+
+- Events counter ("14/20") always visible in the screen header, right-aligned, secondary text weight
+- Deadline countdown contextual: not shown until under 3 hours; appears muted; turns orange (`#FF6B35`) under 1 hour; full orange strip under 15 minutes. No persistent deadline clutter during normal build windows.
+- Save button always visible at bottom of Build View
+
+**Build View — Captain Selection**
+
+- Captain is selected at the individual pick level (not fixture level)
+- Tapping an existing pick row in an expanded fixture card opens a popup: [Select as Captain] [Remove pick]
+- One captain across the entire squad; selecting a new one deselects the previous
+- Captain pick displays a crown (👑) icon on the row
+
+**Prediction Types — Renamed and Visually Distinct**
+
+| Old Name | New Name | Interaction | Visual Identity |
+|---|---|---|---|
+| Match Moment | **Match** | One tap → immediate return to Build View | Lime (`#B4FF32`) badge and points |
+| Precision Pick | **Moment** | Tap → micro-flow (player → minute → zone) | Violet (`#A78BFA`) badge and points |
+
+The type badge colour teaches the interaction model: lime = simple, violet = multi-step. Moment type rows in the catalog show a → arrow to signal that tapping opens a flow.
+
+**Moment Catalog Screen**
+
+- New screen per fixture (not a bottom sheet)
+- Back navigation returns to Build View without saving if no selection was made
+- Table columns: Event | Type | Points
+- Event names simplified: "Goal", "BTTS", "Over 2.5", "Corner", "Red Card", "Assist", "First Goal"
+- Points display: flat value for Match type (e.g. "350"), "420+" for Moment type (signals variable ceiling)
+- Filter chips at top: All / Match / Moment
+- Rows already added show a ✓ indicator
+
+**Moment Micro-flow (Moment type picks only)**
+
+Slides in left-to-right as a two-screen progression:
+
+- **Screen 1 — Select player:** Scrollable player list with bonus points per player. "Any player" option at the bottom (0 bonus). User can back-navigate to the catalog.
+- **Screen 2 — Minute + Zone:** Scrollable minute picker (1–90+). Segmented zone control: ±5 (+50 pts) / ±10 (+25 pts) / ±15 (+0 pts). Running point total shown (base + player bonus + zone bonus). Confirm → auto-returns to Build View, pick appears on the fixture card.
+
+Abandoning the micro-flow (back gesture from Screen 1) cancels the pick and returns to the catalog.
+
+**Moments View (post-save)**
+
+- Accessed by tapping Save on Build View
+- Header shows gameweek number and lock status ("Locked · Sat 12:30")
+- Two tabs at top: **Match** | **Moment**
+  - Match tab: picks grouped by fixture, fixtures sorted by kickoff time
+  - Moment tab: picks in chronological event-time order across all fixtures (predicted minute within match, matches sorted by kickoff) — the streak sequence view
+- Share button (↗) in top right generates a designed card graphic — not a raw screenshot. Separate cards for Match picks and Moment picks, each showing event, type badge, and points with a max potential total.
+- Edit button always visible at bottom — returns user to Build View
+
+**20 Events — No Per-Fixture Limit**
+
+Users have 20 events (picks) to allocate freely across any fixtures. No per-fixture cap. A user can put all 20 on one fixture or spread them across all gameweek matches. This accommodates varying gameweek sizes (blank weeks, double gameweeks, FA Cup disruption). The events counter ("14/20") provides the only allocation feedback needed.
+
+**Quick Pick — Removed from MVP**
+
+The Build View architecture does not create the empty-slot anxiety that Quick Pick was designed to solve. Users who use fewer than 20 events simply compete with fewer picks. Quick Pick is flagged as a potential v2 feature if retention data shows consistent under-use of events budget.
+
+## Player Journey Flows
+
+Five critical journeys covering the full product lifecycle — from first build through social retention.
+
+| Journey | Persona | Stakes |
+|---|---|---|
+| 1 · New User First Build | Jake (casual) | Week 1 retention |
+| 2 · Returning User Squad Build | Priya (strategist) | Depth and mastery |
+| 3 · Score Reveal | All personas | The emotional centrepiece |
+| 4 · Share Squad | Dan (social) | Social acquisition |
+| 5 · Mini-League Create / Join / Compete | Dan (social) | Long-term retention |
+
+---
+
+### Journey 1 — New User First Build (Jake)
+
+The highest-stakes flow. A new user must reach their first saved squad without confusion. Every screen transition is earned by the user's action — no autoplay, no forced tutorials.
+
+```mermaid
+flowchart TD
+    A([App install]) --> B[Onboarding\n5 rules · one screen]
+    B --> C[Build View\nAll fixtures collapsed · 0/20]
+    C --> D[Tap any fixture card]
+    D --> E[Moment Catalog\nEvent · Type · Points table]
+    E --> F{Pick type?}
+    F -->|Tap Match row| G[Immediate return\nto Build View]
+    F -->|Tap Moment row\nsee arrow →| H[Micro-flow\nStep 1: Select player]
+    H --> I{Decision}
+    I -->|Back| E
+    I -->|Select player| J[Micro-flow\nStep 2: Minute + zone]
+    J --> K{Decision}
+    K -->|Back| H
+    K -->|Confirm pick| G
+    G --> L[Pick appears on\nfixture card · counter updates]
+    L --> M{Continue building?}
+    M -->|Tap another fixture| D
+    M -->|Tap expand card\nsee existing picks| N[Expanded card view\nwith tap-to-add placeholder]
+    N --> D
+    M -->|Tap Save| O[Moments View\nMatch tab · first time]
+    O --> P([First build complete ✓])
+```
+
+---
+
+### Journey 2 — Returning User Squad Build (Priya)
+
+A deliberate, strategic build. The user arrives with intent, filters for Moment picks, assigns a captain, and uses the Moment tab to verify their streak sequence before saving.
+
+```mermaid
+flowchart TD
+    A([Push notification\nGW open]) --> B[Tap · app opens\nto Build View]
+    B --> C[Browse fixtures\nscroll by kickoff time]
+    C --> D[Tap target fixture]
+    D --> E[Moment Catalog\nFilter: Moment]
+    E --> F[Tap Moment row →]
+    F --> G[Select player\nwith highest bonus]
+    G --> H[Set minute ±5\nfor maximum bonus]
+    H --> I[Confirm\nauto-return to Build View]
+    I --> J[Expand fixture card\nview current picks]
+    J --> K[Tap pick row\npopup appears]
+    K --> L[Select as Captain 👑\nassigned to this pick]
+    L --> M{Events counter\ncheck}
+    M -->|Picks remaining| C
+    M -->|Satisfied| N[Tap Save]
+    N --> O[Moments View\nMoment tab]
+    O --> P[View all Moment picks\nin event-time order]
+    P --> Q[Streak sequence visible\nacross all fixtures]
+    Q --> R([Build complete ✓\nStreak confirmed])
+```
+
+---
+
+### Journey 3 — Score Reveal
+
+The emotional centrepiece. Designed as a ritual, not a data dump. Sequential animation on first view; fast summary on return visits. The reveal experience is deliberate pacing — it mirrors the emotional arc of watching an accumulator come in.
+
+```mermaid
+flowchart TD
+    A([Push notification\nResults are in]) --> B[Tap · app opens\nto Moments View]
+    B --> C{First view\nthis gameweek?}
+    C -->|Yes| D[Dramatic reveal\nsequential animation]
+    C -->|No - returning| E[Fast summary\nall results visible instantly]
+    D --> F[Match tab\nreveals pick by pick]
+    F --> G{Each pick resolves}
+    G -->|Hit| H[Lime highlight ✓]
+    G -->|Miss| I[Grey out ✗]
+    G -->|Captain hit| J[Gold 2× flash 👑]
+    G -->|Jackpot - exact minute| K[Gold burst ⚡]
+    H & I & J & K --> L[Running score total\nupdates]
+    L --> M{All picks revealed?}
+    M -->|More remaining| G
+    M -->|Done| N[Tap Moment tab]
+    N --> O[Streak chain\nbuilds visually in event order]
+    O --> P[Final score locked]
+    E --> P
+    P --> Q[Mini-league position\nrevealed]
+    Q --> R{In a mini-league?}
+    R -->|Yes| S[Position change shown\n↑3 or ↓1]
+    R -->|No| T[Prompt: create\nor join a league]
+    S --> U[Share results card]
+    T --> U
+    U --> V([Reveal complete ✓])
+```
+
+---
+
+### Journey 4 — Share Squad
+
+The social acquisition loop. One tap from the Moments View generates a designed graphic and surfaces the native share sheet. The path from intent to sent is two taps.
+
+```mermaid
+flowchart TD
+    A([Moments View\nMatch or Moment tab active]) --> B[Tap Share ↗]
+    B --> C[App generates designed\ngraphic for active tab]
+    C --> D{Active tab}
+    D -->|Match tab| E[Match picks card\nlime branding · flat points]
+    D -->|Moment tab| F[Moment picks card\nviolet branding · points+]
+    E --> G[Native share sheet appears]
+    F --> G
+    G --> H{User chooses destination}
+    H -->|WhatsApp / iMessage| I[Graphic sent\nto group chat]
+    H -->|Instagram Stories| J[Opens Instagram\ngraphic pre-loaded]
+    H -->|Copy image| K[Copied to clipboard]
+    I & J & K --> L([Return to Moments View ✓])
+```
+
+---
+
+### Journey 5 — Mini-League Create / Join / Compete
+
+Two entry points — creating and joining — converging on the same post-reveal leaderboard. Mini-leagues are the primary long-term retention mechanism: the reason users return every gameweek.
+
+MVP scope: create league, generate invite link, join via link, weekly leaderboard with position movement. Cumulative season standings and league management are post-MVP.
+
+```mermaid
+flowchart TD
+    A([User wants to\ncompete with friends]) --> B{Entry point}
+
+    B -->|Create path| C[Navigate to League tab]
+    C --> D[Tap Create League]
+    D --> E[Name the league]
+    E --> F[League created\nInvite link generated]
+    F --> G[Share invite link\nnative share sheet]
+    G --> H[Friends receive link\nWhatsApp · iMessage]
+
+    B -->|Join path| I[Friend taps\ninvite link]
+    I --> J{App installed?}
+    J -->|No| K[App Store install\ndeep link preserved]
+    J -->|Yes| L[App opens\nLeague join screen]
+    K --> L
+    L --> M[See league name\nand current members]
+    M --> N[Tap Join]
+    N --> O[Joined ✓\nLeague visible in League tab]
+
+    H --> O
+    O --> P[League tab\nMembers listed · awaiting GW results]
+    P --> Q([Gameweek plays out])
+    Q --> R[Push notification\nResults are in]
+    R --> S[Score reveal\nJourney 3]
+    S --> T[Reveal complete\nFinal score locked]
+    T --> U[Mini-league leaderboard\nembedded in results screen]
+    U --> V[Position shown\nwith ↑ or ↓ movement]
+    V --> W[Friends scores visible\nfor direct comparison]
+    W --> X{Reaction}
+    X -->|Won or top| Y[Share position card]
+    X -->|Lost or behind| Z[Check friend scores\nfuel for next week]
+    Y --> AA([Social loop ✓\nFriends prompted to join])
+    Z --> AA
+```
+
+---
+
+### Journey Patterns
+
+**Navigation patterns**
+- Back navigation always available in multi-step flows — Moment Catalog and both micro-flow steps. No user ever gets trapped.
+- Immediate auto-return to Build View after any selection. No "done" button, no confirmation dialog.
+- Save and Edit are always at the bottom of their respective views — never conditional, never hidden.
+- Deep links (Universal Links / App Links) preserve league join intent through App Store install.
+
+**Decision patterns**
+- No confirmation dialogs anywhere in the build flow. Every pick is immediately reversible via expand card → tap pick → Remove.
+- Abandoned micro-flows (back gesture from Step 1) cancel gracefully — no partial state saved, user returns to catalog.
+- One captain at a time. Selecting a new captain silently deselects the old — no popup, no friction.
+
+**Feedback patterns**
+- Picks appear on the fixture card immediately on return to Build View. No loading state.
+- Events counter updates on every pick (14/20 → 15/20). Always visible in header.
+- ✓ markers in the Moment Catalog prevent accidental double-picks on the same event.
+- Running point total during the micro-flow (base + player + zone bonus) builds anticipation before the confirm tap.
+- Score reveal animation is deliberate pacing — sequential, not instant. Each pick's resolution is a micro-moment.
+
+### Flow Optimisation Principles
+
+1. **2-tap minimum for a Match pick** — tap fixture → tap Match row → back in Build View. The fastest possible path to a pick.
+2. **Progressive complexity** — Jake never needs to engage with the Moment micro-flow. Priya gets full depth on demand. Same app, different paths.
+3. **No dead ends** — every screen has an exit. Abandoned flows restore the last clean state without data loss.
+4. **Immediate visual feedback** — no action in the build flow requires a loading state. Picks are applied locally and synced in background.
+5. **Reveal as ritual** — the score reveal animation is deliberate pacing, not decoration. The sequential build of results mirrors the emotional arc of watching an accumulator land. It IS the product moment.
+6. **Share as first-class action** — Share ↗ is always visible in the Moments View. The path from "I want to show my mates" to "sent" is two taps.
+7. **Deep link integrity** — league invite links survive App Store installation. A friend tapping a link always lands in the right place, regardless of whether the app is installed.
 
 <!-- UX design content will be appended sequentially through collaborative workflow steps -->
