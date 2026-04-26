@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-core-experience, step-04-emotional-response, step-05-inspiration, step-06-design-system, step-07-defining-experience, step-08-visual-foundation, step-09-design-directions, step-10-user-journeys]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-core-experience, step-04-emotional-response, step-05-inspiration, step-06-design-system, step-07-defining-experience, step-08-visual-foundation, step-09-design-directions, step-10-user-journeys, step-11-component-strategy, step-12-ux-patterns, step-13-responsive-accessibility]
 inputDocuments:
   - '_bmad-output/planning-artifacts/prd.md'
   - '_bmad-output/brainstorming/brainstorming-session-2026-04-20.md'
@@ -373,7 +373,7 @@ Users arrive with a **betting accumulator mental model**: browse markets, add se
 
 **Precision Pick (guided micro-flow):**
 - User taps a Precision Pick event (e.g., "⚽ Arsenal score")
-- Step 1: Select player (scrollable list or search) — or "Any player" for team-level
+- Step 1: Select player (scrollable list, named players only — selection is mandatory)
 - Step 2: Pick minute (number input or scroll wheel, 1–90+)
 - Step 3: Set window (segmented control: ±5 | ±10 | ±15)
 - Points breakdown shown in real-time as user makes choices (base + timing bonus range)
@@ -595,7 +595,7 @@ The type badge colour teaches the interaction model: lime = simple, violet = mul
 
 Slides in left-to-right as a two-screen progression:
 
-- **Screen 1 — Select player:** Scrollable player list with bonus points per player. "Any player" option at the bottom (0 bonus). User can back-navigate to the catalog.
+- **Screen 1 — Select player:** Scrollable player list with bonus points per player. Named players only — selection is mandatory. User can back-navigate to the catalog.
 - **Screen 2 — Minute + Zone:** Scrollable minute picker (1–90+). Segmented zone control: ±5 (+50 pts) / ±10 (+25 pts) / ±15 (+0 pts). Running point total shown (base + player bonus + zone bonus). Confirm → auto-returns to Build View, pick appears on the fixture card.
 
 Abandoning the micro-flow (back gesture from Screen 1) cancels the pick and returns to the catalog.
@@ -819,5 +819,485 @@ flowchart TD
 5. **Reveal as ritual** — the score reveal animation is deliberate pacing, not decoration. The sequential build of results mirrors the emotional arc of watching an accumulator land. It IS the product moment.
 6. **Share as first-class action** — Share ↗ is always visible in the Moments View. The path from "I want to show my mates" to "sent" is two taps.
 7. **Deep link integrity** — league invite links survive App Store installation. A friend tapping a link always lands in the right place, regardless of whether the app is installed.
+
+## Component Strategy
+
+### Design System Coverage
+
+The chosen stack (React Native + Expo + NativeWind) provides structural primitives only — `View`, `Text`, `Pressable`, `ScrollView`, `FlatList`, `Modal`, `TextInput`. NativeWind applies Tailwind utility classes for styling. No third-party component library is used; every UI component is custom-built from these primitives.
+
+Additional packages contributing to component behaviour:
+- `react-native-reanimated` — animation engine for the score reveal sequence
+- `expo-haptics` — tactile feedback on picks and reveal states
+- `expo-sharing` + `react-native-view-shot` — off-screen rendering and export for the share graphic
+
+### Custom Components
+
+All 15 components are custom. Organised by implementation priority.
+
+| Component | Role | Priority |
+|---|---|---|
+| `TypeBadge` | Match / Moment pill indicator | P1 |
+| `GameweekHeader` | GW number + events counter / lock status | P1 |
+| `DeadlineStrip` | Contextual urgency banner | P1 |
+| `MomentCatalogRow` | Selectable row in per-fixture event table | P1 |
+| `PickRow` | Pick displayed inside expanded fixture card | P1 |
+| `CaptainPopup` | Tap-on-pick modal: captain / remove | P1 |
+| `FixtureCard` | Core Build View card — collapsed and expanded | P1 |
+| `MicroFlowPlayerRow` | Player selection row in micro-flow Step 1 | P2 |
+| `MinutePicker` | Scroll-wheel minute input in micro-flow Step 2 | P2 |
+| `ZoneChip` | ±5 / ±10 / ±15 segmented zone selector | P2 |
+| `PickSummaryCard` | Running point total during micro-flow Step 2 | P2 |
+| `MomentsPickRow` | Pick row in Moments View — pre and post reveal states | P3 |
+| `RevealCard` | Animated reveal variant of MomentsPickRow | P3 |
+| `LeaderboardRow` | Mini-league results row with movement indicator | P3 |
+| `ShareCard` | Generated off-screen graphic for sharing | P3 |
+
+---
+
+#### `GameweekHeader`
+
+**Purpose:** Persistent header used on both Build View and Moments View. Displays the current gameweek and context-appropriate right-side content.
+
+**Anatomy:**
+```
+GW 27                              14/20   ← Build View
+GW 27 · Locked                             ← Moments View
+```
+
+**Variants:**
+
+| View | Left | Right |
+|---|---|---|
+| Build View | GW {n} | {used}/{total} in lime `#B4FF32` |
+| Moments View | GW {n} · Locked | empty |
+
+**Typography:** Left uses `heading-2` (18px/600). Right uses `mono-number` token (20px/700) with `fontVariant: tabular-nums` so the counter doesn't shift layout as digits change.
+
+---
+
+#### `FixtureCard`
+
+**Purpose:** The primary building block of the Build View. Represents one fixture and all picks made on it.
+
+**Anatomy:**
+```
+┌─ [Teams] · [Kickoff] · [Pick badge] · [Chevron] ──┐  ← header row (always visible)
+│  [Icon] [Pick name]        [TypeBadge]  [Points]   │  ← PickRow (expanded only)
+│  [+] Tap to add a pick                             │  ← placeholder (expanded only)
+└────────────────────────────────────────────────────┘
+```
+
+**States:**
+- `empty` — no picks. Chevron ▸. Tap → navigate to Moment Catalog.
+- `collapsed` — has picks. Pick count badge ("3 picks"). Chevron ▸. Tap → expand.
+- `expanded` — shows PickRows + add placeholder. Chevron ▾. Tap header → collapse.
+
+**Interactions:**
+- Tap empty card → Moment Catalog for this fixture
+- Tap collapsed (with picks) → expand accordion inline, pushes cards below down
+- Tap expanded header → collapse
+- Tap PickRow → open CaptainPopup
+- Tap add placeholder → Moment Catalog for this fixture
+
+**Accessibility:** `accessibilityRole="button"`. State announced: "Arsenal vs Chelsea, 3 picks, collapsed".
+
+---
+
+#### `MomentCatalogRow`
+
+**Purpose:** A single selectable row in the per-fixture Moment Catalog table.
+
+**Anatomy:**
+```
+[Icon] [Event name]  [→ or ✓]     [TypeBadge]    [Points]
+```
+
+**States:**
+- `match-default` — no arrow indicator. Tap → immediate return to Build View.
+- `moment-default` — shows → arrow to signal multi-step flow opens on tap.
+- `added` — shows ✓. Tap is a no-op. Prevents double-picks.
+
+**Points display:** Match type shows flat value ("350"). Moment type shows "420+" to signal a variable ceiling.
+
+**Accessibility:** Added state announced: "{event name}, already added".
+
+---
+
+#### `TypeBadge`
+
+**Purpose:** Visual brand identifier for prediction type. Teaches the interaction model through colour alone — lime = simple, violet = multi-step.
+
+**Variants:**
+
+| Variant | Background | Text colour | Label |
+|---|---|---|---|
+| `match` | `rgba(180,255,50,0.12)` | `#B4FF32` | MATCH |
+| `moment` | `rgba(167,139,250,0.15)` | `#A78BFA` | MOMENT |
+
+**Usage:** Appears in MomentCatalogRow, PickRow, MomentsPickRow, and ShareCard.
+
+---
+
+#### `CaptainPopup`
+
+**Purpose:** Small modal that appears when a user taps an existing pick row inside an expanded FixtureCard.
+
+**Anatomy:**
+```
+[Pick name — as context label]
+[👑 Select as Captain]
+[✕  Remove pick]
+```
+
+**Behaviour:** Selecting captain assigns 👑 to this pick, silently removes it from any previously captained pick. Remove pick deletes the pick and closes the popup. Background tap dismisses without action.
+
+**Implementation:** React Native `Modal` with a semi-transparent backdrop and a bottom-anchored sheet. `border-radius: 10px 10px 0 0`.
+
+---
+
+#### `DeadlineStrip`
+
+**Purpose:** Contextual urgency banner. Invisible most of the time — surfaces only when deadline proximity is actionable.
+
+**States:**
+
+| State | Trigger | Appearance |
+|---|---|---|
+| `hidden` | >3 hours remaining | Not rendered |
+| `approaching` | 1–3 hours | Muted text, no background strip |
+| `urgent` | <1 hour | Orange text `#FF6B35`, orange-tinted background |
+| `critical` | <15 minutes | Full orange strip, subtle pulse animation |
+
+**Logic:** Accepts `deadlineTimestamp` prop. Derives state from `Date.now()`. Refreshes on 60-second interval via `useInterval`.
+
+**Accessibility:** `accessibilityLiveRegion="polite"` — screen readers announce state changes without interrupting flow.
+
+---
+
+#### `MinutePicker`
+
+**Purpose:** Custom scroll-wheel input for selecting a predicted minute (1–90+) in micro-flow Step 2.
+
+**Behaviour:** Scrollable list of numbers, snaps to nearest value. Displays selected minute large and centred. Scroll velocity determines snap speed. Supports tap on ▲/▼ arrows for single-step adjustment.
+
+**Implementation:** `FlatList` with `snapToInterval` or a dedicated scroll-picker library (evaluated at build time for performance on both platforms). Falls back to a simple `TextInput[keyboardType="numeric"]` if scroll performance is unsatisfactory on low-end Android.
+
+---
+
+#### `RevealCard`
+
+**Purpose:** Animated variant of `MomentsPickRow` used during the score reveal sequence. The only component in the app that receives significant animation budget.
+
+**States and animations:**
+
+| State | Trigger | Animation | Haptic |
+|---|---|---|---|
+| `pending` | Default during sequence | Dimmed, neutral | None |
+| `revealing` | ~300ms before resolve | Subtle pulse/scale | None |
+| `hit` | Prediction correct | Lime background fade in | Light |
+| `miss` | Prediction incorrect | Dark grey fade in | None |
+| `captain-hit` | Captain pick correct | Gold 2× flash, crown pulse | Medium |
+| `jackpot` | Exact minute correct | Gold burst, scale up | Heavy |
+
+**Sequencing:** Controlled by a parent `RevealSequence` orchestrator. Cards reveal one at a time with a configurable delay (default 600ms). After all cards resolve, the final score counter animates up to the total.
+
+**Return visit behaviour:** All cards render immediately in their final resolved state. No animation, no delay. Controlled via `firstView` boolean prop.
+
+**Implementation:** `react-native-reanimated` with `withSpring` and `withTiming`. `expo-haptics` for impact variants.
+
+---
+
+#### `ShareCard`
+
+**Purpose:** A designed graphic generated programmatically from the user's picks. Not a screenshot — a purpose-built off-screen rendered card exported as a PNG.
+
+**Variants:**
+- `match-picks` — lime branding, flat points, picks grouped by fixture
+- `moment-picks` — violet branding, "420+" notation, event + player + minute
+- `results` — hit/miss indicators, final score, league position
+
+**Dimensions:** 1080×1350px (4:5 ratio, Instagram-optimised). Rendered at device pixel ratio.
+
+**Content rules:** App name at top, GW number, username, picks list, max potential points at bottom. Maximum 8 picks shown — if more, remaining count summarised ("+ 4 more picks").
+
+**Implementation:** Rendered as a hidden off-screen `View`. Captured via `react-native-view-shot` as PNG. Passed to `expo-sharing` for the native share sheet.
+
+---
+
+#### `LeaderboardRow`
+
+**Purpose:** A single row in the MVP mini-league weekly leaderboard.
+
+**Anatomy:**
+```
+[Rank]  [Name]                    [Score]    [↑3 / ↓1 / —]
+```
+
+**States:**
+- `other` — default appearance
+- `self` — current user's row; lime left border accent (`2px solid #B4FF32`)
+- `movement-up` — lime ↑ indicator with count
+- `movement-down` — muted ↓ indicator with count
+- `no-movement` — dash (—)
+
+### Component Implementation Strategy
+
+**Build in dependency order.** `TypeBadge` and `GameweekHeader` are zero-dependency atoms — build first. `FixtureCard` depends on `PickRow`, `CaptainPopup`, and `TypeBadge` — build those before attempting the card. `RevealCard` and `ShareCard` are the two highest-effort components — defer until Phase 3 journeys are in scope.
+
+**No shared state in components.** Each component receives all data via props. State lives in screens and is managed by the app's state layer (e.g. Zustand or React Context). Components are pure presentational.
+
+**Accessibility as a build constraint, not a retrofit.** Every interactive component gets `accessibilityRole`, `accessibilityLabel`, and `accessibilityState` at the time of first build — not added later.
+
+### Implementation Roadmap
+
+**Phase 1 — Build View** (core squad-building journey functional)
+
+`TypeBadge` → `GameweekHeader` → `DeadlineStrip` → `MomentCatalogRow` → `PickRow` → `CaptainPopup` → `FixtureCard`
+
+**Phase 2 — Moment micro-flow** (Moment type picks functional)
+
+`MicroFlowPlayerRow` → `MinutePicker` → `ZoneChip` → `PickSummaryCard`
+
+**Phase 3 — Moments View and social loop** (retention and sharing functional)
+
+`MomentsPickRow` → `RevealCard` + `RevealSequence` → `LeaderboardRow` → `ShareCard`
+
+## UX Consistency Patterns
+
+### Button Hierarchy
+
+Four action levels used consistently across all screens.
+
+| Level | Appearance | Usage |
+|---|---|---|
+| **Primary** | Lime `#B4FF32` background, black text, `radius-md` 6px, full-width | Save, Confirm pick — one per screen |
+| **Secondary** | Dark surface background, white text, 1px `border-subtle` border | Edit picks, Back in action bars |
+| **Text action** | No background, lime text | Share ↗ — inline with icon |
+| **Destructive** | No background, red `#FF4444` text | Remove pick — inside `CaptainPopup` only |
+
+**Rules:**
+- One primary action per screen. Never two lime buttons competing.
+- Primary button always full-width at the bottom of the screen in a persistent action bar. Never floating.
+- Secondary actions sit left of the primary in the same bar, or appear as text actions in headers.
+- Destructive actions never appear as primary buttons — only in contextual popups after a deliberate tap.
+- No disabled button states in the build flow. Every action is always available.
+
+### Feedback Patterns
+
+Immediate visual feedback on every action — no loading states in the build flow.
+
+| Trigger | Feedback type | Visual | Haptic |
+|---|---|---|---|
+| Match pick added | State change | Pick on fixture card, ✓ in catalog | Light |
+| Moment pick confirmed | State change | Pick on fixture card | Light |
+| Captain assigned | State change | 👑 on PickRow, previous silently cleared | None |
+| Pick removed | State change | Row disappears, counter decrements | None |
+| Reveal — hit | Animation | Lime background fade in, ✓ | Light |
+| Reveal — miss | Animation | Grey fade in, ✗ | None |
+| Reveal — captain hit | Animation | Gold 2× flash, crown pulse | Medium |
+| Reveal — jackpot | Animation | Gold burst, scale up | Heavy |
+| Deadline <15min | Strip animation | Orange strip pulses | None |
+
+**Network errors:** Slim non-blocking toast at the bottom — "Couldn't save — tap to retry." Auto-dismisses after 4 seconds. Never a blocking modal for transient errors.
+
+**No success toasts for picks.** The pick appearing on the fixture card is the success signal.
+
+### Form Patterns
+
+**League name (TextInput):**
+- Placeholder: "Name your league". Max 30 characters. Count shown at 20+ ("24/30").
+- `returnKeyType="done"` dismisses keyboard. "Create" button activates on non-empty input.
+
+**Minute picker (micro-flow Step 2):**
+- Custom scroll-wheel. Range: 1–90, plus "90+". No validation — all values valid.
+- ▲/▼ tap targets for single-step adjustment (min 44px touch target).
+
+**Zone selector (ZoneChip):**
+- Segmented control: ±5 / ±10 / ±15. One always active — never deselected.
+- Default: ±10 (middle, balanced risk/reward). Switching updates `PickSummaryCard` immediately.
+
+### Navigation Patterns
+
+**Stack navigation** (screen-to-screen, left-right slide):
+- Build View → Moment Catalog → Micro-flow Step 1 → Micro-flow Step 2
+- All return via back gesture or back button
+
+**Accordion navigation** (inline, no screen transition):
+- Fixture card expand/collapse within Build View
+- Only one card expanded at a time — tapping a new card collapses the previous
+
+**Tab navigation** (same-level, tap only):
+- Moments View: Match | Moment tabs
+- No swipe between tabs — swipe is reserved for system back gesture
+
+**Save / Edit toggle** (view switch, not navigation):
+- Not a navigation stack — no back gesture between Build View and Moments View
+- Save/Edit buttons are the only mechanism for switching between views
+
+**Back gesture rules:**
+- Available on all stack-navigated screens (Moment Catalog, micro-flow steps)
+- Not available on Build View or Moments View (root views)
+- Abandoning a Moment micro-flow via back from Step 1 cancels the pick with no state change
+
+### Modal and Overlay Patterns
+
+Only one overlay type in MVP: the bottom sheet popup (`CaptainPopup`).
+
+- Semi-transparent black backdrop (`rgba(0,0,0,0.7)`)
+- Sheet slides up from bottom, `border-radius: 10px 10px 0 0`
+- Maximum 3 actions per sheet
+- Tap backdrop = dismiss, no action taken. No close button needed.
+- No full-screen modals in MVP
+
+**Not modals:** Deadline warnings use `DeadlineStrip`. Network errors use a bottom toast. Pick confirmation is not needed — picks are always reversible.
+
+### Empty States
+
+**Build View (fresh gameweek, no picks):** Fixture cards with no badge and chevron ▸ as the implicit affordance. No illustration or empty-state copy. The fixture list itself communicates the action.
+
+**League tab (no leagues):** Centred prompt — "You're not in a league yet." Primary button: "Create league." Secondary: "Join with a link."
+
+**League tab (in league, awaiting results):** Members listed, score column shows "—". Text: "Results available after the gameweek."
+
+**Moments View (no picks saved):** Edge case. Message: "Nothing saved for this gameweek." Primary button: "Build your squad."
+
+### Loading States
+
+**App initial load:** Expo splash screen holds until first screen is ready. No custom animation.
+
+**Moment Catalog:** Skeleton rows — three animated grey bars at row height. If >3 seconds: "Having trouble loading — tap to retry."
+
+**Player list (micro-flow Step 1):** Skeleton rows while fetching. Immediate if cached within session.
+
+**Score reveal:** Moments View opens with all picks in `pending` state. The reveal animation begins immediately — the sequence is the loading experience. No spinner.
+
+**League leaderboard:** Skeleton rows per member. Resolves before the user reaches the screen in normal post-notification flow.
+
+### Filtering Patterns
+
+**Moment Catalog chips (All / Match / Moment):**
+- Single-select. "All" is the default. Resets to "All" each time the screen opens.
+- Active: lime background, black text. Inactive: dark elevated, secondary text.
+- Instant row show/hide — no transition animation.
+
+**Player list (micro-flow Step 1):**
+- No filter or search in MVP. Sorted by scoring likelihood (odds-derived).
+- Player selection is mandatory — no "Any player" fallback. Every Moment pick must have a named player assigned.
+- Scroll is the discovery mechanism.
+
+## Responsive Design & Accessibility
+
+### Responsive Strategy
+
+**Mobile-only. Portrait-only.** No layout adaptation for tablet or desktop is required or planned for MVP. All design decisions are made for a single-column portrait phone layout.
+
+The responsive challenge is phone screen size variance — from compact phones (iPhone SE at 375pt wide) to large phones (iPhone 15 Pro Max at 430pt wide) and the broad range of Android mid-range devices.
+
+**Strategy: fluid, not breakpoint-driven.** Components stretch to fill available width using percentage widths and flex layouts. Vertical space is the primary variable — smaller phones show fewer cards before scrolling. All content is accessible via scroll; nothing is hidden on small screens.
+
+**Key adaptations by screen size:**
+
+| Element | Small (375pt) | Standard (390pt) | Large (430pt+) |
+|---|---|---|---|
+| Fixture card | Same layout, slightly less padding | Design baseline | More horizontal breathing room |
+| Moment Catalog rows | 48px height maintained | 52px (baseline) | 52px |
+| Action bars | Same height, safe area respected | Baseline | Baseline |
+| `GameweekHeader` | Same — font size does not shrink | Baseline | Baseline |
+| MinutePicker | Full-width maintained | Baseline | Baseline |
+
+**What never changes regardless of screen size:**
+- Minimum touch target: 44×44px
+- Horizontal screen padding: 16px
+- Font sizes from the established type scale — no shrinking on small screens
+- Bottom safe area inset on all action bars
+
+### Breakpoint Strategy
+
+No CSS-style breakpoints. React Native layout is flex-based and inherently fluid. Screen dimensions are read via `useWindowDimensions()` and used only for the `ShareCard` export dimensions (fixed at 1080×1350px regardless of device).
+
+**Safe area handling:** All screens wrapped in `SafeAreaProvider`. Action bars, tab bars, and headers respect `useSafeAreaInsets()` — notch iPhones, Dynamic Island, and Android gesture navigation bars all handled automatically.
+
+**Platform-specific adjustments:**
+
+| Concern | iOS | Android |
+|---|---|---|
+| Bottom safe area | Dynamic Island / notch via `useSafeAreaInsets` | Navigation gesture bar via `useSafeAreaInsets` |
+| Font rendering | SF Pro fallback during Inter load | Roboto fallback during Inter load |
+| Haptics | `expo-haptics` full impact levels | Degrades gracefully on devices without haptic motor |
+| Share sheet | Native iOS share sheet | Native Android intent chooser |
+
+### Accessibility Strategy
+
+**Target: WCAG 2.1 Level AA.**
+
+Contrast ratios (confirmed from step 8):
+- White on `#080808` — 21:1 (AAA)
+- Lime `#B4FF32` on `#080808` — ~12:1 (AAA)
+- Secondary grey `#7A7A7A` on `#080808` — 4.6:1 (AA pass)
+- White on `#141414` — 17:1 (AAA)
+
+**Touch targets:** All interactive elements minimum 44×44px. Applied to: fixture cards, catalog rows, PickRows, tab items, chips, ZoneChips, player rows, minute picker arrows, popup actions, Save/Edit buttons.
+
+**Screen reader support:**
+
+| Component | `accessibilityRole` | `accessibilityLabel` example | `accessibilityState` |
+|---|---|---|---|
+| FixtureCard (collapsed) | `button` | "Arsenal vs Chelsea, Saturday 12:30, 3 picks" | `expanded: false` |
+| FixtureCard (expanded) | `button` | "Arsenal vs Chelsea, Saturday 12:30, 3 picks" | `expanded: true` |
+| MomentCatalogRow (match) | `button` | "BTTS, Match type, 350 points" | — |
+| MomentCatalogRow (moment) | `button` | "Goal, Moment type, opens player selection" | — |
+| MomentCatalogRow (added) | `button` | "Arsenal First Goal, already added" | `disabled: true` |
+| ZoneChip | `radio` | "Plus or minus 5 minutes, 50 bonus points" | `selected: true/false` |
+| RevealCard (resolved) | (live region) | "Saka goal, hit, 570 points" | — |
+
+**Colour-only states:** Every hit/miss/jackpot state uses colour AND an icon (✓ / ✗ / 👑 / ⚡). No state is communicated by colour alone. Colour-blind safe by design.
+
+**Dynamic Type / Font Scale:** Inter respects iOS Dynamic Type and Android font size preferences. Flex layout prevents overflow at larger text sizes. Tested at default and 2× system font scale.
+
+**Reduced Motion:** Score reveal animation respects `AccessibilityInfo.isReduceMotionEnabled()`. When enabled, cards transition to their final resolved state instantly — no sequential animation.
+
+### Testing Strategy
+
+**Real devices (not simulators):**
+
+| Device | Purpose |
+|---|---|
+| iPhone SE (3rd gen) | Smallest current iOS target — vertical space stress test |
+| iPhone 15 | Design baseline |
+| iPhone 15 Pro Max | Largest current iOS target |
+| Samsung Galaxy A54 | Popular mid-range Android |
+| Google Pixel 7 | Clean Android reference |
+
+**Screen reader testing:**
+- VoiceOver (iOS) — all five user journeys navigated in full
+- TalkBack (Android) — all five user journeys navigated in full
+- Focus order verified: logical top-to-bottom, left-to-right in all states
+
+**Colour blindness simulation:**
+- Deuteranopia and protanopia (red-green variants) — lime and violet must remain distinct; ✓/✗ icons legible
+- Achromatopsia (monochrome) — icon-only legibility confirmed
+
+**Performance targets:**
+- `RevealCard` animation at 60fps on mid-range Android
+- Moment Catalog load <500ms on 4G
+- App startup to Build View <2 seconds on mid-range devices
+- `ShareCard` off-screen render <1 second
+
+### Implementation Guidelines
+
+**Flex layout only.** Never use absolute pixel widths for layout containers.
+
+**Safe area from day one.** Wrap every root screen in `SafeAreaView` or apply `useSafeAreaInsets()` to action bars at initial build — not retrofitted.
+
+**Accessibility props at component build time.** `accessibilityRole`, `accessibilityLabel`, and `accessibilityState` written when the component is first built.
+
+**Reduced motion check at app start.** `AccessibilityInfo.isReduceMotionEnabled()` checked on mount and passed as a prop through `RevealSequence`. No inline checks in individual `RevealCard` instances.
+
+**Haptics wrapped in try/catch.** Fails silently on devices without haptic support.
+
+**`fontVariant: ['tabular-nums']` on all numeric displays.** Applied to: `GameweekHeader` events counter, `PickSummaryCard` point total, reveal score counter, leaderboard scores.
+
+**Player selection mandatory in Moment micro-flow.** No "Any player" option. The player list shows only named players sorted by scoring likelihood. The confirm button on Step 2 is inactive until a player has been selected in Step 1.
 
 <!-- UX design content will be appended sequentially through collaborative workflow steps -->
