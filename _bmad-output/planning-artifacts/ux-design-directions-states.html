@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UX Mockups — Locked &amp; Reveal States · football-prediction-app</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #080808;
+      --surface:   #141414;
+      --elevated:  #1C1C1C;
+      --text:      #FFFFFF;
+      --secondary: #7A7A7A;
+      --muted:     #404040;
+      --border:    #1E1E1E;
+      --lime:      #B4FF32;
+      --gold:      #FFD700;
+      --orange:    #FF6B35;
+      --violet:    #A78BFA;
+      --cyan:      #00D4FF;
+      --bronze:    #CD7F32;
+      --silver:    #9CA3AF;
+      --r-sm: 4px;
+      --r-md: 6px;
+      --r-lg: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      padding: 48px 40px 80px;
+    }
+
+    .page-title { font-size: 20px; font-weight: 700; }
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25);
+      color: var(--cyan); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 4px; margin-top: 8px;
+    }
+    .page-sub { font-size: 12px; color: var(--secondary); margin-top: 8px; line-height: 1.65; max-width: 720px; }
+
+    /* State machine */
+    .state-machine {
+      margin: 32px 0 40px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 20px 24px; max-width: 860px;
+    }
+    .sm-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--secondary); margin-bottom: 16px; }
+    .sm-row { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+    .sm-state {
+      background: var(--elevated); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 10px 14px; min-width: 130px;
+    }
+    .sm-state-name { font-size: 11px; font-weight: 700; }
+    .sm-state-trigger { font-size: 9px; color: var(--secondary); margin-top: 3px; line-height: 1.4; }
+    .sm-state.building { border-color: rgba(180,255,50,0.3); }
+    .sm-state.building .sm-state-name { color: var(--lime); }
+    .sm-state.locked { border-color: rgba(167,139,250,0.3); }
+    .sm-state.locked .sm-state-name { color: var(--violet); }
+    .sm-state.reveal { border-color: rgba(255,215,0,0.3); }
+    .sm-state.reveal .sm-state-name { color: var(--gold); }
+    .sm-connector {
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 12px; gap: 2px;
+    }
+    .sm-arrow { font-size: 14px; color: var(--muted); }
+    .sm-arrow-label { font-size: 9px; color: var(--secondary); white-space: nowrap; }
+
+    /* Screen grid */
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 260px);
+      gap: 48px 28px;
+    }
+    .screen-card { display: flex; flex-direction: column; gap: 12px; }
+    .screen-num { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); }
+    .screen-name { font-size: 13px; font-weight: 700; margin-top: 1px; }
+    .screen-desc { font-size: 10px; color: var(--secondary); line-height: 1.6; }
+
+    /* Phone shell */
+    .phone {
+      width: 260px; height: 544px;
+      background: var(--bg); border-radius: 28px;
+      border: 1.5px solid #252525; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.55);
+    }
+    .notch { height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .notch-pill { width: 64px; height: 18px; background: #161616; border-radius: 9px; }
+    .sbar { height: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    .sbar-time { font-size: 10px; font-weight: 600; }
+    .sbar-icons { font-size: 9px; color: var(--secondary); }
+
+    .app-header {
+      padding: 8px 16px 6px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .app-title { font-size: 17px; font-weight: 700; }
+    .app-title-sm { font-size: 15px; font-weight: 700; }
+    .events-counter { font-size: 11px; font-weight: 700; color: var(--lime); font-variant-numeric: tabular-nums; }
+
+    .locked-badge {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 700; color: var(--violet);
+      background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.25);
+      padding: 3px 8px; border-radius: 3px;
+    }
+
+    .deadline-strip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 16px; flex-shrink: 0;
+      background: rgba(255,107,53,0.1);
+      border-top: 1px solid rgba(255,107,53,0.2);
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+    }
+    .dl-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+    .dl-text { font-size: 10px; color: var(--orange); font-weight: 600; }
+
+    /* Boldness Hero Card */
+    .hero-card {
+      margin: 0 12px 8px;
+      background: var(--elevated); border-radius: var(--r-lg);
+      border: 1px solid #252525; padding: 13px 14px 11px; flex-shrink: 0;
+    }
+    .hero-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 9px;
+    }
+    .hero-shield-group { display: flex; align-items: center; gap: 8px; }
+    .shield-icon { width: 28px; height: 30px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .shield-tier { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+    .shield-label { font-size: 9px; color: var(--secondary); margin-top: 1px; }
+    .hero-pts-group { text-align: right; }
+    .hero-pts-label { font-size: 9px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+    .hero-pts-value { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+    .hero-divider { height: 1px; background: var(--border); margin-bottom: 9px; }
+    .hero-status { font-size: 10px; color: var(--secondary); }
+
+    .tier-gold   .hero-card { border-color: rgba(255,215,0,0.25); }
+    .tier-gold   .shield-tier, .tier-gold   .hero-pts-value { color: var(--gold); }
+    .tier-platinum .hero-card { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.03); }
+    .tier-platinum .shield-tier, .tier-platinum .hero-pts-value { color: var(--cyan); }
+
+    /* Tabs */
+    .mv-tabs {
+      display: flex; padding: 0 14px;
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .mv-tab {
+      flex: 1; text-align: center; padding: 8px 0;
+      font-size: 11px; font-weight: 600; color: var(--secondary);
+      position: relative;
+    }
+    .mv-tab.active { color: var(--text); }
+    .mv-tab.active::after {
+      content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
+      height: 2px; background: var(--lime); border-radius: 1px;
+    }
+    .mv-tab.active.moment-tab::after { background: var(--violet); }
+
+    /* Pick list */
+    .scroll-area { flex: 1; overflow: hidden; }
+    .inner-scroll { display: flex; flex-direction: column; }
+
+    .mv-group-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 14px 3px; flex-shrink: 0;
+    }
+    .mv-group-time { font-size: 9px; color: var(--secondary); font-weight: 600; flex-shrink: 0; }
+    .mv-group-match { font-size: 10px; font-weight: 700; flex: 1; }
+
+    .mv-pick-row {
+      display: flex; align-items: center;
+      padding: 8px 14px; gap: 7px;
+      border-bottom: 1px solid rgba(30,30,30,0.9); flex-shrink: 0;
+    }
+    .mv-pick-icon { font-size: 12px; width: 18px; text-align: center; flex-shrink: 0; }
+    .mv-pick-name { font-size: 11px; font-weight: 500; line-height: 1.3; }
+    .mv-pick-player { font-size: 9px; color: var(--secondary); }
+    .mv-name-col { flex: 1; }
+    .mv-type-badge { font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 3px; flex-shrink: 0; }
+    .type-match  { background: rgba(180,255,50,0.12); color: var(--lime); }
+    .type-moment { background: rgba(167,139,250,0.15); color: var(--violet); }
+    .mv-pts { font-size: 11px; font-weight: 700; width: 36px; text-align: right; flex-shrink: 0; }
+    .mv-status { font-size: 11px; width: 16px; text-align: right; flex-shrink: 0; color: var(--muted); }
+
+    /* Reveal states */
+    .pick-hit  { background: rgba(180,255,50,0.05); }
+    .pick-hit  .mv-pts { color: var(--lime); }
+    .pick-hit  .mv-status { color: var(--lime); font-size: 13px; }
+    .pick-miss { opacity: 0.45; }
+    .pick-miss .mv-status { font-size: 13px; }
+    .pick-captain { background: rgba(255,215,0,0.06); }
+    .pick-captain .mv-pts { color: var(--gold); }
+    .pick-captain .mv-status { color: var(--gold); font-size: 13px; }
+    .pick-resolving {
+      background: rgba(255,255,255,0.025);
+      border-left: 2px solid rgba(255,255,255,0.12);
+    }
+    .pick-resolving .mv-status { color: var(--muted); letter-spacing: 0.1em; }
+
+    /* Running score bar */
+    .score-bar {
+      margin: 0 12px 7px; padding: 10px 14px;
+      background: var(--elevated); border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .sb-label { font-size: 9px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+    .sb-score { font-size: 22px; font-weight: 700; color: var(--lime); font-variant-numeric: tabular-nums; }
+    .sb-progress { font-size: 9px; color: var(--secondary); }
+
+    /* Final hero */
+    .final-hero {
+      margin: 0 12px 8px; padding: 13px 14px;
+      background: var(--elevated); border-radius: var(--r-lg);
+      border: 1px solid rgba(255,215,0,0.3); flex-shrink: 0;
+    }
+    .fh-row { display: flex; align-items: flex-start; justify-content: space-between; }
+    .fh-gw { font-size: 9px; color: var(--secondary); margin-bottom: 3px; }
+    .fh-score { font-size: 26px; font-weight: 700; color: var(--lime); font-variant-numeric: tabular-nums; }
+    .fh-sub { font-size: 9px; color: var(--secondary); margin-top: 2px; }
+    .fh-shield { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .fh-tier { font-size: 10px; font-weight: 700; color: var(--gold); }
+    .fh-rank {
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+      font-size: 10px; color: var(--secondary);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .rank-num { color: var(--text); font-weight: 700; }
+    .rank-up { color: var(--lime); font-weight: 700; }
+
+    .btn {
+      margin: 0 12px 6px; padding: 11px 16px;
+      border-radius: var(--r-md); font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .btn-primary { background: var(--lime); color: #000; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--secondary); font-weight: 600; }
+
+    /* Fixture cards (builder) */
+    .fc {
+      margin: 0 12px 6px; padding: 11px 13px;
+      background: var(--surface); border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .fc-teams { font-size: 12px; font-weight: 600; flex: 1; }
+    .fc-time { font-size: 9px; color: var(--secondary); }
+    .fc-chevron { font-size: 10px; color: var(--muted); }
+
+    /* Tier showcase */
+    .tier-showcase {
+      margin-top: 56px; max-width: 860px;
+    }
+    .ts-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--secondary); margin-bottom: 14px;
+    }
+    .tier-row {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--elevated); border-radius: var(--r-md);
+      border: 1px solid var(--border); padding: 13px 16px;
+      margin-bottom: 8px;
+    }
+    .tier-row.t-bronze { border-color: rgba(205,127,50,0.3); }
+    .tier-row.t-silver { border-color: rgba(156,163,175,0.3); }
+    .tier-row.t-gold   { border-color: rgba(255,215,0,0.3); }
+    .tier-row.t-platinum { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.02); }
+    .t-shield-col { display: flex; align-items: center; gap: 10px; min-width: 140px; }
+    .t-name { font-size: 13px; font-weight: 700; }
+    .t-range { font-size: 9px; color: var(--secondary); margin-top: 2px; }
+    .t-desc { font-size: 11px; color: var(--secondary); flex: 1; line-height: 1.5; }
+    .t-pts { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+
+<!-- Page header -->
+<div style="margin-bottom:10px;">
+  <div class="page-title">Locked · Live · Reveal States</div>
+  <div class="page-badge">Mockup set 2 — App State Machine</div>
+  <div class="page-sub">
+    Three app states based on GW phase. Locked/Live replaces the Build View while matches are playing — the Moments View anchors the experience chronologically with the BoldnessHeroCard at top. Reveal is one-time, auto-triggered on first open after GW ends. No button press needed.
+  </div>
+</div>
+
+<!-- State Machine -->
+<div class="state-machine">
+  <div class="sm-title">App State Machine — 3 GW States</div>
+  <div class="sm-row">
+    <div class="sm-state building">
+      <div class="sm-state-name">Building</div>
+      <div class="sm-state-trigger">Odds locked → first kick-off.<br>Fixture accordion, 0–20 counter, Save CTA.</div>
+    </div>
+    <div class="sm-connector">
+      <div class="sm-arrow">→</div>
+      <div class="sm-arrow-label">First kick-off</div>
+    </div>
+    <div class="sm-state locked">
+      <div class="sm-state-name">Locked / Live</div>
+      <div class="sm-state-trigger">Kick-off → last final whistle.<br>Moments View + hero card. All picks pending.</div>
+    </div>
+    <div class="sm-connector">
+      <div class="sm-arrow">→</div>
+      <div class="sm-arrow-label">GW ends · first open</div>
+    </div>
+    <div class="sm-state reveal">
+      <div class="sm-state-name">Reveal</div>
+      <div class="sm-state-trigger">Auto on first open. One-time.<br>Sequential animation → share → done.</div>
+    </div>
+    <div class="sm-connector">
+      <div class="sm-arrow">→</div>
+      <div class="sm-arrow-label">Viewed / shared</div>
+    </div>
+    <div class="sm-state building">
+      <div class="sm-state-name">Building</div>
+      <div class="sm-state-trigger">Next GW. Fresh slate.<br>Reveal never replays for prior GW.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Screen grid -->
+<div class="screen-grid">
+
+  <!-- S1: Locked / Live — MM tab -->
+  <div class="screen-card">
+    <div class="screen-num">Screen 01</div>
+    <div class="screen-name">Locked / Live — Match Tab</div>
+    <div class="screen-desc">GW kicks off. Build View replaced by Moments View + BoldnessHeroCard. All picks show pending (—). No edit access.</div>
+    <div class="phone tier-gold">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">11:00</span><span class="sbar-icons">▲ ◼◼◼ ▾</span></div>
+
+      <div class="app-header">
+        <span class="app-title-sm">GW 27</span>
+        <div class="locked-badge">
+          <svg width="10" height="11" viewBox="0 0 24 26" fill="none">
+            <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="currentColor"/>
+          </svg>
+          Locked
+        </div>
+      </div>
+
+      <div class="hero-card" style="border-color:rgba(255,215,0,0.25);">
+        <div class="hero-top">
+          <div class="hero-shield-group">
+            <div class="shield-icon">
+              <svg width="26" height="28" viewBox="0 0 24 26" fill="none">
+                <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(255,215,0,0.15)" stroke="#FFD700" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="shield-tier" style="color:var(--gold);">GOLD</div>
+              <div class="shield-label">Boldness tier</div>
+            </div>
+          </div>
+          <div class="hero-pts-group">
+            <div class="hero-pts-label">Possible Points</div>
+            <div class="hero-pts-value" style="color:var(--gold);">2,840</div>
+          </div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-status">Results incoming · ends Sun 18:00</div>
+      </div>
+
+      <div class="mv-tabs">
+        <div class="mv-tab active">Match</div>
+        <div class="mv-tab">Moment</div>
+      </div>
+
+      <div class="scroll-area">
+        <div class="inner-scroll">
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 12:30</span>
+            <span class="mv-group-match">Arsenal vs Chelsea</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">⚽</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Arsenal First Goal</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">180</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🟨</span>
+            <div class="mv-name-col"><div class="mv-pick-name">BTTS</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">350</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 15:00</span>
+            <span class="mv-group-match">Liverpool vs City</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">📐</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Over 2.5 Goals</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">195</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 17:30</span>
+            <span class="mv-group-match">Spurs vs Man Utd</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🏠</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Spurs Win</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">240</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">📐</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Over 1.5 Goals</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">140</div>
+            <div class="mv-status">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2: Locked / Live — Moment tab -->
+  <div class="screen-card">
+    <div class="screen-num">Screen 02</div>
+    <div class="screen-name">Locked / Live — Moment Tab</div>
+    <div class="screen-desc">PP picks in chrono order — player · event · minute window. Same hero card. All pending.</div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">11:00</span><span class="sbar-icons">▲ ◼◼◼ ▾</span></div>
+
+      <div class="app-header">
+        <span class="app-title-sm">GW 27</span>
+        <div class="locked-badge">
+          <svg width="10" height="11" viewBox="0 0 24 26" fill="none">
+            <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="currentColor"/>
+          </svg>
+          Locked
+        </div>
+      </div>
+
+      <div class="hero-card" style="border-color:rgba(255,215,0,0.25);">
+        <div class="hero-top">
+          <div class="hero-shield-group">
+            <div class="shield-icon">
+              <svg width="26" height="28" viewBox="0 0 24 26" fill="none">
+                <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(255,215,0,0.15)" stroke="#FFD700" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="shield-tier" style="color:var(--gold);">GOLD</div>
+              <div class="shield-label">Boldness tier</div>
+            </div>
+          </div>
+          <div class="hero-pts-group">
+            <div class="hero-pts-label">Possible Points</div>
+            <div class="hero-pts-value" style="color:var(--gold);">2,840</div>
+          </div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-status">Results incoming · ends Sun 18:00</div>
+      </div>
+
+      <div class="mv-tabs">
+        <div class="mv-tab">Match</div>
+        <div class="mv-tab active moment-tab">Moment</div>
+      </div>
+
+      <div class="scroll-area">
+        <div class="inner-scroll">
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 12:30</span>
+            <span class="mv-group-match">Arsenal vs Chelsea</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Goal · 23' ±5</div>
+              <div class="mv-pick-player">👑 Saka · captain</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">570+</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 15:00</span>
+            <span class="mv-group-match">Liverpool vs City</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Goal · 31' ±10</div>
+              <div class="mv-pick-player">Salah</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">495+</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Assist · 44' ±5</div>
+              <div class="mv-pick-player">De Bruyne</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">480+</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SUN 16:30</span>
+            <span class="mv-group-match">Everton vs West Ham</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Goal · 67' ±5</div>
+              <div class="mv-pick-player">Calvert-Lewin</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">510+</div>
+            <div class="mv-status">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3: Reveal in progress -->
+  <div class="screen-card">
+    <div class="screen-num">Screen 03</div>
+    <div class="screen-name">Reveal — In Progress</div>
+    <div class="screen-desc">Auto-triggers on first open after GW ends. Picks resolve sequentially in chrono order. Running score updates with each hit.</div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">11:00</span><span class="sbar-icons">▲ ◼◼◼ ▾</span></div>
+
+      <div class="app-header">
+        <span class="app-title-sm">GW 27 · Results</span>
+      </div>
+
+      <div class="score-bar">
+        <div>
+          <div class="sb-label">Score so far</div>
+          <div class="sb-score">725</div>
+        </div>
+        <div class="sb-progress">6 / 20 resolved</div>
+      </div>
+
+      <div class="mv-tabs">
+        <div class="mv-tab active">Match</div>
+        <div class="mv-tab">Moment</div>
+      </div>
+
+      <div class="scroll-area">
+        <div class="inner-scroll">
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 12:30</span>
+            <span class="mv-group-match">Arsenal vs Chelsea</span>
+          </div>
+          <!-- Hit -->
+          <div class="mv-pick-row pick-hit">
+            <span class="mv-pick-icon">⚽</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Arsenal First Goal</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">180</div>
+            <div class="mv-status" style="color:var(--lime);">✓</div>
+          </div>
+          <!-- Miss -->
+          <div class="mv-pick-row pick-miss">
+            <span class="mv-pick-icon">🟨</span>
+            <div class="mv-name-col"><div class="mv-pick-name">BTTS</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--muted);">350</div>
+            <div class="mv-status">✗</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 15:00</span>
+            <span class="mv-group-match">Liverpool vs City</span>
+          </div>
+          <!-- Captain hit -->
+          <div class="mv-pick-row pick-captain">
+            <span class="mv-pick-icon">👑</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Over 2.5 Goals</div>
+              <div class="mv-pick-player">Captain · ×2</div>
+            </div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--gold);">390</div>
+            <div class="mv-status" style="color:var(--gold);">✓</div>
+          </div>
+          <!-- Currently resolving -->
+          <div class="mv-pick-row pick-resolving">
+            <span class="mv-pick-icon" style="opacity:0.5;">🏠</span>
+            <div class="mv-name-col"><div class="mv-pick-name" style="opacity:0.6;">Spurs Win</div></div>
+            <div class="mv-type-badge type-match" style="opacity:0.4;">Match</div>
+            <div class="mv-pts" style="color:var(--muted);">240</div>
+            <div class="mv-status">···</div>
+          </div>
+          <!-- Still pending (dimmed) -->
+          <div class="mv-group-header" style="opacity:0.3;">
+            <span class="mv-group-time">SUN 14:00</span>
+            <span class="mv-group-match">Villa vs Brentford</span>
+          </div>
+          <div class="mv-pick-row" style="opacity:0.25;">
+            <span class="mv-pick-icon">🏠</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Villa Win</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--muted);">220</div>
+            <div class="mv-status">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4: Reveal complete — final score -->
+  <div class="screen-card">
+    <div class="screen-num">Screen 04</div>
+    <div class="screen-name">Reveal — Final Score</div>
+    <div class="screen-desc">All picks resolved. Final score locked. Shield tier confirmed. Share ↗ is the primary CTA. League rank shown inline.</div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">11:00</span><span class="sbar-icons">▲ ◼◼◼ ▾</span></div>
+
+      <div class="app-header">
+        <span class="app-title-sm">GW 27 · Results</span>
+      </div>
+
+      <div class="final-hero">
+        <div class="fh-row">
+          <div>
+            <div class="fh-gw">Gameweek 27 · Final</div>
+            <div class="fh-score">1,340</div>
+            <div class="fh-sub">11 of 20 picks hit</div>
+          </div>
+          <div class="fh-shield">
+            <svg width="32" height="36" viewBox="0 0 24 26" fill="none">
+              <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(255,215,0,0.2)" stroke="#FFD700" stroke-width="1.5"/>
+            </svg>
+            <div class="fh-tier">GOLD</div>
+          </div>
+        </div>
+        <div class="fh-rank">
+          <span>League rank</span>
+          <span class="rank-up">↑3</span>
+          <span class="rank-num">#2 of 8</span>
+        </div>
+      </div>
+
+      <div class="btn btn-primary">Share results ↗</div>
+
+      <div class="mv-tabs">
+        <div class="mv-tab active">Match</div>
+        <div class="mv-tab">Moment</div>
+      </div>
+
+      <div class="scroll-area">
+        <div class="inner-scroll">
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 12:30</span>
+            <span class="mv-group-match">Arsenal vs Chelsea</span>
+          </div>
+          <div class="mv-pick-row pick-hit">
+            <span class="mv-pick-icon">⚽</span>
+            <div class="mv-name-col"><div class="mv-pick-name">Arsenal First Goal</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--lime);">180</div>
+            <div class="mv-status" style="color:var(--lime);">✓</div>
+          </div>
+          <div class="mv-pick-row pick-miss">
+            <span class="mv-pick-icon">🟨</span>
+            <div class="mv-name-col"><div class="mv-pick-name">BTTS</div></div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--muted);">350</div>
+            <div class="mv-status">✗</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 15:00</span>
+            <span class="mv-group-match">Liverpool vs City</span>
+          </div>
+          <div class="mv-pick-row pick-captain">
+            <span class="mv-pick-icon">👑</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Over 2.5 Goals</div>
+              <div class="mv-pick-player">Captain · ×2</div>
+            </div>
+            <div class="mv-type-badge type-match">Match</div>
+            <div class="mv-pts" style="color:var(--gold);">390</div>
+            <div class="mv-status" style="color:var(--gold);">✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5: Back to builder (GW 28) -->
+  <div class="screen-card">
+    <div class="screen-num">Screen 05</div>
+    <div class="screen-name">Back to Builder — GW 28</div>
+    <div class="screen-desc">After reveal is viewed and/or shared, back returns to fresh Build View. GW 27 reveal never replays.</div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">11:00</span><span class="sbar-icons">▲ ◼◼◼ ▾</span></div>
+
+      <div class="app-header">
+        <span class="app-title">GW 28</span>
+        <span class="events-counter">0/20</span>
+      </div>
+
+      <div class="deadline-strip">
+        <div class="dl-dot"></div>
+        <div class="dl-text">Deadline Fri 8 May · 18:30</div>
+      </div>
+
+      <div class="scroll-area">
+        <div class="inner-scroll" style="padding-top:8px;">
+          <div class="fc"><div class="fc-teams">Arsenal vs Chelsea</div><div class="fc-time">Sat 12:30</div><div class="fc-chevron">›</div></div>
+          <div class="fc"><div class="fc-teams">Liverpool vs Man City</div><div class="fc-time">Sat 15:00</div><div class="fc-chevron">›</div></div>
+          <div class="fc"><div class="fc-teams">Spurs vs Man Utd</div><div class="fc-time">Sat 17:30</div><div class="fc-chevron">›</div></div>
+          <div class="fc"><div class="fc-teams">Aston Villa vs Brentford</div><div class="fc-time">Sun 14:00</div><div class="fc-chevron">›</div></div>
+          <div class="fc"><div class="fc-teams">Wolves vs Brighton</div><div class="fc-time">Sun 16:30</div><div class="fc-chevron">›</div></div>
+          <div class="fc"><div class="fc-teams">Newcastle vs Fulham</div><div class="fc-time">Sun 19:00</div><div class="fc-chevron">›</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6: Platinum tier showcase -->
+  <div class="screen-card">
+    <div class="screen-num">Screen 06</div>
+    <div class="screen-name">Locked — Platinum Tier</div>
+    <div class="screen-desc">5,000+ possible points. Heavy PP build with tight ±5 windows. Cyan shield — visually distinct from Gold.</div>
+    <div class="phone">
+      <div class="notch"><div class="notch-pill"></div></div>
+      <div class="sbar"><span class="sbar-time">11:00</span><span class="sbar-icons">▲ ◼◼◼ ▾</span></div>
+
+      <div class="app-header">
+        <span class="app-title-sm">GW 27</span>
+        <div class="locked-badge">
+          <svg width="10" height="11" viewBox="0 0 24 26" fill="none">
+            <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="currentColor"/>
+          </svg>
+          Locked
+        </div>
+      </div>
+
+      <div class="hero-card" style="border-color:rgba(0,212,255,0.3); background:rgba(0,212,255,0.03);">
+        <div class="hero-top">
+          <div class="hero-shield-group">
+            <div class="shield-icon">
+              <svg width="26" height="28" viewBox="0 0 24 26" fill="none">
+                <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(0,212,255,0.12)" stroke="#00D4FF" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="shield-tier" style="color:var(--cyan);">PLATINUM</div>
+              <div class="shield-label">Boldness tier</div>
+            </div>
+          </div>
+          <div class="hero-pts-group">
+            <div class="hero-pts-label">Possible Points</div>
+            <div class="hero-pts-value" style="color:var(--cyan);">6,120</div>
+          </div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-status">Results incoming · ends Sun 18:00</div>
+      </div>
+
+      <div class="mv-tabs">
+        <div class="mv-tab">Match</div>
+        <div class="mv-tab active moment-tab">Moment</div>
+      </div>
+
+      <div class="scroll-area">
+        <div class="inner-scroll">
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 12:30</span>
+            <span class="mv-group-match">Arsenal vs Chelsea</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Goal · 14' ±5</div>
+              <div class="mv-pick-player">👑 Saka · captain</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">780+</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Assist · 22' ±5</div>
+              <div class="mv-pick-player">Ødegaard</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">650+</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-group-header">
+            <span class="mv-group-time">SAT 15:00</span>
+            <span class="mv-group-match">Liverpool vs City</span>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Goal · 8' ±5</div>
+              <div class="mv-pick-player">Salah</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">820+</div>
+            <div class="mv-status">—</div>
+          </div>
+          <div class="mv-pick-row">
+            <span class="mv-pick-icon">🎯</span>
+            <div class="mv-name-col">
+              <div class="mv-pick-name">Goal · 31' ±5</div>
+              <div class="mv-pick-player">Haaland</div>
+            </div>
+            <div class="mv-type-badge type-moment">Moment</div>
+            <div class="mv-pts" style="color:var(--violet);">710+</div>
+            <div class="mv-status">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /screen-grid -->
+
+<!-- Boldness Shield Tier Showcase -->
+<div class="tier-showcase">
+  <div class="ts-title">Boldness Shield — All Tiers</div>
+
+  <div class="tier-row t-bronze">
+    <div class="t-shield-col">
+      <svg width="24" height="26" viewBox="0 0 24 26" fill="none">
+        <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(205,127,50,0.15)" stroke="#CD7F32" stroke-width="1.5"/>
+      </svg>
+      <div>
+        <div class="t-name" style="color:var(--bronze);">Bronze</div>
+        <div class="t-range">0 – 999 pts</div>
+      </div>
+    </div>
+    <div class="t-desc">Conservative build. Mostly MM picks, lower-odds events. Safe accumulator style.</div>
+    <div class="t-pts" style="color:var(--bronze);">640 pts</div>
+  </div>
+
+  <div class="tier-row t-silver">
+    <div class="t-shield-col">
+      <svg width="24" height="26" viewBox="0 0 24 26" fill="none">
+        <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(156,163,175,0.12)" stroke="#9CA3AF" stroke-width="1.5"/>
+      </svg>
+      <div>
+        <div class="t-name" style="color:var(--silver);">Silver</div>
+        <div class="t-range">1,000 – 2,499 pts</div>
+      </div>
+    </div>
+    <div class="t-desc">Balanced build. Mix of MM and PP. A few bold calls but mostly measured.</div>
+    <div class="t-pts" style="color:var(--silver);">1,840 pts</div>
+  </div>
+
+  <div class="tier-row t-gold">
+    <div class="t-shield-col">
+      <svg width="24" height="26" viewBox="0 0 24 26" fill="none">
+        <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(255,215,0,0.15)" stroke="#FFD700" stroke-width="1.5"/>
+      </svg>
+      <div>
+        <div class="t-name" style="color:var(--gold);">Gold</div>
+        <div class="t-range">2,500 – 4,999 pts</div>
+      </div>
+    </div>
+    <div class="t-desc">Bold build. Heavy PP use, specific minutes, tight windows. High variance.</div>
+    <div class="t-pts" style="color:var(--gold);">2,840 pts</div>
+  </div>
+
+  <div class="tier-row t-platinum">
+    <div class="t-shield-col">
+      <svg width="24" height="26" viewBox="0 0 24 26" fill="none">
+        <path d="M12 1L2 5.5v7C2 18.25 6.25 23.5 12 25c5.75-1.5 10-6.75 10-12.5v-7L12 1z" fill="rgba(0,212,255,0.1)" stroke="#00D4FF" stroke-width="1.5"/>
+      </svg>
+      <div>
+        <div class="t-name" style="color:var(--cyan);">Platinum</div>
+        <div class="t-range">5,000+ pts</div>
+      </div>
+    </div>
+    <div class="t-desc">Maximum boldness. All-in PP, ±5 windows, long-shot events. Jackpot territory.</div>
+    <div class="t-pts" style="color:var(--cyan);">6,120 pts</div>
+  </div>
+</div>
+
+</body>
+</html>

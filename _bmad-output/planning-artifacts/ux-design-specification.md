@@ -852,6 +852,8 @@ All 15 components are custom. Organised by implementation priority.
 | `RevealCard` | Animated reveal variant of MomentsPickRow | P3 |
 | `LeaderboardRow` | Mini-league results row with movement indicator | P3 |
 | `ShareCard` | Generated off-screen graphic for sharing | P3 |
+| `BoldnessShield` | Tier icon + label (Bronze/Silver/Gold/Platinum) | P3 |
+| `BoldnessHeroCard` | Hero card atop Moments View in Locked state | P3 |
 
 ---
 
@@ -1299,5 +1301,72 @@ Contrast ratios (confirmed from step 8):
 **`fontVariant: ['tabular-nums']` on all numeric displays.** Applied to: `GameweekHeader` events counter, `PickSummaryCard` point total, reveal score counter, leaderboard scores.
 
 **Player selection mandatory in Moment micro-flow.** No "Any player" option. The player list shows only named players sorted by scoring likelihood. The confirm button on Step 2 is inactive until a player has been selected in Step 1.
+
+## App State Machine
+
+The app operates in one of three states determined by gameweek phase. Each state has a distinct home screen. State transitions are automatic — no user action triggers them.
+
+| State | Active When | Home Screen | Key Behaviour |
+|---|---|---|---|
+| **Building** | Odds locked → first kick-off of GW | Build View (fixture accordion) | Full editing. Events counter. Save CTA. |
+| **Locked / Live** | First kick-off → last final whistle | Moments View + BoldnessHeroCard | Read-only. All picks pending. No edit access. |
+| **Reveal** | First app open after last match ends | Auto-reveal sequence | One-time. Auto-triggered. No tap needed. Sequential animation → share → done. |
+
+Transitions:
+- **Building → Locked:** Triggered by GW first kick-off time. App detects on next foreground.
+- **Locked → Reveal:** Triggered when last match of GW ends AND user opens app for the first time after that point. The reveal plays once. On subsequent opens it goes directly to Building (next GW).
+- **Reveal → Building:** After reveal is viewed and/or shared. Back gesture or share completion returns to fresh Build View for the next GW.
+
+### BoldnessHeroCard
+
+Displayed at the top of the Moments View during the Locked/Live state. Replaces the events counter and deadline strip that appear during Building.
+
+**Anatomy:**
+```
+┌─────────────────────────────────────────────────┐
+│  [Shield icon]  GOLD         Possible Points     │
+│                 Boldness tier      2,840         │
+│  ─────────────────────────────────────────────  │
+│  Results incoming · ends Sun 18:00               │
+└─────────────────────────────────────────────────┘
+```
+
+**Data shown:**
+- `BoldnessShield` — tier icon + tier name, colour-coded
+- **Possible Points** — sum of all pick point values if every pick lands. Calculated at save time and stored. Not recalculated during GW.
+- **Status line** — contextual text: "Results incoming · ends {day} {time}" during live GW. Updated to "Results in — tap to reveal" state never shown (reveal is auto, no tap needed).
+
+### BoldnessShield
+
+Standalone component used inside `BoldnessHeroCard` and on the post-reveal final score card.
+
+**Tier system — threshold based on total possible points:**
+
+| Tier | Colour | Hex | Possible Points Threshold |
+|---|---|---|---|
+| Bronze | Warm amber | `#CD7F32` | 0 – 999 |
+| Silver | Cool slate | `#9CA3AF` | 1,000 – 2,499 |
+| Gold | Gold | `#FFD700` | 2,500 – 4,999 |
+| Platinum | Cyan | `#00D4FF` | 5,000+ |
+
+Thresholds are calibrated against the actual points system. Values above are initial estimates — adjust when the points model is finalised.
+
+**Visual:** SVG shield path with tier-coloured stroke and low-opacity fill. Tier label in matching colour below/beside the icon. No text inside the shield.
+
+**Card border:** The `BoldnessHeroCard` border adopts the tier colour at 25–30% opacity — subtle ambient colouring indicating the tier at a glance.
+
+**Accessibility:** `accessibilityRole="text"`, `accessibilityLabel="Boldness tier: Gold. Possible points: 2,840"`.
+
+### GameweekHeader — Locked Variant
+
+During Locked/Live state the header right side changes:
+
+| State | Left | Right |
+|---|---|---|
+| Building | GW {n} | {used}/{total} in lime |
+| Locked / Live | GW {n} (smaller) | Locked badge (violet pill, lock icon) |
+| Reveal | GW {n} · Results | empty |
+
+The "Locked" badge uses `#A78BFA` violet with a shield/lock SVG icon at 10px. It is not tappable — purely informational.
 
 <!-- UX design content will be appended sequentially through collaborative workflow steps -->
