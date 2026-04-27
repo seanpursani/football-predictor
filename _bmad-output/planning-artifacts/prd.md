@@ -76,7 +76,7 @@ Two prediction types create layered depth: **Match Moments** (will it happen? e.
 
 - **Two prediction types:**
   - **Match Moments** — match-level outcomes (BTTS, Over/Under, Match Result, Clean Sheet, etc.). Binary, flat odds-derived points.
-  - **Precision Picks** — team event + player + minute + window (±5/10/15 min). Three scoring layers: event points + timing bonus + player bonus. Player bonus is additive (wrong player still earns event + timing points).
+  - **Precision Picks** — team event + event-type-specific precision fields + minute + window (±5/10/15 min). Scoring layers vary by event type but are always independent and additive (partial credit always possible): event points + timing bonus + event-specific precision bonus(es). All precision fields are required — since layers are additive and independent, there is no penalty for being wrong on any individual layer.
 - 20 tokens per gameweek, free spread across all PL matches, any mix of types
 - **Match Builder window:** opens ~3-4 days before first kickoff; odds fetched from API and locked as points at window open; deadline = first kickoff
 - Captain Moment (2x on one chosen moment, any type)
@@ -112,7 +112,7 @@ Two prediction types create layered depth: **Match Moments** (will it happen? e.
 
 **Opening Scene:** Jake clicks the invite link, downloads the app, creates an account. He lands on an onboarding tutorial that walks him through the two prediction types in under 60 seconds: Match Moments are yes/no calls, Precision Picks are "who does what, and when." Five rules on one screen. He gets it.
 
-**Rising Action:** The Match Builder window is open. Jake sees this gameweek's matches laid out as cards. He taps Arsenal vs Chelsea — a catalog of moments appears, each showing its point value. He drags "BTTS — Yes" (12 pts) into his squad as a Match Moment. Then he builds a Precision Pick: "Arsenal score, Saka, minute 28, ±10 min." The card shows his potential points breakdown — event base, timing bonus range, and Saka's player bonus. He doesn't overthink it — he fills 15 tokens manually across 4 matches he cares about, hits Quick Pick to auto-fill the remaining 5 on matches he doesn't follow. He picks his Captain: the Saka Precision Pick. He submits.
+**Rising Action:** The Match Builder window is open. Jake sees this gameweek's matches laid out as cards. He taps Arsenal vs Chelsea — a catalog of moments appears, each showing its point value. He drags "BTTS — Yes" (12 pts) into his squad as a Match Moment. Then he builds a Precision Pick using the goal micro-flow: Arsenal score → Saka (scorer) → Odegaard (assister) → minute 28 → ±10 min. The card shows his potential points breakdown — event base, timing bonus range, Saka's scorer bonus, and Odegaard's assister bonus. He doesn't overthink it — more fields just means more chances to score points. He doesn't overthink it — he fills 15 tokens manually across 4 matches he cares about, hits Quick Pick to auto-fill the remaining 5 on matches he doesn't follow. He picks his Captain: the Saka Precision Pick. He submits.
 
 **Climax:** Sunday evening. The gameweek is over. Jake gets a notification: "Your results are in." He opens the app. His score builds moment by moment — greyed out misses, green hits, a gold flash for an exact minute hit on a corner pick. Saka scored at minute 31 — inside his ±10 window. Event points ✓, timing bonus ✓, player bonus ✓, Captain 2x ✓. He's buzzing. He checks the mini-league — he's 2nd behind Dan. He screenshots and drops it in the group chat.
 
@@ -171,7 +171,7 @@ Two prediction types create layered depth: **Match Moments** (will it happen? e.
 
 2. **Cross-match streaks by real-world event time** — Streaks are ordered by when events actually happened across all matches in a gameweek, not by match or by user's predicted minute. This creates an emergent narrative arc that unfolds across the entire gameweek — genuinely novel in the prediction game space.
 
-3. **Layered scoring on Precision Picks** — The three-layer structure (event + timing + player) where each layer is independently scored and additive means partial credit is always possible. This is a departure from binary prediction models (right/wrong) and creates a richer feedback loop.
+3. **Layered scoring on Precision Picks** — Scoring layers are event-type-specific but always independent and additive, meaning partial credit is always possible. Goals score across four layers (event + timing + scorer + assister); substitutions score on player on/off identity; corners score on zone rather than player. All precision fields are always required — since no layer can subtract points, requiring every field costs the user nothing and maximises scoring opportunity and reveal richness.
 
 4. **Odds-as-difficulty without gambling** — Using betting odds APIs as the difficulty/points calibration engine while keeping the product entirely free-to-play. The app inherits the betting market's intelligence (match-specific, crowd-calibrated difficulty) without being a betting product. This separation of concerns is architecturally novel.
 
@@ -287,7 +287,17 @@ Standard opt-in via OS permission prompt during onboarding. No complex schedulin
 - **FR11:** User can view all fixtures in the current gameweek
 - **FR12:** User can browse the moment catalog filtered by match, event type, or team
 - **FR13:** User can add a Match Moment to their squad (match-level outcome, binary yes/no)
-- **FR14:** User can add a Precision Pick to their squad (team event + player + minute + window)
+- **FR14:** User can add a Precision Pick to their squad using an event-type-specific micro-flow (team → event type → minute → window → event-specific precision fields). Each event type presents only its relevant fields in sequence — no unused fields are shown.
+- **FR14a:** The Precision Pick micro-flow supports the following event-type schemas:
+
+  | Event Type | Required Fields | Optional Fields | Scoring Layers |
+  |---|---|---|---|
+  | Goal | Scorer, Assister | — | Event + Timing + Scorer bonus + Assister bonus |
+  | Substitution | Player On, Player Off | — | Event + Timing + Player On bonus + Player Off bonus |
+  | Corner | Zone | — | Event + Timing + Zone bonus |
+  | Yellow Card | Player | — | Event + Timing + Player bonus |
+  | Red Card | Player | — | Event + Timing + Player bonus |
+
 - **FR15:** User can select a confidence window (±5, ±10, or ±15 minutes) for each Precision Pick
 - **FR16:** User can see the point value breakdown for any moment before selecting it
 - **FR17:** User can designate one moment as Captain (2x points)
@@ -300,7 +310,12 @@ Standard opt-in via OS permission prompt during onboarding. No complex schedulin
 ### Scoring Engine
 
 - **FR23:** System can score Match Moments (correct = flat odds-derived points, incorrect = 0)
-- **FR24:** System can score Precision Picks across three independent layers: event points (event happened), timing bonus (event fell within user's window), player bonus (correct player involved)
+- **FR24:** System can score Precision Picks across event-type-specific independent layers, all additive (partial credit always possible):
+  - All types: event points (event happened) + timing bonus (event fell within user's window)
+  - Goal: scorer bonus (correct scorer) + assister bonus (correct assister)
+  - Substitution: player-on bonus (correct player coming on) + player-off bonus (correct player going off)
+  - Corner: zone bonus (correct zone)
+  - Yellow/Red Card: player bonus (correct player)
 - **FR25:** System can award exact minute jackpot bonus when a Precision Pick hits the precise minute
 - **FR26:** System can apply Captain Moment multiplier (2x) to the designated moment's total points
 - **FR27:** System can calculate cross-match streaks by ordering correct Precision Picks by real-world event time
