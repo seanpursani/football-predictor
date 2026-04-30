@@ -10,7 +10,7 @@ documentsInventoried:
 # Implementation Readiness Assessment Report
 
 **Date:** 2026-04-30
-**Project:** football-prediction-app
+**Project:** LeColpo
 
 ---
 

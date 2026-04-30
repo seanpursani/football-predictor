@@ -6,11 +6,11 @@ inputDocuments:
   - '_bmad-output/planning-artifacts/ux-design-specification.md'
 ---
 
-# football-prediction-app - Epic Breakdown
+# LeColpo - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for football-prediction-app, decomposing the requirements from the PRD, UX Design Specification, and Architecture into implementable stories.
+This document provides the complete epic and story breakdown for LeColpo, decomposing the requirements from the PRD, UX Design Specification, and Architecture into implementable stories.
 
 ## Requirements Inventory
 
@@ -373,7 +373,7 @@ So that all subsequent epics can build against a type-safe, locally-testable dat
 **Then** RLS is enabled on the `predictions` table with a skeleton own-rows policy (to be enforced in Epic 2)
 
 **Given** TypeScript interfaces are exported from `packages/types/src/index.ts`
-**When** any workspace package imports `@football-prediction-app/types`
+**When** any workspace package imports `@lecolpo/types`
 **Then** `Prediction`, `GameweekState`, `ScoringResult`, `MomentCard`, `MiniLeague`, `LeaderboardEntry`, and all other shared interfaces defined in the Architecture's `packages/types/src/` structure resolve with no type errors
 
 ### Story 1.4: Mobile Infrastructure — Data Layer & Navigation Skeleton
@@ -623,7 +623,7 @@ So that all external API calls are isolated to a single entry point per provider
 
 **Given** both clients return data
 **When** the response is typed
-**Then** it maps to shared interfaces from `@football-prediction-app/types`
+**Then** it maps to shared interfaces from `@lecolpo/types`
 
 ### Story 3.2: Odds Ingestion & Moment Catalog Generation
 

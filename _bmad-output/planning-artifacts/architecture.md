@@ -8,7 +8,7 @@ inputDocuments:
   - '_bmad-output/planning-artifacts/ux-design-specification.md'
   - '_bmad-output/brainstorming/brainstorming-session-2026-04-20.md'
 workflowType: 'architecture'
-project_name: 'football-prediction-app'
+project_name: 'LeColpo'
 user_name: 'sean'
 date: '2026-04-27'
 ---
@@ -123,7 +123,7 @@ Mobile stack pre-decided by UX Specification. Backend stack decided in this step
 
 ```bash
 # Monorepo root
-mkdir football-prediction-app && cd football-prediction-app
+mkdir LeColpo && cd LeColpo
 pnpm init
 # Configure pnpm-workspace.yaml
 
@@ -571,7 +571,7 @@ Stores hold **client UI state only**. Server data lives in TanStack Query cache 
 ### Complete Project Directory Structure
 
 ```
-football-prediction-app/
+LeColpo/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                      ← Tests → migrations → functions deploy → EAS build
@@ -873,7 +873,7 @@ For MVP: direct Supabase Studio table edits to `moment_types` and `game_week_mom
 **First Implementation Story:**
 ```bash
 # 1. Scaffold monorepo
-mkdir football-prediction-app && cd football-prediction-app
+mkdir LeColpo && cd LeColpo
 pnpm init
 # configure pnpm-workspace.yaml
 

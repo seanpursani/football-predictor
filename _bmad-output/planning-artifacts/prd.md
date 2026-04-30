@@ -10,7 +10,7 @@ classification:
   projectContext: greenfield
 ---
 
-# Product Requirements Document - football-prediction-app
+# Product Requirements Document - LeColpo
 
 **Author:** Sean
 **Date:** 2026-04-22

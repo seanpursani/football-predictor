@@ -5,7 +5,7 @@ inputDocuments:
   - '_bmad-output/brainstorming/brainstorming-session-2026-04-20.md'
 ---
 
-# UX Design Specification — football-prediction-app
+# UX Design Specification — LeColpo
 
 **Author:** Sean
 **Date:** 2026-04-23
