@@ -112,7 +112,7 @@ Two prediction types create layered depth: **Match Moments** (will it happen? e.
 
 **Opening Scene:** Jake clicks the invite link, downloads the app, creates an account. He lands on an onboarding tutorial that walks him through the two prediction types in under 60 seconds: Match Moments are yes/no calls, Precision Picks are "who does what, and when." Five rules on one screen. He gets it.
 
-**Rising Action:** The Match Builder window is open. Jake sees this gameweek's matches laid out as cards. He taps Arsenal vs Chelsea — a catalog of moments appears, each showing its point value. He drags "BTTS — Yes" (12 pts) into his squad as a Match Moment. Then he builds a Precision Pick using the goal micro-flow: Arsenal score → Saka (scorer) → Odegaard (assister) → minute 28 → ±10 min. The card shows his potential points breakdown — event base, timing bonus range, Saka's scorer bonus, and Odegaard's assister bonus. He doesn't overthink it — more fields just means more chances to score points. He doesn't overthink it — he fills 15 tokens manually across 4 matches he cares about, hits Quick Pick to auto-fill the remaining 5 on matches he doesn't follow. He picks his Captain: the Saka Precision Pick. He submits.
+**Rising Action:** The Match Builder window is open. Jake sees this gameweek's matches laid out as cards. He taps Arsenal vs Chelsea — a catalog of moments appears, each showing its point value. He drags "BTTS — Yes" (12 pts) into his squad as a Match Moment. Then he builds a Precision Pick using the goal micro-flow: Arsenal score → Saka (scorer) → Odegaard (assister) → minute 28 → ±10 min. The card shows his potential points breakdown — event base, timing bonus range, Saka's scorer bonus, and Odegaard's assister bonus. He doesn't overthink it — more fields just means more chances to score points. He fills 15 tokens manually across 4 matches he cares about and leaves the remaining 5 slots empty — no penalty, no pressure to fill them all. He picks his Captain: the Saka Precision Pick. He saves his squad.
 
 **Climax:** Sunday evening. The gameweek is over. Jake gets a notification: "Your results are in." He opens the app. His score builds moment by moment — greyed out misses, green hits, a gold flash for an exact minute hit on a corner pick. Saka scored at minute 31 — inside his ±10 window. Event points ✓, timing bonus ✓, player bonus ✓, Captain 2x ✓. He's buzzing. He checks the mini-league — he's 2nd behind Dan. He screenshots and drops it in the group chat.
 
@@ -319,7 +319,7 @@ Standard opt-in via OS permission prompt during onboarding. No complex schedulin
 - **FR25:** System can award exact minute jackpot bonus when a Precision Pick hits the precise minute
 - **FR26:** System can apply Captain Moment multiplier (2x) to the designated moment's total points
 - **FR27:** System can calculate cross-match streaks by ordering correct Precision Picks by real-world event time
-- **FR28:** System can apply streak multiplier to consecutive correct Precision Picks
+- **FR28:** System can apply streak bonus (additive flat points) to consecutive correct Precision Picks
 - **FR29:** System can handle postponed matches (tokens lost, no points awarded)
 - **FR30:** System can calculate a user's total gameweek score from all 20 tokens
 
