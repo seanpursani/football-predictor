@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Supabase local state
+apps/supabase/.branches/
+apps/supabase/.temp/
+apps/supabase/volumes/
+
+# Build outputs
+dist/
+build/
+
+# IDE
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# pnpm
+.pnpm-debug.log
