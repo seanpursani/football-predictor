@@ -1,5 +1,13 @@
 {
   "name": "@lecolpo/supabase",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "scripts": {
+    "start": "supabase start",
+    "stop": "supabase stop",
+    "db:reset": "supabase db reset"
+  },
+  "devDependencies": {
+    "supabase": "^2.98.2"
+  }
 }

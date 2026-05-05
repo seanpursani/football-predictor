@@ -5,5 +5,23 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.9"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "drizzle-kit": "^0.31.10",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.9",
+    "typescript": "~5.9.3"
   }
 }
