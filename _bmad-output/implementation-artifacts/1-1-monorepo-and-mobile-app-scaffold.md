@@ -1,6 +1,6 @@
 # Story 1.1: Monorepo & Mobile App Scaffold
 
-Status: review
+Status: done
 
 ## Story
 

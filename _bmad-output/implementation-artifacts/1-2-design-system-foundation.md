@@ -1,6 +1,6 @@
 # Story 1.2: Design System Foundation
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -20,47 +20,47 @@ So that all components reference a single source of truth for colours, type, and
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Extend `tailwind.config.js` with OLED Sharp colour tokens (AC: #1)
-  - [ ] Add `colors.bg.primary` (`#080808`), `colors.bg.surface` (`#141414`), `colors.bg.elevated` (`#1C1C1C`)
-  - [ ] Add `colors.text.primary` (`#FFFFFF`), `colors.text.secondary` (`#7A7A7A`), `colors.text.muted` (`#404040`)
-  - [ ] Add `colors.border.subtle` (`#1E1E1E`), `colors.border.active` (`#B4FF32`)
-  - [ ] Add semantic colours: `colors.accent` (`#B4FF32`), `colors.success` (`#B4FF32`), `colors.jackpot` (`#FFD700`), `colors.captain` (`#FFD700`), `colors.deadline` (`#FF6B35`), `colors.streak` (`#A78BFA`), `colors.miss` (`#303030`)
-  - [ ] Verify: `className="bg-primary"` renders `#080808`, `className="text-accent"` renders `#B4FF32`
+- [x] Task 1: Extend `tailwind.config.js` with OLED Sharp colour tokens (AC: #1)
+  - [x] Add `colors.bg.primary` (`#080808`), `colors.bg.surface` (`#141414`), `colors.bg.elevated` (`#1C1C1C`)
+  - [x] Add `colors.text.primary` (`#FFFFFF`), `colors.text.secondary` (`#7A7A7A`), `colors.text.muted` (`#404040`)
+  - [x] Add `colors.border.subtle` (`#1E1E1E`), `colors.border.active` (`#B4FF32`)
+  - [x] Add semantic colours: `colors.accent` (`#B4FF32`), `colors.success` (`#B4FF32`), `colors.jackpot` (`#FFD700`), `colors.captain` (`#FFD700`), `colors.deadline` (`#FF6B35`), `colors.streak` (`#A78BFA`), `colors.miss` (`#303030`)
+  - [x] Verify: `className="bg-primary"` renders `#080808`, `className="text-accent"` renders `#B4FF32`
 
-- [ ] Task 2: Define spacing tokens in `tailwind.config.js` (AC: #3)
-  - [ ] Add spacing: `space-1` (4px), `space-2` (8px), `space-3` (12px), `space-4` (16px), `space-5` (24px), `space-6` (32px), `space-8` (48px)
-  - [ ] Add border radius: `radius-sm` (4), `radius-md` (6), `radius-lg` (8), `radius-full` (9999)
-  - [ ] Note: Tailwind values are unitless (interpreted as px by NativeWind); use numeric values not strings
+- [x] Task 2: Define spacing tokens in `tailwind.config.js` (AC: #3)
+  - [x] Add spacing: `space-1` (4px), `space-2` (8px), `space-3` (12px), `space-4` (16px), `space-5` (24px), `space-6` (32px), `space-8` (48px)
+  - [x] Add border radius: `radius-sm` (4), `radius-md` (6), `radius-lg` (8), `radius-full` (9999)
+  - [x] Note: Tailwind values are unitless (interpreted as px by NativeWind); use numeric values not strings
 
-- [ ] Task 3: Install and load Inter font via `@expo-google-fonts/inter` (AC: #2)
-  - [ ] Run `npx expo install @expo-google-fonts/inter expo-font` from `apps/mobile`
-  - [ ] Create `src/lib/fonts.ts` — export font map object with all 7 required weights/styles
-  - [ ] Load fonts in `app/_layout.tsx` using `useFonts` hook from `expo-font`
-  - [ ] Show splash screen while fonts load (`expo-splash-screen` — already installed)
-  - [ ] Provide system font fallback: fonts render as SF Pro (iOS) / Roboto (Android) until Inter loads
+- [x] Task 3: Install and load Inter font via `@expo-google-fonts/inter` (AC: #2)
+  - [x] Run `npx expo install @expo-google-fonts/inter expo-font` from `apps/mobile`
+  - [x] Create `src/lib/fonts.ts` — export font map object with all 7 required weights/styles
+  - [x] Load fonts in `app/_layout.tsx` using `useFonts` hook from `expo-font`
+  - [x] Show splash screen while fonts load (`expo-splash-screen` — already installed)
+  - [x] Provide system font fallback: fonts render as SF Pro (iOS) / Roboto (Android) until Inter loads
 
-- [ ] Task 4: Create typography scale utility (AC: #2)
-  - [ ] Create `src/lib/typography.ts` with named style objects for all 7 variants
-  - [ ] Display: `{ fontFamily: 'Inter_700Bold', fontSize: 32, lineHeight: 38 }`
-  - [ ] Heading1: `{ fontFamily: 'Inter_700Bold', fontSize: 24, lineHeight: 30 }`
-  - [ ] Heading2: `{ fontFamily: 'Inter_600SemiBold', fontSize: 18, lineHeight: 24 }`
-  - [ ] Body: `{ fontFamily: 'Inter_400Regular', fontSize: 15, lineHeight: 22 }`
-  - [ ] Label: `{ fontFamily: 'Inter_500Medium', fontSize: 13, lineHeight: 18 }`
-  - [ ] Caption: `{ fontFamily: 'Inter_400Regular', fontSize: 11, lineHeight: 16 }`
-  - [ ] MonoNumber: `{ fontFamily: 'Inter_700Bold', fontSize: 20, lineHeight: 24, fontVariant: ['tabular-nums'] }`
-  - [ ] Also define corresponding Tailwind `fontFamily` entries in `tailwind.config.js` so `className="font-inter-bold"` works
+- [x] Task 4: Create typography scale utility (AC: #2)
+  - [x] Create `src/lib/typography.ts` with named style objects for all 7 variants
+  - [x] Display: `{ fontFamily: 'Inter_700Bold', fontSize: 32, lineHeight: 38 }`
+  - [x] Heading1: `{ fontFamily: 'Inter_700Bold', fontSize: 24, lineHeight: 30 }`
+  - [x] Heading2: `{ fontFamily: 'Inter_600SemiBold', fontSize: 18, lineHeight: 24 }`
+  - [x] Body: `{ fontFamily: 'Inter_400Regular', fontSize: 15, lineHeight: 22 }`
+  - [x] Label: `{ fontFamily: 'Inter_500Medium', fontSize: 13, lineHeight: 18 }`
+  - [x] Caption: `{ fontFamily: 'Inter_400Regular', fontSize: 11, lineHeight: 16 }`
+  - [x] MonoNumber: `{ fontFamily: 'Inter_700Bold', fontSize: 20, lineHeight: 24, fontVariant: ['tabular-nums'] }`
+  - [x] Also define corresponding Tailwind `fontFamily` entries in `tailwind.config.js` so `className="font-inter-bold"` works
 
-- [ ] Task 5: Update `constants/theme.ts` to OLED Sharp palette (AC: #1)
-  - [ ] Replace existing `Colors` export with OLED Sharp tokens for programmatic access (e.g. React Navigation theme)
-  - [ ] Remove light theme — dark mode only per architecture
-  - [ ] Export colour constants matching Tailwind tokens for use in non-className contexts (e.g. `react-native-reanimated` colour values, `StatusBar` style)
+- [x] Task 5: Update `constants/theme.ts` to OLED Sharp palette (AC: #1)
+  - [x] Replace existing `Colors` export with OLED Sharp tokens for programmatic access (e.g. React Navigation theme)
+  - [x] Remove light theme — dark mode only per architecture
+  - [x] Export colour constants matching Tailwind tokens for use in non-className contexts (e.g. `react-native-reanimated` colour values, `StatusBar` style)
 
-- [ ] Task 6: Create smoke-test screen verifying tokens render correctly (AC: #1, #2, #3)
-  - [ ] Add a temporary dev-only section in `app/(tabs)/index.tsx` (or existing explore tab)
-  - [ ] Render: bg-primary, bg-surface, bg-elevated backgrounds; text-primary, text-accent, text-deadline text colours
-  - [ ] Render: all 7 typography variants with their names
-  - [ ] Render: spacing boxes at space-2, space-4, space-6 with visible borders
-  - [ ] This is a dev verification screen — can be removed after visual confirmation
+- [x] Task 6: Create smoke-test screen verifying tokens render correctly (AC: #1, #2, #3)
+  - [x] Add a temporary dev-only section in `app/(tabs)/index.tsx` (or existing explore tab)
+  - [x] Render: bg-primary, bg-surface, bg-elevated backgrounds; text-primary, text-accent, text-deadline text colours
+  - [x] Render: all 7 typography variants with their names
+  - [x] Render: spacing boxes at space-2, space-4, space-6 with visible borders
+  - [x] This is a dev verification screen — can be removed after visual confirmation
 
 ## Dev Notes
 
@@ -276,11 +276,35 @@ This story delivers **tokens and type scale only** — no UI components beyond t
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Sonnet 4 (2026-05-05)
 
 ### Debug Log References
 
+- Jest 30 incompatible with jest-expo/react-native ESM setup — downgraded to jest@29.7.0
+- pnpm `.pnpm` symlink structure required custom `transformIgnorePatterns` regex
+
 ### Completion Notes List
+
+- ✅ Task 1–2: Tailwind config extended with flat colour tokens (avoiding double-prefix), spacing, radius, fontFamily
+- ✅ Task 3: Inter font installed via `@expo-google-fonts/inter`, loaded in `_layout.tsx` with SplashScreen gate
+- ✅ Task 4: Typography scale utility created with all 7 variants including `monoNumber` with `tabular-nums`
+- ✅ Task 5: `constants/theme.ts` replaced with OLED Sharp dark-only palette + `NavigationTheme` export
+- ✅ Task 6: Smoke-test screen placed in `explore.tsx` tab with colour, typography, and spacing verification
+- ✅ Fixed downstream consumers of old `Colors` shape: `collapsible.tsx`, `(tabs)/_layout.tsx`, `use-theme-color.ts`
+- ✅ Jest test infrastructure set up (jest-expo preset, pnpm-compatible transform patterns)
+- ✅ 15 tests passing (8 theme tests, 7 typography tests)
 
 ### File List
 
+- `apps/mobile/tailwind.config.js` — Modified: colours, spacing, radius, fontFamily tokens
+- `apps/mobile/app/_layout.tsx` — Modified: Inter font loading with useFonts + SplashScreen
+- `apps/mobile/app/(tabs)/explore.tsx` — Modified: replaced with design system smoke-test screen
+- `apps/mobile/app/(tabs)/_layout.tsx` — Modified: removed useColorScheme, use Colors.accent
+- `apps/mobile/src/lib/fonts.ts` — New: font map export
+- `apps/mobile/src/lib/typography.ts` — New: 7 named TextStyle objects
+- `apps/mobile/src/lib/typography.test.ts` — New: 7 typography unit tests
+- `apps/mobile/constants/theme.ts` — Modified: OLED Sharp dark-only palette + NavigationTheme
+- `apps/mobile/constants/theme.test.ts` — New: 8 theme/colour unit tests
+- `apps/mobile/hooks/use-theme-color.ts` — Modified: dark-only, removed light theme logic
+- `apps/mobile/components/ui/collapsible.tsx` — Modified: removed useColorScheme, use Colors.text.secondary
+- `apps/mobile/package.json` — Modified: added jest, jest-expo, test script, jest config

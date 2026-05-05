@@ -1,112 +1,53 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { Typography } from '@/src/lib/typography';
 
-export default function TabTwoScreen() {
+/**
+ * DEV SMOKE TEST — Design System Token Verification
+ * Remove after visual confirmation of Story 1.2.
+ */
+export default function DesignSystemSmokeTest() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <ScrollView className="flex-1 bg-primary p-space-4">
+      {/* Colour tokens */}
+      <Text style={Typography.heading1} className="text-text-primary mb-space-2">
+        Colour Tokens
+      </Text>
+      <View className="flex-row gap-space-2 mb-space-4">
+        <View className="w-16 h-16 bg-primary rounded-radius-md border border-border-subtle" />
+        <View className="w-16 h-16 bg-surface rounded-radius-md" />
+        <View className="w-16 h-16 bg-elevated rounded-radius-md" />
+      </View>
+      <View className="flex-row gap-space-2 mb-space-4">
+        <Text className="text-text-primary" style={Typography.body}>Primary</Text>
+        <Text className="text-accent" style={Typography.body}>Accent</Text>
+        <Text className="text-deadline" style={Typography.body}>Deadline</Text>
+        <Text className="text-jackpot" style={Typography.body}>Jackpot</Text>
+        <Text className="text-streak" style={Typography.body}>Streak</Text>
+      </View>
+
+      {/* Typography scale */}
+      <Text style={Typography.heading1} className="text-text-primary mb-space-2">
+        Typography Scale
+      </Text>
+      <Text style={Typography.display} className="text-text-primary mb-space-1">Display 32/700</Text>
+      <Text style={Typography.heading1} className="text-text-primary mb-space-1">Heading1 24/700</Text>
+      <Text style={Typography.heading2} className="text-text-primary mb-space-1">Heading2 18/600</Text>
+      <Text style={Typography.body} className="text-text-primary mb-space-1">Body 15/400</Text>
+      <Text style={Typography.label} className="text-text-primary mb-space-1">Label 13/500</Text>
+      <Text style={Typography.caption} className="text-text-primary mb-space-1">Caption 11/400</Text>
+      <Text style={Typography.monoNumber} className="text-text-primary mb-space-4">MonoNumber 1234567890</Text>
+
+      {/* Spacing */}
+      <Text style={Typography.heading1} className="text-text-primary mb-space-2">
+        Spacing Tokens
+      </Text>
+      <View className="flex-row gap-space-2 mb-space-4">
+        <View className="w-space-2 h-space-2 bg-accent rounded-radius-sm" />
+        <View className="w-space-4 h-space-4 bg-accent rounded-radius-md" />
+        <View className="w-space-6 h-space-6 bg-accent rounded-radius-lg" />
+      </View>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});

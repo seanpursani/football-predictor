@@ -1,53 +1,49 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * OLED Sharp colour palette — dark mode only.
+ * Matches Tailwind tokens in tailwind.config.js.
  */
 
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
 export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+  bg: {
+    primary: '#080808',
+    surface: '#141414',
+    elevated: '#1C1C1C',
   },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+  text: {
+    primary: '#FFFFFF',
+    secondary: '#7A7A7A',
+    muted: '#404040',
   },
-};
+  border: {
+    subtle: '#1E1E1E',
+    active: '#B4FF32',
+  },
+  accent: '#B4FF32',
+  success: '#B4FF32',
+  jackpot: '#FFD700',
+  captain: '#FFD700',
+  deadline: '#FF6B35',
+  streak: '#A78BFA',
+  miss: '#303030',
+} as const;
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+/**
+ * React Navigation dark theme override using OLED Sharp palette.
+ */
+export const NavigationTheme = {
+  dark: true,
+  colors: {
+    primary: Colors.accent,
+    background: Colors.bg.primary,
+    card: Colors.bg.surface,
+    text: Colors.text.primary,
+    border: Colors.border.subtle,
+    notification: Colors.deadline,
   },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+  fonts: {
+    regular: { fontFamily: 'Inter_400Regular', fontWeight: '400' as const },
+    medium: { fontFamily: 'Inter_500Medium', fontWeight: '500' as const },
+    bold: { fontFamily: 'Inter_700Bold', fontWeight: '700' as const },
+    heavy: { fontFamily: 'Inter_700Bold', fontWeight: '700' as const },
   },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+} as const;
