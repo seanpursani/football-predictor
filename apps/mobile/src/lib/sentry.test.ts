@@ -61,33 +61,31 @@ describe('Sentry mobile init', () => {
 describe('Sentry ErrorBoundary', () => {
   it('renders fallback when a child throws', () => {
     const React = require('react');
+    const { create, act } = require('react-test-renderer');
     const { ErrorBoundary } = require('@sentry/react-native');
 
-    // Component that throws on render
-    function ThrowingComponent() {
-      throw new Error('Test error');
+    // Component that always throws on render
+    function ThrowingComponent(): never {
+      throw new Error('Test render error');
     }
 
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    let caught = false;
-    try {
-      // Simulate React render cycle via createElement
-      const element = React.createElement(
-        ErrorBoundary,
-        { fallback: React.createElement('div', null, 'Error fallback') },
-        React.createElement(ThrowingComponent)
+    let renderer: ReturnType<typeof create> | null = null;
+    act(() => {
+      renderer = create(
+        React.createElement(
+          ErrorBoundary,
+          { fallback: React.createElement('Text', null, 'Error fallback') },
+          React.createElement(ThrowingComponent)
+        )
       );
-      // Verify the ErrorBoundary is a valid React component
-      expect(element).toBeDefined();
-      expect(element.type).toBe(ErrorBoundary);
-      caught = true;
-    } catch {
-      caught = true;
-    }
+    });
 
+    // The boundary's mock implementation should render the fallback
+    const json = renderer!.toJSON();
+    expect(json).not.toBeNull();
     consoleSpy.mockRestore();
-    expect(caught).toBe(true);
   });
 });
 

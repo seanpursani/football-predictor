@@ -41,10 +41,9 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) return null;
-
   return (
     <Sentry.ErrorBoundary fallback={<ErrorFallback />}>
+      {!fontsLoaded ? null : (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider value={NavigationTheme}>
           <Stack>
@@ -57,6 +56,7 @@ export default function RootLayout() {
           <StatusBar style="light" />
         </ThemeProvider>
       </QueryClientProvider>
+      )}
     </Sentry.ErrorBoundary>
   );
 }

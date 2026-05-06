@@ -9,9 +9,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const SENTRY_HELPER_PATH = path.resolve(
-  __dirname,
-  '../../../../apps/supabase/supabase/functions/_shared/sentry.ts'
+// Anchor to monorepo root (4 levels up from apps/mobile/src/lib)
+const MONOREPO_ROOT = path.resolve(__dirname, '../../../../');
+const SENTRY_HELPER_PATH = path.join(
+  MONOREPO_ROOT,
+  'apps/supabase/supabase/functions/_shared/sentry.ts'
 );
 
 describe('Edge Function Sentry helper — file contract', () => {
