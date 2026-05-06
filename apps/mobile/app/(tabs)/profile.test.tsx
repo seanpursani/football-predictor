@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react-native';
 
 const mockMutate = jest.fn();
+const mockReset = jest.fn();
 let mockIsPending = false;
 let mockMutationError: Error | null = null;
 
@@ -15,6 +16,7 @@ jest.mock('@/src/queries/useUserQuery', () => ({
     mutate: mockMutate,
     isPending: mockIsPending,
     error: mockMutationError,
+    reset: mockReset,
   }),
 }));
 
@@ -26,6 +28,7 @@ import ProfileScreen from './profile';
 
 beforeEach(() => {
   mockMutate.mockClear();
+  mockReset.mockClear();
   mockIsPending = false;
   mockMutationError = null;
 });

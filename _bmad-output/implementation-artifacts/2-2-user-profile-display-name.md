@@ -1,6 +1,6 @@
 # Story 2.2: User Profile — Display Name
 
-Status: review
+Status: done
 
 ## Story
 
@@ -260,10 +260,20 @@ Modified:
 New:
 - `apps/mobile/app/(tabs)/profile.test.tsx`
 
+### Review Findings
+
+- [x] [Review][Patch] Null `authId` crash at save time — `authId!` non-null assertion on line 36 of `profile.tsx` will throw `TypeError` if session expires between mount and button press [`apps/mobile/app/(tabs)/profile.tsx:36`]
+- [x] [Review][Patch] `mutationError` not cleared when user retries save — `setValidationError(null)` is called at line 35 but there is no `reset()` call on the mutation, so a prior server error persists in state while a new attempt is in-flight [`apps/mobile/app/(tabs)/profile.tsx:35`]
+- [x] [Review][Defer] `useEffect` overwrites in-progress user edits on background refetch — if TanStack Query refetches while user is typing, `setNameInput` fires and clobbers the input [`apps/mobile/app/(tabs)/profile.tsx:25-27`] — deferred, pre-existing pattern decision
+- [x] [Review][Defer] `.update()` silent no-op — Supabase does not error when 0 rows are affected; if auth_id row is missing, the save silently does nothing [`apps/mobile/src/queries/useUserQuery.ts:71-74`] — deferred, pre-existing architecture assumption (row guaranteed by Story 2.1)
+- [x] [Review][Defer] No success feedback after save — spec is silent on confirmation UX; users have no indication the save succeeded [`apps/mobile/app/(tabs)/profile.tsx`] — deferred, spec gap to address in future UX pass
+- [x] [Review][Defer] `screens.test.ts` fragile require pattern — bare `require(screenPath)` bypasses jest mock context for transitive supabase import; currently passing but environment-sensitive [`apps/mobile/src/lib/screens.test.ts:24`] — deferred, pre-existing test pattern
+
 ## Change Log
 
 | Date | Change |
 |------|--------|
 | 2026-05-06 | Story created — ready for dev |
 | 2026-05-06 | Implementation complete — profile screen, mutation, tests (73 tests passing) |
+| 2026-05-06 | Code review complete — 2 patch findings, 4 deferred, 2 dismissed |
 

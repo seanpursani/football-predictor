@@ -17,7 +17,7 @@ export default function ProfileScreen() {
   const { session } = useAuthState();
   const authId = session?.user?.id ?? null;
   const { data: userRecord } = useUserQuery(authId);
-  const { mutate: updateDisplayName, isPending, error: mutationError } = useUpdateDisplayNameMutation();
+  const { mutate: updateDisplayName, isPending, error: mutationError, reset: resetMutation } = useUpdateDisplayNameMutation();
 
   const [nameInput, setNameInput] = useState(userRecord?.displayName ?? '');
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -32,8 +32,10 @@ export default function ProfileScreen() {
       setValidationError('Display name cannot be empty');
       return;
     }
+    if (!authId) return;
     setValidationError(null);
-    updateDisplayName({ authId: authId!, displayName: trimmed });
+    resetMutation();
+    updateDisplayName({ authId, displayName: trimmed });
   };
 
   return (

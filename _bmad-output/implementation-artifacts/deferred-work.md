@@ -15,3 +15,10 @@
 - Blank screen if `useUserQuery` enters error state post-auth — `_layout.tsx` returns `null` with no error UI. Address with a proper error boundary or error state render in a future story.
 - `upsertUser` missing from `useEffect` dependency array in `_layout.tsx` — `eslint-react-hooks` violation. Mutation refs are stable in practice; clean up in a future pass.
 
+## Deferred from: code review of 2-2-user-profile-display-name (2026-05-06)
+
+- `useEffect` in `profile.tsx` calls `setNameInput` on every background refetch, silently clobbering in-progress user edits. Address with a "dirty" guard or by switching to a controlled uncontrolled pattern in a future UX pass.
+- Supabase `.update()` does not error on 0-row match — silent no-op if auth_id row is missing. Currently safe given Story 2.1 guarantees row existence, but worth adding a count check when hardening the data layer.
+- No success feedback after display name save — spec is silent; address in a future UX iteration.
+- `screens.test.ts` uses bare `require(screenPath)` which triggers transitive supabase module init before jest mocks are in scope. Currently works but fragile; revisit with a module-factory or factory-level mock approach.
+
