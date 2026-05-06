@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-06 # dev-story started
+last_updated: 2026-05-06 # story 2-1 created
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -48,12 +48,12 @@ development_status:
   1-2-design-system-foundation: done
   1-3-supabase-project-and-database-schema: done
   1-4-mobile-infrastructure-data-layer-and-navigation-skeleton: done
-  1-5-cicd-pipeline-and-error-monitoring: review
+  1-5-cicd-pipeline-and-error-monitoring: done
   epic-1-retrospective: optional
 
   # Epic 2: Account, Authentication & Onboarding
-  epic-2: backlog
-  2-1-social-login-apple-and-google: backlog
+  epic-2: in-progress
+  2-1-social-login-apple-and-google: ready-for-dev
   2-2-user-profile-display-name: backlog
   2-3-push-notification-permission-and-token-registration: backlog
   2-4-rls-prediction-privacy-policies: backlog

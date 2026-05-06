@@ -22,6 +22,8 @@ export function captureException(err: unknown, context?: Record<string, unknown>
     if (context) scope.setContext('additional', context);
     Sentry.captureException(err);
   });
+  // Flush buffered events — Edge Functions may exit immediately after returning
+  Sentry.flush(2000);
 }
 
 /**
@@ -34,5 +36,7 @@ export function captureHighPriority(err: unknown, context?: Record<string, unkno
     if (context) scope.setContext('additional', context);
     Sentry.captureException(err);
   });
+  // Flush buffered events — Edge Functions may exit immediately after returning
+  Sentry.flush(2000);
 }
 

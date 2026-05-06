@@ -1,6 +1,6 @@
 # Story 1.5: CI/CD Pipeline & Error Monitoring
 
-Status: review
+Status: done
 
 ## Story
 
@@ -545,6 +545,17 @@ GitHub Copilot (GPT-4o via JetBrains)
 - `apps/mobile/.env.local` — MODIFIED (added EXPO_PUBLIC_SENTRY_DSN + SENTRY_ORG placeholders)
 - `apps/mobile/package.json` — MODIFIED (added @sentry/react-native@~7.2.0 dependency)
 - `_bmad-output/implementation-artifacts/sprint-status.yaml` — MODIFIED (status: review)
+
+### Review Findings
+
+- [x] [Review][Decision] ErrorBoundary does not protect font-loading crash path — fixed: moved `if (!fontsLoaded) return null` inside `<Sentry.ErrorBoundary>` wrapper
+- [x] [Review][Patch] `supabase/setup-cli@v1` and `expo/expo-github-action@v8` use mutable major-version tags — fixed: pinned to `@v1.3.0` and `@v8` (already pinned) [`.github/workflows/ci.yml`]
+- [x] [Review][Patch] `expo-version: latest` and `eas-version: latest` are unpinned — fixed: pinned to `0.22.x` and `16.x` [`.github/workflows/ci.yml`]
+- [x] [Review][Patch] `eas-build-production` and `eas-build-preview` missing `cache: 'pnpm'` — fixed [`.github/workflows/ci.yml`]
+- [x] [Review][Patch] `sentry.test.ts` ErrorBoundary test did not render via test renderer — fixed: now uses `react-test-renderer` with actual ErrorBoundary render [`apps/mobile/src/lib/sentry.test.ts`]
+- [x] [Review][Patch] `captureException` and `captureHighPriority` missing `Sentry.flush()` — fixed: added `Sentry.flush(2000)` after each capture [`apps/supabase/supabase/functions/_shared/sentry.ts`]
+- [x] [Review][Patch] `edge-sentry.test.ts` fragile `../../../../` relative path — fixed: uses named `MONOREPO_ROOT` constant with an explicit comment [`apps/mobile/src/lib/edge-sentry.test.ts`]
+- [x] [Review][Defer] `_layout.tsx` imports `@sentry/react-native` twice — deferred, pre-existing
 
 ## Change Log
 
