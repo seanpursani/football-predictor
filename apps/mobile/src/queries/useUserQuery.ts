@@ -61,3 +61,21 @@ export function useUpsertUserMutation() {
   });
 }
 
+/**
+ * Updates the display_name for an existing user row in the `users` table.
+ * Should only be called when a row already exists (created in Story 2.1 on sign-in).
+ */
+export function useUpdateDisplayNameMutation() {
+  return useMutation({
+    mutationFn: async ({ authId, displayName }: { authId: string; displayName: string }) => {
+      const { error } = await supabase
+        .from('users')
+        .update({ display_name: displayName })
+        .eq('auth_id', authId);
+      if (error) throw error;
+    },
+    onSuccess: (_data, { authId }) => {
+      queryClient.invalidateQueries({ queryKey: ['user', authId] });
+    },
+  });
+}

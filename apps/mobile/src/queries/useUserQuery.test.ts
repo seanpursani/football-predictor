@@ -1,10 +1,12 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useUpsertUserMutation, useUserQuery } from './useUserQuery';
+import { useUpsertUserMutation, useUserQuery, useUpdateDisplayNameMutation } from './useUserQuery';
 
 const mockFrom = jest.fn();
 const mockUpsert = jest.fn().mockResolvedValue({ error: null });
+const mockUpdate = jest.fn();
+const mockEqUpdate = jest.fn().mockResolvedValue({ error: null });
 const mockSelect = jest.fn();
 const mockEq = jest.fn();
 const mockSingle = jest.fn();
@@ -16,6 +18,7 @@ jest.mock('../lib/supabase', () => ({
       return {
         select: (...a: unknown[]) => { mockSelect(...a); return { eq: (...b: unknown[]) => { mockEq(...b); return { single: mockSingle }; } }; },
         upsert: mockUpsert,
+        update: (...a: unknown[]) => { mockUpdate(...a); return { eq: mockEqUpdate }; },
       };
     },
   },
@@ -23,7 +26,9 @@ jest.mock('../lib/supabase', () => ({
 
 jest.mock('../lib/queryClient', () => {
   const { QueryClient } = require('@tanstack/react-query');
-  return { queryClient: new QueryClient() };
+  const qc = new QueryClient();
+  qc.invalidateQueries = jest.fn().mockResolvedValue(undefined);
+  return { queryClient: qc };
 });
 
 function wrapper({ children }: { children: React.ReactNode }) {
@@ -49,6 +54,44 @@ describe('useUserQuery', () => {
   it('does not run when authId is null', () => {
     const { result } = renderHook(() => useUserQuery(null), { wrapper });
     expect(result.current.fetchStatus).toBe('idle');
+  });
+});
+
+describe('useUpdateDisplayNameMutation', () => {
+  beforeEach(() => {
+    mockFrom.mockClear();
+    mockUpdate.mockClear();
+    mockEqUpdate.mockClear();
+  });
+
+  it('calls supabase.from(users).update().eq() with correct args', async () => {
+    const { result } = renderHook(() => useUpdateDisplayNameMutation(), { wrapper });
+    await act(async () => {
+      result.current.mutate({ authId: 'test-auth-id', displayName: 'TestUser' });
+    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(mockFrom).toHaveBeenCalledWith('users');
+    expect(mockUpdate).toHaveBeenCalledWith({ display_name: 'TestUser' });
+    expect(mockEqUpdate).toHaveBeenCalledWith('auth_id', 'test-auth-id');
+  });
+
+  it('calls invalidateQueries with correct key on success', async () => {
+    const { queryClient } = require('../lib/queryClient');
+    const { result } = renderHook(() => useUpdateDisplayNameMutation(), { wrapper });
+    await act(async () => {
+      result.current.mutate({ authId: 'test-auth-id', displayName: 'TestUser' });
+    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(queryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['user', 'test-auth-id'] });
+  });
+
+  it('propagates error when supabase returns error', async () => {
+    mockEqUpdate.mockResolvedValueOnce({ error: { message: 'DB error' } });
+    const { result } = renderHook(() => useUpdateDisplayNameMutation(), { wrapper });
+    await act(async () => {
+      result.current.mutate({ authId: 'test-auth-id', displayName: 'SomeName' });
+    });
+    await waitFor(() => expect(result.current.isError).toBe(true));
   });
 });
 

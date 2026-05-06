@@ -1,6 +1,6 @@
 # Story 2.2: User Profile — Display Name
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -18,35 +18,35 @@ So that I appear correctly on leaderboards and in mini-leagues.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Add `useUpdateDisplayNameMutation` to `src/queries/useUserQuery.ts` (AC: #2, #3)
-  - [ ] Export `useUpdateDisplayNameMutation` — updates `display_name` in `users` table where `auth_id = session.user.id`
-  - [ ] Use `supabase.from('users').update({ display_name: trimmedName }).eq('auth_id', authId)` — update not upsert
-  - [ ] On success: call `queryClient.invalidateQueries({ queryKey: ['user', authId] })` to refresh cached record
-  - [ ] On error: propagate — let the UI handle it via `onError`
-  - [ ] Import `queryClient` from `../lib/queryClient` (already imported in the file)
+- [x] Task 1: Add `useUpdateDisplayNameMutation` to `src/queries/useUserQuery.ts` (AC: #2, #3)
+  - [x] Export `useUpdateDisplayNameMutation` — updates `display_name` in `users` table where `auth_id = session.user.id`
+  - [x] Use `supabase.from('users').update({ display_name: trimmedName }).eq('auth_id', authId)` — update not upsert
+  - [x] On success: call `queryClient.invalidateQueries({ queryKey: ['user', authId] })` to refresh cached record
+  - [x] On error: propagate — let the UI handle it via `onError`
+  - [x] Import `queryClient` from `../lib/queryClient` (already imported in the file)
 
-- [ ] Task 2: Build `(tabs)/profile.tsx` — Profile screen (AC: #1, #2, #3)
-  - [ ] Import `useAuthState` from `@/src/hooks/useAuthState` — get `session.user.id`
-  - [ ] Import `useUserQuery` and `useUpdateDisplayNameMutation` from `@/src/queries/useUserQuery`
-  - [ ] Show current display name from `userRecord.displayName` (may be `null` — show empty string in input)
-  - [ ] TextInput: pre-filled with current `displayName`; `style` uses `Typography.body` from `@/src/lib/typography`; `placeholderTextColor='#7A7A7A'` (text-secondary)
-  - [ ] Save button: Primary button style — lime bg `#B4FF32`, black text, `radius-md` (6px), full-width
-  - [ ] Inline validation: if trimmed value is empty/whitespace on save attempt → show red (`#FF4444`) error text below input — no toast, no modal
-  - [ ] On save: call `updateDisplayName({ authId: session.user.id, displayName: trimmedValue })`; clear inline error
-  - [ ] Loading state: replace Save button text with `ActivityIndicator` while mutation is pending
-  - [ ] Error state (network/server): show inline error text below input "Couldn't save — please try again" (NOT a toast)
-  - [ ] Background: `#080808` (bg-primary); all text `#FFFFFF`; horizontal padding: 16px per UX-DR3
-  - [ ] Screen heading "Profile" in `Typography.heading1` style
-  - [ ] Touch targets minimum 44×44px (UX-DR28)
+- [x] Task 2: Build `(tabs)/profile.tsx` — Profile screen (AC: #1, #2, #3)
+  - [x] Import `useAuthState` from `@/src/hooks/useAuthState` — get `session.user.id`
+  - [x] Import `useUserQuery` and `useUpdateDisplayNameMutation` from `@/src/queries/useUserQuery`
+  - [x] Show current display name from `userRecord.displayName` (may be `null` — show empty string in input)
+  - [x] TextInput: pre-filled with current `displayName`; `style` uses `Typography.body` from `@/src/lib/typography`; `placeholderTextColor='#7A7A7A'` (text-secondary)
+  - [x] Save button: Primary button style — lime bg `#B4FF32`, black text, `radius-md` (6px), full-width
+  - [x] Inline validation: if trimmed value is empty/whitespace on save attempt → show red (`#FF4444`) error text below input — no toast, no modal
+  - [x] On save: call `updateDisplayName({ authId: session.user.id, displayName: trimmedValue })`; clear inline error
+  - [x] Loading state: replace Save button text with `ActivityIndicator` while mutation is pending
+  - [x] Error state (network/server): show inline error text below input "Couldn't save — please try again" (NOT a toast)
+  - [x] Background: `#080808` (bg-primary); all text `#FFFFFF`; horizontal padding: 16px per UX-DR3
+  - [x] Screen heading "Profile" in `Typography.heading1` style
+  - [x] Touch targets minimum 44×44px (UX-DR28)
 
-- [ ] Task 3: Write tests (AC: #1, #2, #3)
-  - [ ] Add test for `useUpdateDisplayNameMutation` in `src/queries/useUserQuery.test.ts` — mock `supabase.from().update().eq()` chain; verify it calls the correct method with correct args; verify `invalidateQueries` is called on success
-  - [ ] Create `apps/mobile/app/(tabs)/profile.test.tsx` — render screen; mock `useAuthState`, `useUserQuery`, `useUpdateDisplayNameMutation`; verify: display name shown, empty-submit shows inline error, valid submit calls mutation, loading state shown
-  - [ ] Run full test suite: `pnpm test` from `apps/mobile` — confirm no regressions
+- [x] Task 3: Write tests (AC: #1, #2, #3)
+  - [x] Add test for `useUpdateDisplayNameMutation` in `src/queries/useUserQuery.test.ts` — mock `supabase.from().update().eq()` chain; verify it calls the correct method with correct args; verify `invalidateQueries` is called on success
+  - [x] Create `apps/mobile/app/(tabs)/profile.test.tsx` — render screen; mock `useAuthState`, `useUserQuery`, `useUpdateDisplayNameMutation`; verify: display name shown, empty-submit shows inline error, valid submit calls mutation, loading state shown
+  - [x] Run full test suite: `pnpm test` from `apps/mobile` — confirm no regressions
 
-- [ ] Task 4: Update sprint status and story (AC: all)
-  - [ ] Mark all tasks complete in this file
-  - [ ] Update `sprint-status.yaml`: `2-2-user-profile-display-name` → `review`
+- [x] Task 4: Update sprint status and story (AC: all)
+  - [x] Mark all tasks complete in this file
+  - [x] Update `sprint-status.yaml`: `2-2-user-profile-display-name` → `review`
 
 ## Dev Notes
 
@@ -234,23 +234,36 @@ New files:
 
 ### Implementation Plan
 
-_To be filled during development_
+1. Added `useUpdateDisplayNameMutation` to `useUserQuery.ts` — uses `.update().eq()` (not upsert), invalidates `['user', authId]` cache on success, propagates errors to UI.
+2. Replaced placeholder `profile.tsx` with full screen: displays current `displayName` from TanStack Query cache, editable TextInput synced via `useEffect`, inline validation (empty/whitespace), loading state via `ActivityIndicator`, server error inline text. Uses `react-native-safe-area-context` SafeAreaView. Follows OLED Sharp palette and Typography constants throughout.
+3. Added 3 new tests to `useUserQuery.test.ts` covering update chain, invalidation, and error propagation. Created `profile.test.tsx` with 7 tests covering all ACs. Updated `screens.test.ts` with additional mocks to support supabase-importing screens.
 
 ### Debug Log
 
-_To be filled during development_
+- `screens.test.ts` required additional mocks (`supabase`, `useAuthState`, `useUserQuery`, `expo-router`, `react-native-safe-area-context`) after profile screen started importing real modules — fixed by adding jest.mock calls to that test file.
+- Used mutable `let` variables for `mockIsPending`/`mockMutationError` in profile tests to avoid `jest.resetModules()` multi-React-instance issues.
 
 ### Completion Notes
 
-_To be filled during development_
+- All 4 tasks and all subtasks complete.
+- 73 tests pass, 0 regressions.
+- All 3 ACs satisfied: display name shown on load (AC1), update persisted and reflected via cache invalidation (AC2), inline validation for empty/whitespace (AC3).
 
 ## File List
 
-_To be updated on completion_
+Modified:
+- `apps/mobile/app/(tabs)/profile.tsx`
+- `apps/mobile/src/queries/useUserQuery.ts`
+- `apps/mobile/src/queries/useUserQuery.test.ts`
+- `apps/mobile/src/lib/screens.test.ts`
+
+New:
+- `apps/mobile/app/(tabs)/profile.test.tsx`
 
 ## Change Log
 
 | Date | Change |
 |------|--------|
 | 2026-05-06 | Story created — ready for dev |
+| 2026-05-06 | Implementation complete — profile screen, mutation, tests (73 tests passing) |
 
