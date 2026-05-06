@@ -1,6 +1,6 @@
 # Story 1.5: CI/CD Pipeline & Error Monitoring
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -20,58 +20,58 @@ So that every push to main automatically validates, deploys, and builds — and 
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Install Sentry mobile SDK (AC: #3)
-  - [ ] `npx expo install @sentry/react-native` in `apps/mobile`
-  - [ ] Add Sentry Expo plugin to `app.config.ts`: `['@sentry/react-native/expo', { organization: '<org>', project: 'lecolpo-mobile' }]`
-  - [ ] Verify no peer dependency errors
+- [x] Task 1: Install Sentry mobile SDK (AC: #3)
+  - [x] `npx expo install @sentry/react-native` in `apps/mobile`
+  - [x] Add Sentry Expo plugin to `app.config.ts`: `['@sentry/react-native/expo', { organization: '<org>', project: 'lecolpo-mobile' }]`
+  - [x] Verify no peer dependency errors
 
-- [ ] Task 2: Create `lib/sentry.ts` — mobile Sentry init (AC: #3)
-  - [ ] Create `apps/mobile/src/lib/sentry.ts`
-  - [ ] Initialize Sentry with DSN from `EXPO_PUBLIC_SENTRY_DSN` env var
-  - [ ] Set `environment` based on `__DEV__` flag: `'development'` vs `'production'`
-  - [ ] Set `debug: __DEV__` to suppress noise in production
-  - [ ] Export `Sentry` for use in catch blocks (error capture)
-  - [ ] Do NOT call `Sentry.init()` more than once — singleton init pattern
+- [x] Task 2: Create `lib/sentry.ts` — mobile Sentry init (AC: #3)
+  - [x] Create `apps/mobile/src/lib/sentry.ts`
+  - [x] Initialize Sentry with DSN from `EXPO_PUBLIC_SENTRY_DSN` env var
+  - [x] Set `environment` based on `__DEV__` flag: `'development'` vs `'production'`
+  - [x] Set `debug: __DEV__` to suppress noise in production
+  - [x] Export `Sentry` for use in catch blocks (error capture)
+  - [x] Do NOT call `Sentry.init()` more than once — singleton init pattern
 
-- [ ] Task 3: Add Sentry error boundary to `app/_layout.tsx` (AC: #3)
-  - [ ] Import `Sentry` from `src/lib/sentry.ts` — ensure init runs before any render
-  - [ ] Wrap root `<Stack>` content with `Sentry.ErrorBoundary` (or equivalent `<ErrorBoundary fallback={...}>`)
-  - [ ] Fallback renders a safe, non-blank screen (e.g. "Something went wrong — please restart the app")
-  - [ ] The `QueryClientProvider` and `ThemeProvider` wrappers must remain — add error boundary as outer wrapper
+- [x] Task 3: Add Sentry error boundary to `app/_layout.tsx` (AC: #3)
+  - [x] Import `Sentry` from `src/lib/sentry.ts` — ensure init runs before any render
+  - [x] Wrap root `<Stack>` content with `Sentry.ErrorBoundary` (or equivalent `<ErrorBoundary fallback={...}>`)
+  - [x] Fallback renders a safe, non-blank screen (e.g. "Something went wrong — please restart the app")
+  - [x] The `QueryClientProvider` and `ThemeProvider` wrappers must remain — add error boundary as outer wrapper
 
-- [ ] Task 4: Create `functions/_shared/sentry.ts` — Edge Function Sentry init (AC: #4)
-  - [ ] Create `apps/supabase/functions/_shared/sentry.ts`
-  - [ ] Import and init `@sentry/deno` SDK with DSN from Supabase secret env var `SENTRY_DSN`
-  - [ ] Set environment: `'edge-functions'`
-  - [ ] Export a `captureException(err: unknown, context?: Record<string, unknown>)` helper
-  - [ ] Export a `captureHighPriority(err: unknown, context?: Record<string, unknown>)` helper that sets `level: 'fatal'` — used by `run-scoring`
+- [x] Task 4: Create `functions/_shared/sentry.ts` — Edge Function Sentry init (AC: #4)
+  - [x] Create `apps/supabase/functions/_shared/sentry.ts`
+  - [x] Import and init `@sentry/deno` SDK with DSN from Supabase secret env var `SENTRY_DSN`
+  - [x] Set environment: `'edge-functions'`
+  - [x] Export a `captureException(err: unknown, context?: Record<string, unknown>)` helper
+  - [x] Export a `captureHighPriority(err: unknown, context?: Record<string, unknown>)` helper that sets `level: 'fatal'` — used by `run-scoring`
 
-- [ ] Task 5: Create GitHub Actions CI workflow for main branch (AC: #1)
-  - [ ] Create `.github/workflows/ci.yml`
-  - [ ] Trigger: `push` to `main` branch only
-  - [ ] Jobs must run sequentially (each `needs` the previous):
+- [x] Task 5: Create GitHub Actions CI workflow for main branch (AC: #1)
+  - [x] Create `.github/workflows/ci.yml`
+  - [x] Trigger: `push` to `main` branch only
+  - [x] Jobs must run sequentially (each `needs` the previous):
     - `test`: Run `pnpm --filter mobile test -- --ci --passWithNoTests`
     - `migrate`: Run `supabase db push` using `SUPABASE_ACCESS_TOKEN` + `SUPABASE_PROJECT_ID` secrets
     - `deploy-functions`: Run `supabase functions deploy --all` using project secrets
     - `eas-build`: Trigger Expo EAS production channel build via `expo-github-action`
-  - [ ] Each job only runs if the previous passes (`needs:` dependency chain)
-  - [ ] Use pinned action versions for security (e.g. `actions/checkout@v4`)
+  - [x] Each job only runs if the previous passes (`needs:` dependency chain)
+  - [x] Use pinned action versions for security (e.g. `actions/checkout@v4`)
 
-- [ ] Task 6: Create GitHub Actions CI workflow for PRs (AC: #2)
-  - [ ] Add a separate job (or workflow) triggered on `pull_request` targeting `main`
-  - [ ] PR workflow runs: Jest tests only + EAS Preview channel build (no `supabase db push`, no functions deploy)
-  - [ ] EAS Preview build uses `--profile preview` channel
-  - [ ] Can be in the same `ci.yml` using job conditionals or a separate `pr.yml`
+- [x] Task 6: Create GitHub Actions CI workflow for PRs (AC: #2)
+  - [x] Add a separate job (or workflow) triggered on `pull_request` targeting `main`
+  - [x] PR workflow runs: Jest tests only + EAS Preview channel build (no `supabase db push`, no functions deploy)
+  - [x] EAS Preview build uses `--profile preview` channel
+  - [x] Can be in the same `ci.yml` using job conditionals or a separate `pr.yml`
 
-- [ ] Task 7: Write tests (AC: #3, #4)
-  - [ ] Test `lib/sentry.ts` exports a Sentry instance (or mock init) without throwing
-  - [ ] Test error boundary renders fallback when a child throws (use `@testing-library/react-native` render with a throw)
-  - [ ] Test `functions/_shared/sentry.ts` exports `captureException` and `captureHighPriority` as functions
-  - [ ] Run full test suite and confirm no regressions (39 existing tests pass)
+- [x] Task 7: Write tests (AC: #3, #4)
+  - [x] Test `lib/sentry.ts` exports a Sentry instance (or mock init) without throwing
+  - [x] Test error boundary renders fallback when a child throws (use `@testing-library/react-native` render with a throw)
+  - [x] Test `functions/_shared/sentry.ts` exports `captureException` and `captureHighPriority` as functions
+  - [x] Run full test suite and confirm no regressions (39 existing tests pass)
 
-- [ ] Task 8: Update sprint status and story (AC: all)
-  - [ ] Mark all tasks complete in this file
-  - [ ] Update `sprint-status.yaml`: `1-5-cicd-pipeline-and-error-monitoring` → `review`
+- [x] Task 8: Update sprint status and story (AC: all)
+  - [x] Mark all tasks complete in this file
+  - [x] Update `sprint-status.yaml`: `1-5-cicd-pipeline-and-error-monitoring` → `review`
 
 ## Dev Notes
 
@@ -512,23 +512,44 @@ apps/mobile/
 
 ### Agent Model Used
 
-_To be filled by dev agent_
+GitHub Copilot (GPT-4o via JetBrains)
 
 ### Debug Log References
 
-_None yet_
+- Edge Function sentry test: path required 4 `../` traversals from `apps/mobile/src/lib` to reach monorepo root, then `apps/supabase/supabase/functions/_shared/sentry.ts`
+- Sentry SDK installed as `@sentry/react-native@~7.2.0` (Expo SDK 54 compatible version)
+- CI args `--ci --passWithNoTests --forceExit` must be passed directly to `jest` — not via `pnpm --filter mobile test -- ...` as that causes Jest to treat them as test path patterns
 
 ### Completion Notes List
 
-_To be filled by dev agent_
+- ✅ Task 1: `@sentry/react-native@~7.2.0` installed via `npx expo install`. Sentry Expo plugin added to `app.config.ts` with org/project config.
+- ✅ Task 2: `apps/mobile/src/lib/sentry.ts` created. Singleton init pattern: `Sentry.init()` called once as module side-effect. `enabled: !__DEV__` suppresses Sentry traffic in dev.
+- ✅ Task 3: `app/_layout.tsx` updated — `import '../src/lib/sentry'` at top ensures init before render. `Sentry.ErrorBoundary` wraps `QueryClientProvider` + `ThemeProvider`. `ErrorFallback` component provides non-blank crash screen.
+- ✅ Task 4: `apps/supabase/supabase/functions/_shared/sentry.ts` created with `captureException` (standard) and `captureHighPriority` (level: fatal) helpers. Uses lazy `ensureInit()` guard for Deno Edge Function cold starts.
+- ✅ Task 5: `.github/workflows/ci.yml` created. Push-to-main sequence: `test` → `migrate` → `deploy-functions` → `eas-build-production`. All jobs use `needs:` chains. `migrate`/`deploy-functions`/`eas-build-production` gated to `github.ref == 'refs/heads/main' && github.event_name == 'push'`.
+- ✅ Task 6: `eas-build-preview` job in same `ci.yml` — triggered on `pull_request`, `needs: test`, uses `--profile preview`. No DB migrations or function deploys on PRs.
+- ✅ Task 7: 9 new tests added across `sentry.test.ts` (Sentry init, ErrorBoundary mock) and `edge-sentry.test.ts` (file contract assertions). All 48 tests pass (was 39).
+- ✅ Task 8: Sprint status updated; story marked review.
+- CI YAML syntax verified valid via Node.js file parsing.
 
 ## File List
 
-_To be filled by dev agent_
+- `.github/workflows/ci.yml` — NEW
+- `apps/mobile/eas.json` — NEW
+- `apps/mobile/src/lib/sentry.ts` — NEW
+- `apps/mobile/src/lib/sentry.test.ts` — NEW
+- `apps/mobile/src/lib/edge-sentry.test.ts` — NEW
+- `apps/supabase/supabase/functions/_shared/sentry.ts` — NEW
+- `apps/mobile/app.config.ts` — MODIFIED (added @sentry/react-native/expo plugin)
+- `apps/mobile/app/_layout.tsx` — MODIFIED (added Sentry import + ErrorBoundary wrapper)
+- `apps/mobile/.env.local` — MODIFIED (added EXPO_PUBLIC_SENTRY_DSN + SENTRY_ORG placeholders)
+- `apps/mobile/package.json` — MODIFIED (added @sentry/react-native@~7.2.0 dependency)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — MODIFIED (status: review)
 
 ## Change Log
 
 | Date | Change |
 |------|--------|
 | 2026-05-06 | Story created — ready-for-dev |
+| 2026-05-06 | Story implemented — all ACs satisfied; 48 tests pass; status: review |
 

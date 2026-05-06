@@ -1,6 +1,6 @@
 # Story 1.4: Mobile Infrastructure — Data Layer & Navigation Skeleton
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -20,74 +20,74 @@ So that all mobile screens have a working data layer and navigation skeleton rea
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Install TanStack Query and Zustand (AC: #2, #3)
-  - [ ] `pnpm add @tanstack/react-query` in `apps/mobile`
-  - [ ] `pnpm add zustand` in `apps/mobile`
-  - [ ] `pnpm add @supabase/supabase-js expo-secure-store` in `apps/mobile`
-  - [ ] Verify all packages resolve without peer dependency errors
+- [x] Task 1: Install TanStack Query and Zustand (AC: #2, #3)
+  - [x] `pnpm add @tanstack/react-query` in `apps/mobile`
+  - [x] `pnpm add zustand` in `apps/mobile`
+  - [x] `pnpm add @supabase/supabase-js expo-secure-store` in `apps/mobile`
+  - [x] Verify all packages resolve without peer dependency errors
 
-- [ ] Task 2: Create Supabase client singleton (AC: #1)
-  - [ ] Create `apps/mobile/src/lib/supabase.ts`
-  - [ ] Initialize `createClient()` with `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` from `expo-constants` or `process.env`
-  - [ ] Configure `expo-secure-store` as the storage adapter for auth token persistence
-  - [ ] Export a single `supabase` instance — this is the **only** Supabase client initialization in the entire codebase
-  - [ ] Add `.env.local` with placeholder values for local dev (gitignored)
+- [x] Task 2: Create Supabase client singleton (AC: #1)
+  - [x] Create `apps/mobile/src/lib/supabase.ts`
+  - [x] Initialize `createClient()` with `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` from `expo-constants` or `process.env`
+  - [x] Configure `expo-secure-store` as the storage adapter for auth token persistence
+  - [x] Export a single `supabase` instance — this is the **only** Supabase client initialization in the entire codebase
+  - [x] Add `.env.local` with placeholder values for local dev (gitignored)
 
-- [ ] Task 3: Set up QueryClientProvider in root layout (AC: #2)
-  - [ ] Create `apps/mobile/src/lib/queryClient.ts` — export a configured `QueryClient` instance
-  - [ ] Default options: `staleTime: 5 * 60 * 1000` (5 min), `retry: 2`
-  - [ ] Wrap root layout in `<QueryClientProvider client={queryClient}>` in `app/_layout.tsx`
-  - [ ] Import `QueryClientProvider` from `@tanstack/react-query`
+- [x] Task 3: Set up QueryClientProvider in root layout (AC: #2)
+  - [x] Create `apps/mobile/src/lib/queryClient.ts` — export a configured `QueryClient` instance
+  - [x] Default options: `staleTime: 5 * 60 * 1000` (5 min), `retry: 2`
+  - [x] Wrap root layout in `<QueryClientProvider client={queryClient}>` in `app/_layout.tsx`
+  - [x] Import `QueryClientProvider` from `@tanstack/react-query`
 
-- [ ] Task 4: Create three Zustand stores (AC: #3)
-  - [ ] Create `apps/mobile/src/stores/useGameweekStore.ts`
+- [x] Task 4: Create three Zustand stores (AC: #3)
+  - [x] Create `apps/mobile/src/stores/useGameweekStore.ts`
     - State: `phase: 'building' | 'locked' | 'reveal' | null`, `currentGameweekId: number | null`
     - Actions: `setPhase()`, `setCurrentGameweekId()`
-  - [ ] Create `apps/mobile/src/stores/useBuildStore.ts`
+  - [x] Create `apps/mobile/src/stores/useBuildStore.ts`
     - State: `expandedFixtureId: number | null`, `unsavedPicks: []` (local pick staging)
     - Actions: `setExpandedFixtureId()`, `resetBuildState()`
-  - [ ] Create `apps/mobile/src/stores/useRevealStore.ts`
+  - [x] Create `apps/mobile/src/stores/useRevealStore.ts`
     - State: `firstView: boolean`, `reduceMotion: boolean`, `revealIndex: number`
     - Actions: `setFirstView()`, `setReduceMotion()`, `advanceReveal()`, `resetReveal()`
-  - [ ] **Anti-pattern guard:** No store imports server data — stores hold UI state only
+  - [x] **Anti-pattern guard:** No store imports server data — stores hold UI state only
 
-- [ ] Task 5: Create tab navigation layout with 4 tabs (AC: #4)
-  - [ ] Replace existing `app/(tabs)/_layout.tsx` with 4-tab layout: Build, Moments, Leagues, Profile
-  - [ ] Tab icons: use `@expo/vector-icons` (Ionicons or MaterialCommunityIcons)
-  - [ ] Tab bar styling: `bg-primary` (#080808) background, `accent` (#B4FF32) active tint, `text-muted` (#404040) inactive tint
-  - [ ] Remove existing `index.tsx` and `explore.tsx` from `(tabs)/`
+- [x] Task 5: Create tab navigation layout with 4 tabs (AC: #4)
+  - [x] Replace existing `app/(tabs)/_layout.tsx` with 4-tab layout: Build, Moments, Leagues, Profile
+  - [x] Tab icons: use `@expo/vector-icons` (Ionicons or MaterialCommunityIcons)
+  - [x] Tab bar styling: `bg-primary` (#080808) background, `accent` (#B4FF32) active tint, `text-muted` (#404040) inactive tint
+  - [x] Remove existing `index.tsx` and `explore.tsx` from `(tabs)/`
 
-- [ ] Task 6: Create tab screen placeholders (AC: #4)
-  - [ ] Create `app/(tabs)/build.tsx` — placeholder: "Build View" text, `bg-primary` background
-  - [ ] Create `app/(tabs)/moments.tsx` — placeholder: "Moments View" text
-  - [ ] Create `app/(tabs)/leagues.tsx` — placeholder: "Leagues" text
-  - [ ] Create `app/(tabs)/profile.tsx` — placeholder: "Profile" text
-  - [ ] Each screen uses `SafeAreaView` and renders the screen name in `text-primary` (#FFFFFF) on `bg-primary` (#080808)
+- [x] Task 6: Create tab screen placeholders (AC: #4)
+  - [x] Create `app/(tabs)/build.tsx` — placeholder: "Build View" text, `bg-primary` background
+  - [x] Create `app/(tabs)/moments.tsx` — placeholder: "Moments View" text
+  - [x] Create `app/(tabs)/leagues.tsx` — placeholder: "Leagues" text
+  - [x] Create `app/(tabs)/profile.tsx` — placeholder: "Profile" text
+  - [x] Each screen uses `SafeAreaView` and renders the screen name in `text-primary` (#FFFFFF) on `bg-primary` (#080808)
 
-- [ ] Task 7: Create stack screen placeholders (AC: #4)
-  - [ ] Create `app/catalog/[fixtureId].tsx` — placeholder showing fixture ID from route params
-  - [ ] Create `app/microflow/_layout.tsx` — stack layout for the micro-flow screens
-  - [ ] Create `app/microflow/player.tsx` — placeholder: "Player Selection"
-  - [ ] Create `app/microflow/timing.tsx` — placeholder: "Timing & Zone"
-  - [ ] Create `app/onboarding.tsx` — placeholder: "Onboarding"
-  - [ ] Register all stack screens in `app/_layout.tsx` Stack navigator
+- [x] Task 7: Create stack screen placeholders (AC: #4)
+  - [x] Create `app/catalog/[fixtureId].tsx` — placeholder showing fixture ID from route params
+  - [x] Create `app/microflow/_layout.tsx` — stack layout for the micro-flow screens
+  - [x] Create `app/microflow/player.tsx` — placeholder: "Player Selection"
+  - [x] Create `app/microflow/timing.tsx` — placeholder: "Timing & Zone"
+  - [x] Create `app/onboarding.tsx` — placeholder: "Onboarding"
+  - [x] Register all stack screens in `app/_layout.tsx` Stack navigator
 
-- [ ] Task 8: Create empty TanStack Query hook stubs (AC: #2)
-  - [ ] Create `apps/mobile/src/queries/useGameweekQuery.ts` — stub returning placeholder, key: `['gameweek', 'current']`
-  - [ ] Create `apps/mobile/src/queries/useCatalogQuery.ts` — stub, key: `['catalog', fixtureId]`
-  - [ ] Create `apps/mobile/src/queries/useSquadQuery.ts` — stub, key: `['squad', userId, gameweekId]`
-  - [ ] Create `apps/mobile/src/queries/useResultsQuery.ts` — stub, key: `['results', userId, gameweekId]`
-  - [ ] Create `apps/mobile/src/queries/useLeaderboardQuery.ts` — stub, key: `['leaderboard', 'global', gameweekId]`
-  - [ ] Create `apps/mobile/src/queries/useLeagueQuery.ts` — stub, key: `['mini-leagues', userId]`
-  - [ ] Each stub uses `useQuery` with `enabled: false` and returns typed placeholder data matching `@lecolpo/types`
+- [x] Task 8: Create empty TanStack Query hook stubs (AC: #2)
+  - [x] Create `apps/mobile/src/queries/useGameweekQuery.ts` — stub returning placeholder, key: `['gameweek', 'current']`
+  - [x] Create `apps/mobile/src/queries/useCatalogQuery.ts` — stub, key: `['catalog', fixtureId]`
+  - [x] Create `apps/mobile/src/queries/useSquadQuery.ts` — stub, key: `['squad', userId, gameweekId]`
+  - [x] Create `apps/mobile/src/queries/useResultsQuery.ts` — stub, key: `['results', userId, gameweekId]`
+  - [x] Create `apps/mobile/src/queries/useLeaderboardQuery.ts` — stub, key: `['leaderboard', 'global', gameweekId]`
+  - [x] Create `apps/mobile/src/queries/useLeagueQuery.ts` — stub, key: `['mini-leagues', userId]`
+  - [x] Each stub uses `useQuery` with `enabled: false` and returns typed placeholder data matching `@lecolpo/types`
 
-- [ ] Task 9: Write tests (AC: #1, #2, #3, #4)
-  - [ ] Test Supabase client exports a single instance
-  - [ ] Test each Zustand store initializes with correct default state
-  - [ ] Test store actions update state correctly
-  - [ ] Test that no store contains server data properties
-  - [ ] Smoke test: all screen files exist and export a default component
-  - [ ] Verify existing tests still pass (15 tests from Stories 1.1–1.3)
+- [x] Task 9: Write tests (AC: #1, #2, #3, #4)
+  - [x] Test Supabase client exports a single instance
+  - [x] Test each Zustand store initializes with correct default state
+  - [x] Test store actions update state correctly
+  - [x] Test that no store contains server data properties
+  - [x] Smoke test: all screen files exist and export a default component
+  - [x] Verify existing tests still pass (15 tests from Stories 1.1–1.3)
 
 ## Dev Notes
 
@@ -390,15 +390,73 @@ apps/mobile/
 - [Source: architecture.md#Architectural Boundaries] — Supabase client singleton rule
 - [Source: ux-design-specification.md#Design Direction Decision] — Build View / Moments View split, 4 tabs
 
+### Review Findings
+
+- [x] [Review][Decision] `useRevealStore.resetReveal` does not reset `reduceMotion` — **Decision: A — persist** (accessibility preference survives session resets; intentional)
+- [x] [Review][Patch] `useBuildStore.unsavedPicks` typed as `never[]` instead of a meaningful type [apps/mobile/src/stores/useBuildStore.ts:6] — fixed: introduced `UnsavedPick` interface
+- [x] [Review][Patch] `supabase.ts` uses `?? ''` fallback for missing env vars — silently passes empty strings to `createClient` instead of surfacing misconfiguration [apps/mobile/src/lib/supabase.ts:5-6] — fixed: added `console.warn` guard
+- [x] [Review][Patch] `screens.test.ts` line 24 `require()` uses a string literal `'../../app'` instead of `appDir` — inconsistent with line 4, brittle if test file moves [apps/mobile/src/lib/screens.test.ts:24] — fixed: now uses `appDir`
+- [x] [Review][Defer] Placeholder screens hard-code magic colour strings (`'#080808'`, `'#FFFFFF'`) instead of `Colors.*` tokens [apps/mobile/app/(tabs)/*.tsx + other placeholder screens] — deferred, stubs only
+- [x] [Review][Defer] No `gcTime` set on `queryClient` — may cause unnecessary re-fetches once queries are enabled [apps/mobile/src/lib/queryClient.ts] — deferred, all queries disabled in this story
+- [x] [Review][Defer] `catalog/[fixtureId].tsx` path with square brackets may cause issues on Windows CI agents — deferred, not a macOS/Linux concern
+
 ## Dev Agent Record
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude (GitHub Copilot) — 2026-05-05
 
 ### Debug Log References
 
+None — all tasks completed without issues.
+
 ### Completion Notes List
 
+- Installed @tanstack/react-query v5.100.9, zustand v5.0.13, @supabase/supabase-js v2.105.3, expo-secure-store v15.0.8
+- Added expo-secure-store plugin to app.config.ts
+- Created Supabase client singleton at src/lib/supabase.ts with expo-secure-store adapter for native auth persistence
+- Created QueryClient at src/lib/queryClient.ts with 5min staleTime and retry:2
+- Wrapped root layout in QueryClientProvider; registered onboarding, catalog/[fixtureId], and microflow stack screens
+- Created 3 Zustand stores (useGameweekStore, useBuildStore, useRevealStore) — UI state only, no server data
+- Replaced Expo starter tabs (index/explore) with 4-tab layout: Build, Moments, Leagues, Profile using Ionicons
+- Created 9 placeholder screens: 4 tabs + catalog/[fixtureId] + microflow/_layout + microflow/player + microflow/timing + onboarding
+- Created 6 TanStack Query hook stubs with correct query keys per architecture spec, all enabled:false
+- Wrote 24 new tests (supabase singleton, store defaults/actions/anti-patterns, screen file existence); all 39 tests pass (15 existing + 24 new)
+
 ### File List
+
+**New files:**
+- apps/mobile/src/lib/supabase.ts
+- apps/mobile/src/lib/supabase.test.ts
+- apps/mobile/src/lib/queryClient.ts
+- apps/mobile/src/lib/screens.test.ts
+- apps/mobile/src/stores/useGameweekStore.ts
+- apps/mobile/src/stores/useBuildStore.ts
+- apps/mobile/src/stores/useRevealStore.ts
+- apps/mobile/src/stores/stores.test.ts
+- apps/mobile/src/queries/useGameweekQuery.ts
+- apps/mobile/src/queries/useCatalogQuery.ts
+- apps/mobile/src/queries/useSquadQuery.ts
+- apps/mobile/src/queries/useResultsQuery.ts
+- apps/mobile/src/queries/useLeaderboardQuery.ts
+- apps/mobile/src/queries/useLeagueQuery.ts
+- apps/mobile/app/(tabs)/build.tsx
+- apps/mobile/app/(tabs)/moments.tsx
+- apps/mobile/app/(tabs)/leagues.tsx
+- apps/mobile/app/(tabs)/profile.tsx
+- apps/mobile/app/catalog/[fixtureId].tsx
+- apps/mobile/app/microflow/_layout.tsx
+- apps/mobile/app/microflow/player.tsx
+- apps/mobile/app/microflow/timing.tsx
+- apps/mobile/app/onboarding.tsx
+
+**Modified files:**
+- apps/mobile/package.json (new dependencies)
+- apps/mobile/app/_layout.tsx (QueryClientProvider + new stack screens)
+- apps/mobile/app/(tabs)/_layout.tsx (4-tab layout with Ionicons)
+- apps/mobile/app.config.ts (expo-secure-store plugin)
+
+**Deleted files:**
+- apps/mobile/app/(tabs)/index.tsx
+- apps/mobile/app/(tabs)/explore.tsx
 
