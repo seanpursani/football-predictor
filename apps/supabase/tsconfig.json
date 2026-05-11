@@ -6,7 +6,9 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["supabase/tests/**/*.ts", "supabase/functions/_shared/**/*.ts"]
 }
