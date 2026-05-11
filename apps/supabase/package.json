@@ -5,9 +5,30 @@
   "scripts": {
     "start": "supabase start",
     "stop": "supabase stop",
-    "db:reset": "supabase db reset"
+    "db:reset": "supabase db reset",
+    "test": "jest --testPathPattern=supabase/tests"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/supabase/tests/**/*.test.ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "./tsconfig.json"
+      }
+    }
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.105.3"
   },
   "devDependencies": {
-    "supabase": "^2.98.2"
+    "@types/jest": "^29.5.14",
+    "@types/node": "^18.0.0",
+    "jest": "^29.7.0",
+    "supabase": "^2.98.2",
+    "ts-jest": "^29.3.4",
+    "typescript": "~5.9.2"
   }
 }

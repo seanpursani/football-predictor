@@ -28,3 +28,7 @@
 - Double-tap on notification toggle in `profile.tsx` can fire `updatePushToken` mutation twice before the first settles — needs debounce or in-flight guard; defer to a UX hardening pass.
 - `jest.mock` inside `describe` block in `notifications.test.ts` is brittle due to Jest hoisting — tests pass currently but the isolation strategy relies on `resetModules()` execution order. Revisit with a cleaner per-describe module isolation approach.
 
+## Deferred from: code review of 2-4-rls-prediction-privacy-policies (2026-05-11)
+
+- `first_kickoff IS NULL` keeps predictions permanently writable — if `first_kickoff` is never set on a gameweek, INSERT/UPDATE are never blocked. Pre-existing schema design; `first_kickoff` is expected to always be set before a gameweek goes live (Story 3.4). Revisit with a NOT NULL constraint or a separate `is_locked` flag when Story 3.4 lands.
+
