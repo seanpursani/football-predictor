@@ -491,3 +491,77 @@ describe('admin JWT claim bypass', () => {
   });
 });
 
+// ---------------------------------------------------------------------------
+// users table — INSERT policy (regression test for Epic 2 retro discovery)
+// ---------------------------------------------------------------------------
+
+describe('users RLS — INSERT policy (new user sign-in path)', () => {
+  const email = `insert-test-${Date.now()}@example.com`;
+  const password = 'Test1234!';
+  let authId: string;
+  let anonClient: SupabaseClient;
+
+  beforeAll(async () => {
+    if (SKIP) return;
+    // Create auth user only — no public.users row yet (simulates first sign-in)
+    const admin = adminClient();
+    const { data, error } = await admin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+    });
+    if (error || !data.user) throw new Error(`Setup failed: ${error?.message}`);
+    authId = data.user.id;
+
+    // Sign in as this user via anon key
+    anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: false },
+    });
+    const { error: signInError } = await anonClient.auth.signInWithPassword({ email, password });
+    if (signInError) throw new Error(`Sign-in failed: ${signInError.message}`);
+  });
+
+  afterAll(async () => {
+    if (SKIP) return;
+    await adminClient().from('users').delete().eq('auth_id', authId);
+    await adminClient().auth.admin.deleteUser(authId);
+  });
+
+  it('authenticated user can INSERT their own row into users (upsert on first sign-in)', async () => {
+    if (SKIP) return;
+    // Simulates supabase.from('users').upsert({ auth_id: authId }) from the mobile client
+    const { error } = await anonClient
+      .from('users')
+      .upsert({ auth_id: authId }, { onConflict: 'auth_id' });
+    expect(error).toBeNull();
+
+    // Verify row exists
+    const { data, error: selectError } = await anonClient
+      .from('users')
+      .select('id, auth_id')
+      .eq('auth_id', authId)
+      .maybeSingle();
+    expect(selectError).toBeNull();
+    expect(data).not.toBeNull();
+    expect(data?.auth_id).toBe(authId);
+  });
+
+  it('authenticated user cannot INSERT a row with a different auth_id', async () => {
+    if (SKIP) return;
+    const fakeAuthId = '00000000-0000-0000-0000-000000000001';
+    const { error } = await anonClient
+      .from('users')
+      .insert({ auth_id: fakeAuthId });
+    // RLS WITH CHECK should block this
+    expect(error).not.toBeNull();
+  });
+
+  it('second upsert (returning user) is a no-op and does not error', async () => {
+    if (SKIP) return;
+    const { error } = await anonClient
+      .from('users')
+      .upsert({ auth_id: authId }, { onConflict: 'auth_id' });
+    expect(error).toBeNull();
+  });
+});
+
