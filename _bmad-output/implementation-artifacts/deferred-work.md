@@ -1,5 +1,10 @@
 # Deferred Work
 
+## Deferred from: code review of 3-0-odds-to-points-formula-design-and-calibration (2026-05-11)
+
+- No constants for player/assister/zone bonus values in `constants.ts` — Story 4.1 will need these. Values are expected to come from the DB per-moment (`game_week_moments` columns), not formula constants, so no action needed here. Verify in Story 4.1 that magic numbers are not introduced.
+- AC#2 formula traceability: the `oddsToPoints` formula shape exists only in a JSDoc comment in `constants.ts`, not as an exported reference implementation. Acceptable for this constants-only story; Story 3.2 will codify it as `odds-converter.ts`.
+
 ## Deferred from: code review of 1-4-mobile-infrastructure-data-layer-and-navigation-skeleton (2026-05-06)
 
 - Placeholder screens hard-code magic colour strings (`'#080808'`, `'#FFFFFF'`) instead of `Colors.*` tokens. Low priority since these are stubs; update when screens get real UI.

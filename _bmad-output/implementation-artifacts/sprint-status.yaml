@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-11 # epic-2 retrospective complete
+last_updated: 2026-05-11 # 3-0 code review complete
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -61,8 +61,8 @@ development_status:
   epic-2-retrospective: done
 
   # Epic 3: Gameweek Data Pipeline
-  epic-3: backlog
-  3-0-odds-to-points-formula-design-and-calibration: backlog
+  epic-3: in-progress
+  3-0-odds-to-points-formula-design-and-calibration: done
   3-1-external-api-client-infrastructure: backlog
   3-2-odds-ingestion-and-moment-catalog-generation: backlog
   3-3-match-event-ingestion-and-gameweek-completion-detection: backlog
