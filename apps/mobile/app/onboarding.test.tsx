@@ -114,6 +114,18 @@ describe('OnboardingScreen', () => {
     // Navigation should NOT have been called
     expect(mockReplace).not.toHaveBeenCalled();
   });
+
+  it('still navigates when push token store fails (non-blocking)', async () => {
+    // First update (has_seen_onboarding) succeeds, second (push_token) fails
+    mockSupabaseUpdate
+      .mockReturnValueOnce({ eq: jest.fn().mockResolvedValue({ error: null }) })
+      .mockReturnValueOnce({ eq: jest.fn().mockResolvedValue({ error: { message: 'token DB error' } }) });
+    render(<OnboardingScreen />);
+    fireEvent.press(screen.getByText("Let's go"));
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/(tabs)');
+    });
+  });
 });
 
 

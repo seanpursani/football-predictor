@@ -46,10 +46,16 @@ const RULES = [
 export default function OnboardingScreen() {
   const { session } = useAuthState();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleComplete = async () => {
+    if (isSubmitting) return;
     const authId = session?.user?.id;
-    if (!authId) return;
+    if (!authId) {
+      console.error('[Onboarding] handleComplete called with no authenticated session.');
+      return;
+    }
+    setIsSubmitting(true);
 
     // 1. Mark onboarding seen first — must succeed before navigating
     const { error: onboardingError } = await supabase
@@ -59,6 +65,7 @@ export default function OnboardingScreen() {
     if (onboardingError) {
       // Cannot proceed — user would be stuck in onboarding loop on next launch
       console.error('[Onboarding] Failed to mark has_seen_onboarding:', onboardingError.message);
+      setIsSubmitting(false);
       return;
     }
     queryClient.invalidateQueries({ queryKey: ['user', authId] });
@@ -120,8 +127,9 @@ export default function OnboardingScreen() {
         ))}
 
         <TouchableOpacity
-          style={styles.ctaButton}
+          style={[styles.ctaButton, isSubmitting && styles.ctaButtonDisabled]}
           onPress={handleComplete}
+          disabled={isSubmitting}
           accessibilityLabel="Let's go"
         >
           <Text style={styles.ctaButtonText}>{"Let's go"}</Text>
@@ -202,6 +210,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 32,
+  },
+  ctaButtonDisabled: {
+    opacity: 0.5,
   },
   ctaButtonText: {
     ...Typography.label,
