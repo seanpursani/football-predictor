@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-06 # story 2-2 done
+last_updated: 2026-05-11 # story 2-3 review complete
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -55,7 +55,7 @@ development_status:
   epic-2: in-progress
   2-1-social-login-apple-and-google: done
   2-2-user-profile-display-name: done
-  2-3-push-notification-permission-and-token-registration: backlog
+  2-3-push-notification-permission-and-token-registration: done
   2-4-rls-prediction-privacy-policies: backlog
   2-5-onboarding-tutorial-screen: backlog
   epic-2-retrospective: optional

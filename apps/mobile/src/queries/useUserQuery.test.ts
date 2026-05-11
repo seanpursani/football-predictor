@@ -1,7 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useUpsertUserMutation, useUserQuery, useUpdateDisplayNameMutation } from './useUserQuery';
+import { useUpsertUserMutation, useUserQuery, useUpdateDisplayNameMutation, useUpdatePushTokenMutation } from './useUserQuery';
 
 const mockFrom = jest.fn();
 const mockUpsert = jest.fn().mockResolvedValue({ error: null });
@@ -92,6 +92,45 @@ describe('useUpdateDisplayNameMutation', () => {
       result.current.mutate({ authId: 'test-auth-id', displayName: 'SomeName' });
     });
     await waitFor(() => expect(result.current.isError).toBe(true));
+  });
+});
+
+describe('useUpdatePushTokenMutation', () => {
+  beforeEach(() => {
+    mockFrom.mockClear();
+    mockUpdate.mockClear();
+    mockEqUpdate.mockClear();
+    mockEqUpdate.mockResolvedValue({ error: null });
+  });
+
+  it('calls supabase.from(users).update().eq() with push_token string', async () => {
+    const { result } = renderHook(() => useUpdatePushTokenMutation(), { wrapper });
+    await act(async () => {
+      result.current.mutate({ authId: 'test-auth-id', pushToken: 'ExponentPushToken[test]' });
+    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(mockFrom).toHaveBeenCalledWith('users');
+    expect(mockUpdate).toHaveBeenCalledWith({ push_token: 'ExponentPushToken[test]' });
+    expect(mockEqUpdate).toHaveBeenCalledWith('auth_id', 'test-auth-id');
+  });
+
+  it('calls update with null to clear push token', async () => {
+    const { result } = renderHook(() => useUpdatePushTokenMutation(), { wrapper });
+    await act(async () => {
+      result.current.mutate({ authId: 'test-auth-id', pushToken: null });
+    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(mockUpdate).toHaveBeenCalledWith({ push_token: null });
+  });
+
+  it('calls invalidateQueries with correct key on success', async () => {
+    const { queryClient } = require('../lib/queryClient');
+    const { result } = renderHook(() => useUpdatePushTokenMutation(), { wrapper });
+    await act(async () => {
+      result.current.mutate({ authId: 'test-auth-id', pushToken: 'ExponentPushToken[test]' });
+    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(queryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['user', 'test-auth-id'] });
   });
 });
 

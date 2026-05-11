@@ -10,14 +10,23 @@ jest.mock('@/src/hooks/useAuthState', () => ({
   useAuthState: () => ({ session: { user: { id: 'test-auth-id' } }, isLoading: false }),
 }));
 
+const mockUpdatePushToken = jest.fn().mockResolvedValue(undefined);
+
 jest.mock('@/src/queries/useUserQuery', () => ({
-  useUserQuery: () => ({ data: { displayName: 'TestUser', hasSeenOnboarding: true }, isLoading: false }),
+  useUserQuery: () => ({ data: { displayName: 'TestUser', hasSeenOnboarding: true, pushToken: null }, isLoading: false }),
   useUpdateDisplayNameMutation: () => ({
     mutate: mockMutate,
     isPending: mockIsPending,
     error: mockMutationError,
     reset: mockReset,
   }),
+  useUpdatePushTokenMutation: () => ({
+    mutateAsync: mockUpdatePushToken,
+  }),
+}));
+
+jest.mock('@/src/lib/notifications', () => ({
+  requestPushPermissionAndGetToken: jest.fn().mockResolvedValue(null),
 }));
 
 jest.mock('expo-router', () => ({

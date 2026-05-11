@@ -62,6 +62,25 @@ export function useUpsertUserMutation() {
 }
 
 /**
+ * Updates the push_token for an existing user row in the `users` table.
+ * Pass pushToken: null to clear the token (notifications disabled).
+ */
+export function useUpdatePushTokenMutation() {
+  return useMutation({
+    mutationFn: async ({ authId, pushToken }: { authId: string; pushToken: string | null }) => {
+      const { error } = await supabase
+        .from('users')
+        .update({ push_token: pushToken })
+        .eq('auth_id', authId);
+      if (error) throw error;
+    },
+    onSuccess: (_data, { authId }) => {
+      queryClient.invalidateQueries({ queryKey: ['user', authId] });
+    },
+  });
+}
+
+/**
  * Updates the display_name for an existing user row in the `users` table.
  * Should only be called when a row already exists (created in Story 2.1 on sign-in).
  */

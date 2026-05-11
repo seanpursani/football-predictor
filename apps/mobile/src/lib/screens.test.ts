@@ -14,6 +14,7 @@ jest.mock('@/src/queries/useUserQuery', () => ({
   useUserQuery: () => ({ data: null, isLoading: false }),
   useUpdateDisplayNameMutation: () => ({ mutate: jest.fn(), isPending: false, error: null }),
   useUpsertUserMutation: () => ({ mutate: jest.fn() }),
+  useUpdatePushTokenMutation: () => ({ mutateAsync: jest.fn().mockResolvedValue(undefined) }),
 }));
 
 jest.mock('expo-router', () => ({
@@ -23,6 +24,18 @@ jest.mock('expo-router', () => ({
   Stack: { Screen: () => null },
   Tabs: { Screen: () => null },
 }));
+
+jest.mock('@/src/lib/notifications', () => ({
+  requestPushPermissionAndGetToken: jest.fn().mockResolvedValue(null),
+}));
+
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  requestPermissionsAsync: jest.fn().mockResolvedValue({ status: 'denied' }),
+  getExpoPushTokenAsync: jest.fn().mockResolvedValue({ data: null }),
+}));
+
+jest.mock('expo-device', () => ({ isDevice: false }));
 
 jest.mock('react-native-safe-area-context', () => ({
   SafeAreaView: 'SafeAreaView',

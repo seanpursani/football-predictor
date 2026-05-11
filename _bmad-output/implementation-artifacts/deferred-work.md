@@ -22,3 +22,9 @@
 - No success feedback after display name save — spec is silent; address in a future UX iteration.
 - `screens.test.ts` uses bare `require(screenPath)` which triggers transitive supabase module init before jest mocks are in scope. Currently works but fragile; revisit with a module-factory or factory-level mock approach.
 
+## Deferred from: code review of 2-3-push-notification-permission-and-token-registration (2026-05-11)
+
+- `onboarding.test.tsx` mock doesn't distinguish first vs second `update()` call — both `has_seen_onboarding` and `push_token` writes share the same mock instance; assertion ordering is not enforced. Improve test isolation when revisiting onboarding.
+- Double-tap on notification toggle in `profile.tsx` can fire `updatePushToken` mutation twice before the first settles — needs debounce or in-flight guard; defer to a UX hardening pass.
+- `jest.mock` inside `describe` block in `notifications.test.ts` is brittle due to Jest hoisting — tests pass currently but the isolation strategy relies on `resetModules()` execution order. Revisit with a cleaner per-describe module isolation approach.
+
