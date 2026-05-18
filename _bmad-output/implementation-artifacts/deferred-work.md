@@ -42,3 +42,9 @@
 
 - `first_kickoff IS NULL` keeps predictions permanently writable — if `first_kickoff` is never set on a gameweek, INSERT/UPDATE are never blocked. Pre-existing schema design; `first_kickoff` is expected to always be set before a gameweek goes live (Story 3.4). Revisit with a NOT NULL constraint or a separate `is_locked` flag when Story 3.4 lands.
 
+## Deferred from: code review of push-sender (_shared/push-sender.ts) (2026-05-18)
+
+- `body` parameter name shadowed by fetch options `body` property — naming-only collision, no runtime bug. Rename fetch option to `fetchBody` or similar in a future refactor pass.
+- `response.json()` may throw on non-JSON 2xx responses (e.g., 204 No Content) — gracefully caught by existing try/catch and batch counted as failed. Extremely rare in practice with Expo Push API; revisit if API version changes.
+- No retry/backoff on HTTP 429 rate-limiting — entire batch silently counted as failed. Address when implementing high-volume notification flows (e.g., Story 4-3 scoring push).
+

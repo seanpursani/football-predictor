@@ -8,8 +8,11 @@
     "skipLibCheck": true,
     "types": ["jest", "node"],
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "https://esm.sh/@supabase/supabase-js@2": ["./node_modules/@supabase/supabase-js"]
+    }
   },
-  "include": ["supabase/tests/**/*.ts", "supabase/functions/_shared/**/*.ts"]
+  "include": ["supabase/tests/**/*.ts", "supabase/functions/_shared/**/*.ts", "supabase/functions/**/*.ts"]
 }
 
