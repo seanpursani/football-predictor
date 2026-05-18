@@ -1,6 +1,6 @@
 # Story 3.2: Odds Ingestion & Moment Catalog Generation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -282,4 +282,14 @@ GitHub Copilot (GPT-4.1)
 - `apps/supabase/tsconfig.json` — MODIFIED (added paths, expanded include)
 - `apps/supabase/package.json` — MODIFIED (added moduleNameMapper)
 - `_bmad-output/implementation-artifacts/sprint-status.yaml` — MODIFIED (status: review)
+
+### Review Findings
+
+- [x] [Review][Patch] `push-sender.ts:94-96` — Orphaned tickets (fewer tickets than tokens) silently counted as `sent`; fixed to count as `failed` with error entry — **applied**
+- [x] [Review][Patch] `push-sender.ts:83-91` — Tickets longer than batch could over-count `sent`; clamped with `.slice(0, batchTokens.length)` — **applied**
+- [x] [Review][Patch] `push-sender.test.ts` — `global.fetch` direct assignment not reliably cleaned up by `jest.restoreAllMocks()`; replaced with `jest.spyOn` — **applied**
+- [x] [Review][Patch] `push-sender.test.ts` — Batch test used static 100-ticket mock for all batches including 50-token last batch; replaced with dynamic mock + added `sent`/`failed` assertions + new orphan test case — **applied**
+- [x] [Review][Defer] `body` parameter name shadowed by fetch options `body` property — naming only, no runtime bug — deferred
+- [x] [Review][Defer] `response.json()` may throw on non-JSON 2xx responses — caught gracefully, extremely rare — deferred
+- [x] [Review][Defer] No retry/backoff on HTTP 429 — feature gap, not in scope for MVP — deferred
 
