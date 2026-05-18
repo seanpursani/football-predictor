@@ -42,6 +42,11 @@
 
 - `first_kickoff IS NULL` keeps predictions permanently writable — if `first_kickoff` is never set on a gameweek, INSERT/UPDATE are never blocked. Pre-existing schema design; `first_kickoff` is expected to always be set before a gameweek goes live (Story 3.4). Revisit with a NOT NULL constraint or a separate `is_locked` flag when Story 3.4 lands.
 
+## Deferred from: code review of 3-3-match-event-ingestion-and-gameweek-completion-detection (2026-05-18)
+
+- `SupabaseClientLike.from` typed as `any` (`index.ts:18`) — pre-existing pattern inherited from `ingest-odds`; defeats TypeScript safety for all DB calls. Address when the shared client interface is refactored (candidate for a types package utility type).
+- Double-invocation race condition — two concurrent `ingest-events` calls for different fixtures in the same gameweek can both pass the `every()` completion check before either writes `events_ingested=true`, invoking `run-scoring` twice. Requires a DB-level idempotency guard (advisory lock, or a `scoring_triggered` boolean flag on the `gameweeks` table). Scope this into Story 4.1 or a dedicated hardening story.
+
 ## Deferred from: code review of push-sender (_shared/push-sender.ts) (2026-05-18)
 
 - `body` parameter name shadowed by fetch options `body` property — naming-only collision, no runtime bug. Rename fetch option to `fetchBody` or similar in a future refactor pass.
