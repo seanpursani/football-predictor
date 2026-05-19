@@ -10,7 +10,8 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "paths": {
-      "https://esm.sh/@supabase/supabase-js@2": ["./node_modules/@supabase/supabase-js"]
+      "https://esm.sh/@supabase/supabase-js@2": ["./node_modules/@supabase/supabase-js"],
+      "@lecolpo/types": ["../../packages/types/src/index.ts"]
     }
   },
   "include": ["supabase/tests/**/*.ts", "supabase/functions/_shared/**/*.ts", "supabase/functions/**/*.ts"]

@@ -1,5 +1,12 @@
 # Deferred Work
 
+## Deferred from: code review of 4-1-scoring-engine-full-multi-layer-scoring-logic (2026-05-19)
+
+- JSDoc comment in `getTimingBonus` references the earlier (incorrect) spec draft for diff=0 return value — logic is correct but comment is misleading. Consider clarifying in a future cleanup pass. [`scoring-engine.ts:71–78`]
+- `match_result` event type silently falls through with no scoring logic. Not in scoring scope for Story 4.1 but could become a bug if `match_result` events appear in the `match_events` table and a prediction references them. Address in Story 4.3 or when `match_result` Precision Pick type is introduced. [`scoring-engine.ts:183–231`]
+- `moduleNameMapper` regex `^(\\.{1,2}/.*)\\.ts$` strips `.ts` extensions globally in Jest config — works for current test suite (114 passing) but is fragile if future test files mix `.ts`-extended and non-extended imports. [`apps/supabase/package.json`]
+- No guard for `prediction.fixtureId !== gameWeekMoment.fixtureId` wiring mismatch — scoring engine silently returns 0 if caller passes mismatched inputs. Add defensive assertion in Story 4.3's orchestrator. [`scoring-engine.ts:257–265`]
+
 ## Deferred from: code review of 3-0-odds-to-points-formula-design-and-calibration (2026-05-11)
 
 - No constants for player/assister/zone bonus values in `constants.ts` — Story 4.1 will need these. Values are expected to come from the DB per-moment (`game_week_moments` columns), not formula constants, so no action needed here. Verify in Story 4.1 that magic numbers are not introduced.

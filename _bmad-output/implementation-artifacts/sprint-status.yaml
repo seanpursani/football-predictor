@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-19 # story 3-4 review complete → done
+last_updated: 2026-05-19 # story 4-1 review complete → done
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -70,8 +70,8 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4: Scoring Engine & Results Processing
-  epic-4: backlog
-  4-1-scoring-engine-full-multi-layer-scoring-logic: backlog
+  epic-4: in-progress
+  4-1-scoring-engine-full-multi-layer-scoring-logic: done
   4-2-cross-match-streak-calculator: backlog
   4-3-scoring-orchestrator-results-persistence-and-push-notification: backlog
   epic-4-retrospective: optional
