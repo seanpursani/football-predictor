@@ -61,8 +61,15 @@ schema_paths = []
 # If enabled, seeds the database after migrations during a db reset.
 enabled = true
 # Specifies an ordered list of seed files to load during db reset.
-# Supports glob patterns relative to supabase directory: "./seeds/*.sql"
-sql_paths = ["./seed.sql"]
+# NOTE: Supabase's internal runner does not support psql \i meta-commands.
+# Seed files are listed individually here in FK-safe order.
+# seed.sql exists as a psql convenience entrypoint only (not used by supabase db reset).
+sql_paths = [
+  "./seeds/dev_moment_types.sql",
+  "./seeds/dev_gameweek.sql",
+  "./seeds/dev_fixtures.sql",
+  "./seeds/dev_users.sql"
+]
 
 [db.network_restrictions]
 # Enable management of network restrictions.

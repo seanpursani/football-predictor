@@ -42,6 +42,12 @@
 
 - `first_kickoff IS NULL` keeps predictions permanently writable — if `first_kickoff` is never set on a gameweek, INSERT/UPDATE are never blocked. Pre-existing schema design; `first_kickoff` is expected to always be set before a gameweek goes live (Story 3.4). Revisit with a NOT NULL constraint or a separate `is_locked` flag when Story 3.4 lands.
 
+## Deferred from: code review of 3-4-gameweek-lifecycle-scheduling-and-development-seed-data (2026-05-19)
+
+- **F5** — `ON CONFLICT (gameweek_number) DO NOTHING` in `dev_gameweek.sql` assumes a unique constraint on `gameweek_number`; depends on existing schema from Story 1.3. Verify this constraint exists before Epic 5 development.
+- **F6** — `canInsertPrediction` TypeScript helper in `rls-helpers.ts` mirrors the SQL RLS policy predicate but can silently drift if the policy is updated. A proper DB integration test (using `supabase db test` or a live client) is the authoritative verification path; deferred to a future hardening story.
+- **F7** — No test for DELETE RLS predicate after deadline. The prediction policies may also gate DELETE; coverage extension not required by this story's AC. Add when hardening the RLS test suite.
+
 ## Deferred from: code review of 3-3-match-event-ingestion-and-gameweek-completion-detection (2026-05-18)
 
 - `SupabaseClientLike.from` typed as `any` (`index.ts:18`) — pre-existing pattern inherited from `ingest-odds`; defeats TypeScript safety for all DB calls. Address when the shared client interface is refactored (candidate for a types package utility type).
@@ -52,4 +58,3 @@
 - `body` parameter name shadowed by fetch options `body` property — naming-only collision, no runtime bug. Rename fetch option to `fetchBody` or similar in a future refactor pass.
 - `response.json()` may throw on non-JSON 2xx responses (e.g., 204 No Content) — gracefully caught by existing try/catch and batch counted as failed. Extremely rare in practice with Expo Push API; revisit if API version changes.
 - No retry/backoff on HTTP 429 rate-limiting — entire batch silently counted as failed. Address when implementing high-volume notification flows (e.g., Story 4-3 scoring push).
-

@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-18 # 3-3 code review complete
+last_updated: 2026-05-19 # story 3-4 review complete → done
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -66,7 +66,7 @@ development_status:
   3-1-external-api-client-infrastructure: done
   3-2-odds-ingestion-and-moment-catalog-generation: done
   3-3-match-event-ingestion-and-gameweek-completion-detection: done
-  3-4-gameweek-lifecycle-scheduling-and-development-seed-data: backlog
+  3-4-gameweek-lifecycle-scheduling-and-development-seed-data: done
   epic-3-retrospective: optional
 
   # Epic 4: Scoring Engine & Results Processing
