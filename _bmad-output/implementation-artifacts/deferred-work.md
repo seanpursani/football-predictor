@@ -1,5 +1,10 @@
 # Deferred Work
 
+## Deferred from: code review of 4-3-scoring-orchestrator-results-persistence-and-push-notification (2026-05-21)
+
+- TOCTOU race on idempotency guard — read-then-write of `scoring_status` is not atomic; a second concurrent call can pass the guard before the first `in_progress` write commits. The idempotency check is a mitigation (better than nothing) but not a full fix. A DB-level advisory lock or `scoring_triggered` boolean is the authoritative solution. Addressed when the double-invocation race is revisited. [`run-scoring/index.ts:56–86`]
+- `usersScored` in the success response only counts users with ≥1 prediction contributing to `weeklyScoreByUser` — cosmetic undercount for match-moment-only users. No functional impact. Revisit if this metric is surfaced in monitoring dashboards. [`run-scoring/index.ts:394`]
+
 ## Deferred from: code review of 4-2-cross-match-streak-calculator (2026-05-21)
 
 - `MISS_SORT_MINUTE_SENTINEL = 95` is a hardcoded assumption not sourced from `constants.ts`. Works for 2.5h+ kickoff gaps but becomes incorrect if matches are scheduled ≤95 min apart. Revisit in Story 4.3 context when real fixture scheduling constraints are confirmed. [`streak-calculator.ts:52`]
