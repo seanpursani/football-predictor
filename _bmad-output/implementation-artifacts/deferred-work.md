@@ -1,5 +1,10 @@
 # Deferred Work
 
+## Deferred from: code review of 5-1-app-state-machine-and-gameweek-phase-detection (2026-05-21)
+
+- Unauthenticated user derives `'reveal'` phase — when no session, userId is null, revealState is disabled, hasSeenReveal defaults false; a completed gameweek would give `'reveal'` phase to unauthenticated users. Pre-existing auth gating concern; address when authentication guard/splash screen is implemented.
+- Multiple completed gameweeks across seasons — query returns `status IN ('building', 'locked', 'completed') ORDER BY first_kickoff DESC LIMIT 1`; at start of new season with no active gameweek, could return last season's completed gameweek. Pre-existing data model concern; address when season management is implemented.
+
 ## Deferred from: code review of 4-3-scoring-orchestrator-results-persistence-and-push-notification (2026-05-21)
 
 - TOCTOU race on idempotency guard — read-then-write of `scoring_status` is not atomic; a second concurrent call can pass the guard before the first `in_progress` write commits. The idempotency check is a mitigation (better than nothing) but not a full fix. A DB-level advisory lock or `scoring_triggered` boolean is the authoritative solution. Addressed when the double-invocation race is revisited. [`run-scoring/index.ts:56–86`]
