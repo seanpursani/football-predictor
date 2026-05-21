@@ -15,7 +15,8 @@
 --
 -- WARNING: dev_users.sql inserts into auth.users — LOCAL DEV ONLY, never production.
 
-\i seeds/dev_moment_types.sql
+\i
+seeds/dev_moment_types.sql
 \i seeds/dev_gameweek.sql
 \i seeds/dev_fixtures.sql
 \i seeds/dev_users.sql

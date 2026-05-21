@@ -53,9 +53,9 @@ export const MAX_BASE_POINTS = 120;
  * @returns Integer base points in the range [MIN_BASE_POINTS, MAX_BASE_POINTS]
  */
 export function oddsToBasePoints(decimalOdds: number): number {
-  return Math.round(
-    Math.min(Math.max((decimalOdds - 1) * ODDS_SCALE_FACTOR, MIN_BASE_POINTS), MAX_BASE_POINTS),
-  );
+    return Math.round(
+        Math.min(Math.max((decimalOdds - 1) * ODDS_SCALE_FACTOR, MIN_BASE_POINTS), MAX_BASE_POINTS),
+    );
 }
 
 // ─── Precision Pick Timing Window Bonuses ────────────────────────────────────

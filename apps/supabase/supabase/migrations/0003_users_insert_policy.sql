@@ -5,8 +5,10 @@
 -- Identified in: Epic 2 Retrospective (2026-05-11)
 
 -- Add INSERT policy: authenticated users may only insert a row with their own auth_id
-DROP POLICY IF EXISTS insert_own_user ON users;
-CREATE POLICY insert_own_user ON users
+DROP
+POLICY IF EXISTS insert_own_user ON users;
+CREATE
+POLICY insert_own_user ON users
   FOR INSERT WITH CHECK (
     auth_id = auth.uid()
   );

@@ -16,7 +16,7 @@
  * @returns true if a prediction INSERT/UPDATE is allowed under the RLS policy.
  */
 export function canInsertPrediction(firstKickoff: Date | null, now: Date = new Date()): boolean {
-  if (firstKickoff === null) return true; // NULL → open, no deadline
-  return now < firstKickoff; // strict: must be BEFORE deadline
+    if (firstKickoff === null) return true; // NULL → open, no deadline
+    return now < firstKickoff; // strict: must be BEFORE deadline
 }
 

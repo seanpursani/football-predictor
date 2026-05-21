@@ -1,4 +1,4 @@
-import { ODDS_SCALE_FACTOR, MIN_BASE_POINTS, MAX_BASE_POINTS } from './constants.ts';
+import {MAX_BASE_POINTS, MIN_BASE_POINTS, ODDS_SCALE_FACTOR} from './constants.ts';
 
 /** Input type for odds conversion */
 export type DecimalOdds = number;
@@ -14,8 +14,8 @@ export type BasePoints = number;
  * @returns Integer base points in [MIN_BASE_POINTS, MAX_BASE_POINTS]
  */
 export function convertOddsToPoints(decimalOdds: DecimalOdds): BasePoints {
-  return Math.round(
-    Math.min(Math.max((decimalOdds - 1) * ODDS_SCALE_FACTOR, MIN_BASE_POINTS), MAX_BASE_POINTS),
-  );
+    return Math.round(
+        Math.min(Math.max((decimalOdds - 1) * ODDS_SCALE_FACTOR, MIN_BASE_POINTS), MAX_BASE_POINTS),
+    );
 }
 

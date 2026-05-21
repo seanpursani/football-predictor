@@ -65,10 +65,10 @@ enabled = true
 # Seed files are listed individually here in FK-safe order.
 # seed.sql exists as a psql convenience entrypoint only (not used by supabase db reset).
 sql_paths = [
-  "./seeds/dev_moment_types.sql",
-  "./seeds/dev_gameweek.sql",
-  "./seeds/dev_fixtures.sql",
-  "./seeds/dev_users.sql"
+    "./seeds/dev_moment_types.sql",
+    "./seeds/dev_gameweek.sql",
+    "./seeds/dev_fixtures.sql",
+    "./seeds/dev_users.sql"
 ]
 
 [db.network_restrictions]

@@ -3,11 +3,11 @@ import * as Notifications from 'expo-notifications';
 
 // Show notification when app is in foreground
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
 });
 
 /**
@@ -16,19 +16,19 @@ Notifications.setNotificationHandler({
  * Never throws — designed to be safe to call without try/catch.
  */
 export async function requestPushPermissionAndGetToken(): Promise<string | null> {
-  if (!Device.isDevice) {
-    return null; // simulators cannot register for push
-  }
-  const { status } = await Notifications.requestPermissionsAsync();
-  if (status !== 'granted') {
-    return null; // user denied — not an error
-  }
-  try {
-    const { data } = await Notifications.getExpoPushTokenAsync();
-    return data;
-  } catch {
-    return null; // token fetch failed — still not blocking
-  }
+    if (!Device.isDevice) {
+        return null; // simulators cannot register for push
+    }
+    const {status} = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+        return null; // user denied — not an error
+    }
+    try {
+        const {data} = await Notifications.getExpoPushTokenAsync();
+        return data;
+    } catch {
+        return null; // token fetch failed — still not blocking
+    }
 }
 
 /**
@@ -37,5 +37,5 @@ export async function requestPushPermissionAndGetToken(): Promise<string | null>
  * Centralises the "remove token" intent in the notifications module per architecture constraints.
  */
 export function removePushToken(): null {
-  return null;
+    return null;
 }

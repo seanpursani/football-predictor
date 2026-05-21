@@ -1,5 +1,11 @@
 # Deferred Work
 
+## Deferred from: code review of 4-2-cross-match-streak-calculator (2026-05-21)
+
+- `MISS_SORT_MINUTE_SENTINEL = 95` is a hardcoded assumption not sourced from `constants.ts`. Works for 2.5h+ kickoff gaps but becomes incorrect if matches are scheduled ≤95 min apart. Revisit in Story 4.3 context when real fixture scheduling constraints are confirmed. [`streak-calculator.ts:52`]
+- `fixtureId` declared in `StreakScoringEntry` but never read by the streak algorithm. Consumed by Story 4.3 orchestrator for DB writes. No action needed in streak-calc itself. [`streak-calculator.ts:22`]
+- No guard against duplicate `predictionId` in input — silent ambiguous result. Orchestrator (Story 4.3) must ensure deduplication before calling `calculateStreaks()`. [`streak-calculator.ts:88`]
+
 ## Deferred from: code review of 4-1-scoring-engine-full-multi-layer-scoring-logic (2026-05-19)
 
 - JSDoc comment in `getTimingBonus` references the earlier (incorrect) spec draft for diff=0 return value — logic is correct but comment is misleading. Consider clarifying in a future cleanup pass. [`scoring-engine.ts:71–78`]

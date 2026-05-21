@@ -5,12 +5,15 @@
 
 ALTER TABLE predictions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY select_own_predictions ON predictions
-  FOR SELECT USING (
+CREATE
+POLICY select_own_predictions ON predictions
+  FOR
+SELECT USING (
     user_id IN (SELECT id FROM users WHERE auth_id = auth.uid())
-  );
+    );
 
-CREATE POLICY insert_own_predictions ON predictions
+CREATE
+POLICY insert_own_predictions ON predictions
   FOR INSERT WITH CHECK (
     user_id IN (SELECT id FROM users WHERE auth_id = auth.uid())
   );
