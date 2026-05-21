@@ -1,5 +1,10 @@
 # Deferred Work
 
+## Deferred from: code review of 5-4-precision-pick-micro-flow (2026-05-21)
+
+- `MINUTES.indexOf(value)` in MinutePicker has no guard for out-of-range value — if value drifts outside 1–91, `scrollToValue` silently no-ops and `handleScrollEnd` derives an unexpected index on next scroll. Safe in current flow but fragile. [`MinutePicker.tsx`]
+- `router.push(... as any)` in `player.tsx` suppresses Expo Router typed route checking for microflow navigation. Pre-existing project pattern (same as other dynamic-query routes); revisit when Expo Router supports typed dynamic query params natively. [`player.tsx` line 31]
+
 ## Deferred from: code review of 5-3-squad-management-captain-remove-and-save (2026-05-21)
 
 - `momentType` always `null` in `CaptainPopup` — context label shows `Pick #N` instead of event name; TypeBadge in fallback state. Full MomentType wiring deferred to Story 5.5 where catalog data is needed for Moments View anyway. [`build.tsx` — CaptainPopup call site]
