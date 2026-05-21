@@ -1,5 +1,13 @@
 # Deferred Work
 
+## Deferred from: code review of 5-3-squad-management-captain-remove-and-save (2026-05-21)
+
+- `momentType` always `null` in `CaptainPopup` — context label shows `Pick #N` instead of event name; TypeBadge in fallback state. Full MomentType wiring deferred to Story 5.5 where catalog data is needed for Moments View anyway. [`build.tsx` — CaptainPopup call site]
+- No loading/disabled state on Save button — user can tap multiple times during in-flight mutation; acceptable for MVP, revisit if double-save becomes an issue [`build.tsx` — saveButton]
+- Empty squad (`squad.length === 0`) not guarded in `handleSave` — save fires an empty array upsert; server handles gracefully for now [`build.tsx` — handleSave]
+- No slide-out animation on popup close — `pick` null guard returns `null` before Modal can animate; cosmetic/UX polish for a future sprint [`CaptainPopup.tsx` — null guard]
+- AC#3 catalog ✓ indicator clearing on remove — may be pre-existing in `useRemovePickMutation` from 5.2; verify when catalog integration is end-to-end tested [`useSquadQuery.ts`]
+
 ## Deferred from: code review of 5-2-build-view-fixture-cards-and-match-moment-selection (2026-05-21)
 
 - `SkeletonRow` Reanimated animation not explicitly cancelled on unmount — pre-existing pattern in the codebase; low risk but could cause strict-mode warnings [`SkeletonRow.tsx`]

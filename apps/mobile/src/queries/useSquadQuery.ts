@@ -127,6 +127,53 @@ export function useRemovePickMutation(userId: string | null | undefined, gamewee
   });
 }
 
+export function useCaptainMutation(userId: string | null | undefined, gameweekId: number | null | undefined) {
+  const queryClient = useQueryClient();
+  const queryKey = ['squad', userId, gameweekId];
+
+  return useMutation({
+    mutationFn: async ({ pickId }: { pickId: number; userId: string; gameweekId: number }) => {
+      // Set the new captain first — if this fails, the old captain is still set (consistent DB state)
+      const { error: setError } = await supabase
+        .from('predictions')
+        .update({ is_captain: true })
+        .eq('id', pickId);
+      if (setError) {
+        console.error('useCaptainMutation set error:', setError);
+        throw setError;
+      }
+      // Clear all other captains for this user/gameweek — if this fails, briefly two captains exist
+      // but onSettled invalidation will re-sync from server
+      const { error: clearError } = await supabase
+        .from('predictions')
+        .update({ is_captain: false })
+        .eq('user_id', userId!)
+        .eq('gameweek_id', gameweekId!)
+        .neq('id', pickId);
+      if (clearError) {
+        console.error('useCaptainMutation clear error:', clearError);
+        throw clearError;
+      }
+    },
+    onMutate: async ({ pickId }) => {
+      await queryClient.cancelQueries({ queryKey });
+      const previousSquad = queryClient.getQueryData<Prediction[]>(queryKey);
+      queryClient.setQueryData<Prediction[]>(queryKey, (old) =>
+        (old ?? []).map((p) => ({ ...p, isCaptain: p.id === pickId })),
+      );
+      return { previousSquad };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousSquad !== undefined) {
+        queryClient.setQueryData(queryKey, context.previousSquad);
+      }
+    },
+    onSettled: (_data, _err, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['squad', vars.userId, vars.gameweekId] }).catch(() => {});
+    },
+  });
+}
+
 export function useSaveSquadMutation(userId: string | null | undefined, gameweekId: number | null | undefined) {
   const queryClient = useQueryClient();
   const queryKey = ['squad', userId, gameweekId];
