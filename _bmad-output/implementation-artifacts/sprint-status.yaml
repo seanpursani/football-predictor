@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-21 # story 5-4 code review complete, done
+last_updated: 2026-05-21 # story 5-5 review complete, all patches applied, status → done
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -82,7 +82,7 @@ development_status:
   5-2-build-view-fixture-cards-and-match-moment-selection: done
   5-3-squad-management-captain-remove-and-save: done
   5-4-precision-pick-micro-flow: done
-  5-5-moments-view-squad-review-and-locked-state: backlog
+  5-5-moments-view-squad-review-and-locked-state: done
   epic-5-retrospective: optional
 
   # Epic 6: Score Reveal & Results

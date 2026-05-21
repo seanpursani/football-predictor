@@ -1,5 +1,10 @@
 # Deferred Work
 
+## Deferred from: code review of 5-5-moments-view-squad-review-and-locked-state (2026-05-21)
+
+- `totalPicks={20}` hardcoded in `GameweekHeader` call in `moments.tsx` — correct value should come from gameweek config; consistent with current stub pattern but would show wrong data if picks-per-gameweek changes. [`moments.tsx`]
+- Empty Moment tab state (when picks exist but zero are Precision Picks) — no empty state message shown; spec AC#3 only covers the zero-picks case, Precision Pick-specific empty state not defined until future spec review. [`moments.tsx`]
+
 ## Deferred from: code review of 5-4-precision-pick-micro-flow (2026-05-21)
 
 - `MINUTES.indexOf(value)` in MinutePicker has no guard for out-of-range value — if value drifts outside 1–91, `scrollToValue` silently no-ops and `handleScrollEnd` derives an unexpected index on next scroll. Safe in current flow but fragile. [`MinutePicker.tsx`]
