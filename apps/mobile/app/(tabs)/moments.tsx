@@ -187,8 +187,8 @@ export default function MomentsScreen() {
         phase={phase ?? 'building'}
       />
 
-      {/* BoldnessHeroCard: only shown in locked phase AND once gameweek data has loaded */}
-      {phase === 'locked' && gameweek && (
+      {/* BoldnessHeroCard: only shown in locked phase AND once gameweek data has loaded with a valid end timestamp */}
+      {phase === 'locked' && gameweek?.lastMatchEnd && (
         <BoldnessHeroCard
           tier={boldnessTier}
           tierName={TIER_NAMES[boldnessTier]}
