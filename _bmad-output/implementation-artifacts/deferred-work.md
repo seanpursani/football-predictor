@@ -1,5 +1,12 @@
 # Deferred Work
 
+## Deferred from: code review of 5-2-build-view-fixture-cards-and-match-moment-selection (2026-05-21)
+
+- `SkeletonRow` Reanimated animation not explicitly cancelled on unmount — pre-existing pattern in the codebase; low risk but could cause strict-mode warnings [`SkeletonRow.tsx`]
+- `build.tsx` `totalPicks={20}` hardcoded — deliberate constant; revisit when gameweek config surface is introduced [`build.tsx`]
+- Concurrent `useAddPickMutation` calls share same `previousSquad` snapshot — rapid-fire taps could roll back the wrong state; acceptable for v1 UX; address if concurrent picks become a real scenario [`useSquadQuery.ts`]
+- Historical dots always `correct: true` — `useHistoricalDotsQuery` has no concept of missed/voided events; ✗ dots require a `voided` or `result` field on `match_events`. Wire in ✗ logic when miss tracking is added to the schema [`useCatalogQuery.ts`]
+
 ## Deferred from: code review of 5-1-app-state-machine-and-gameweek-phase-detection (2026-05-21)
 
 - Unauthenticated user derives `'reveal'` phase — when no session, userId is null, revealState is disabled, hasSeenReveal defaults false; a completed gameweek would give `'reveal'` phase to unauthenticated users. Pre-existing auth gating concern; address when authentication guard/splash screen is implemented.

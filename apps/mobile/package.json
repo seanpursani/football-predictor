@@ -15,7 +15,11 @@
     "preset": "jest-expo",
     "transformIgnorePatterns": [
       "node_modules/(?!(.pnpm/[^/]+/node_modules/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|nativewind|@testing-library/react-native))"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^nativewind/jsx-runtime$": "<rootDir>/src/__mocks__/nativewindJsxRuntime.js",
+      "^nativewind/jsx-dev-runtime$": "<rootDir>/src/__mocks__/nativewindJsxRuntime.js"
+    }
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
