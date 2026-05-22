@@ -1,0 +1,139 @@
+# Le Colpo — Football Prediction App
+
+A monorepo containing a React Native (Expo) mobile app and a local Supabase backend.
+
+---
+
+## Prerequisites
+
+Make sure you have the following installed before you begin:
+
+| Tool | Version | Install |
+|------|---------|---------|
+| Node.js | ≥ 18 | https://nodejs.org |
+| pnpm | ≥ 8 | `npm install -g pnpm` |
+| Docker Desktop | latest | https://www.docker.com/products/docker-desktop (required for Supabase) |
+| Supabase CLI | latest | included via `pnpm install` (or `brew install supabase/tap/supabase`) |
+| Expo Go app | latest | iOS App Store / Google Play Store (for running on a physical device) |
+
+---
+
+## 1. Clone & Install Dependencies
+
+```bash
+git clone <repo-url>
+cd football-prediction-app
+pnpm install
+```
+
+---
+
+## 2. Start the Local Supabase Backend
+
+Supabase runs locally inside Docker.
+
+```bash
+# Make sure Docker Desktop is running first, then:
+cd apps/supabase
+
+# Copy and configure environment variables
+cp .env.example .env
+# (Optional) Edit .env with your Google OAuth credentials if needed for auth
+
+# Start Supabase (this may take a minute on first run)
+pnpm start
+```
+
+Once running, the CLI will print your local credentials, e.g.:
+
+```
+API URL: http://localhost:54321
+anon key: eyJhbGci...
+```
+
+Keep this terminal open — Supabase needs to stay running.
+
+---
+
+## 3. Configure the Mobile App
+
+```bash
+cd apps/mobile
+
+# Copy the environment file
+cp .env.example .env.local
+```
+
+Open `.env.local` and fill in the values printed by `supabase start`:
+
+```dotenv
+EXPO_PUBLIC_SUPABASE_URL=http://localhost:54321
+EXPO_PUBLIC_SUPABASE_ANON_KEY=<paste anon key here>
+```
+
+Leave `EXPO_PUBLIC_SENTRY_DSN` empty for local development.
+
+---
+
+## 4. Run the Mobile App
+
+```bash
+cd apps/mobile
+pnpm start
+```
+
+This starts the Expo development server. You'll see a QR code in the terminal.
+
+### Run on a physical device
+1. Install **Expo Go** on your iOS or Android device.
+2. Make sure your phone is on the **same Wi-Fi network** as your development machine.
+3. Scan the QR code with:
+   - **iOS**: the Camera app
+   - **Android**: the Expo Go app
+
+### Run on a simulator/emulator
+```bash
+# iOS Simulator (macOS only, requires Xcode)
+pnpm ios
+
+# Android Emulator (requires Android Studio)
+pnpm android
+```
+
+---
+
+## 5. Reset / Seed the Database (Optional)
+
+```bash
+cd apps/supabase
+pnpm db:reset   # Resets the DB and re-runs all migrations + seed data
+```
+
+---
+
+## Project Structure
+
+```
+football-prediction-app/
+├── apps/
+│   ├── mobile/       # Expo React Native app
+│   └── supabase/     # Local Supabase project (migrations, Edge Functions, seed data)
+├── packages/
+│   └── types/        # Shared TypeScript types
+└── package.json      # Monorepo root (pnpm workspaces)
+```
+
+---
+
+## Useful Commands
+
+| Command | Description |
+|---------|-------------|
+| `pnpm install` | Install all dependencies across the monorepo |
+| `pnpm test:all` | Run all tests |
+| `pnpm lint:all` | Lint all packages |
+| `cd apps/supabase && pnpm start` | Start local Supabase |
+| `cd apps/supabase && pnpm stop` | Stop local Supabase |
+| `cd apps/supabase && pnpm db:reset` | Reset database with fresh migrations |
+| `cd apps/mobile && pnpm start` | Start Expo dev server |
+
