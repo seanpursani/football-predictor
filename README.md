@@ -82,10 +82,14 @@ Open `.env.local` and fill in the values printed by `supabase start`:
 
 ```dotenv
 EXPO_PUBLIC_SUPABASE_URL=http://localhost:54321
-EXPO_PUBLIC_SUPABASE_ANON_KEY=<paste anon key here>
+EXPO_PUBLIC_SUPABASE_ANON_KEY=<paste Publishable key here>
 ```
 
-Leave `EXPO_PUBLIC_SENTRY_DSN` empty for local development.
+> **Running on a physical device?** `localhost` on the phone points to the phone itself, not your computer. Replace it with your machine's LAN IP address:
+> ```dotenv
+> EXPO_PUBLIC_SUPABASE_URL=http://192.168.x.x:54321
+> ```
+> Find your IP with `ipconfig getifaddr en0` (macOS) or `ipconfig` (Windows). Make sure your phone and computer are on the **same Wi-Fi network**.
 
 ---
 
