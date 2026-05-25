@@ -9,7 +9,7 @@
 CREATE
 OR REPLACE FUNCTION is_admin()
 RETURNS boolean AS $$
-SELECT (auth.jwt() - > 'app_metadata' ->> 'role') = 'admin';
+SELECT (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin';
 $$
 LANGUAGE sql;
 
