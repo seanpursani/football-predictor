@@ -1,6 +1,7 @@
 import * as AppleAuthentication from 'expo-apple-authentication';
 import {makeRedirectUri} from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
+import Constants, {ExecutionEnvironment} from 'expo-constants';
 
 import {supabase} from './supabase';
 
@@ -29,9 +30,21 @@ export async function signInWithApple() {
 
 /**
  * Sign in with Google via PKCE OAuth flow using expo-web-browser.
+ *
+ * In Expo Go the redirect must go through Supabase's own auth callback page
+ * (which then deep-links back into the app via the exp:// scheme that Expo Go
+ * registers dynamically for the *current* dev server).  Using a hard-coded
+ * scheme:// URI here would embed the dev-machine's LAN IP, causing
+ * ERR_CONNECTION_REFUSED on any other machine.
+ *
+ * In a standalone / production build we use the custom `lecolpo://` scheme.
  */
 export async function signInWithGoogle() {
-    const redirectUri = makeRedirectUri({scheme: 'lecolpo'});
+    const isExpoGo = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+
+    const redirectUri = isExpoGo
+        ? makeRedirectUri({preferLocalhost: false})   // resolves to exp://<current-host>:8081
+        : makeRedirectUri({scheme: 'lecolpo', path: 'auth/callback'});
 
     const {data, error} = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -44,8 +57,19 @@ export async function signInWithGoogle() {
     if (error) throw error;
 
     if (data.url) {
-        await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-        // onAuthStateChange fires after redirect resolves — no session return needed here
+        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
+
+        // In Expo Go the deep-link comes back as a universal link; we need to
+        // manually tell Supabase to exchange the code from the URL.
+        if (result.type === 'success' && result.url) {
+            const url = new URL(result.url);
+            const code = url.searchParams.get('code');
+            if (code) {
+                await supabase.auth.exchangeCodeForSession(code);
+            }
+        }
+        // For standalone builds onAuthStateChange fires automatically via the
+        // deep-link handler registered in the app.
     }
 }
 
