@@ -18,7 +18,9 @@ apps/supabase/volumes/
 
 # Build outputs
 dist/
-build/
+/build/
+apps/mobile/build/
+packages/*/build/
 
 # IDE
 .idea/
