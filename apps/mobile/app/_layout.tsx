@@ -133,6 +133,7 @@ export default function RootLayout() {
                             <Stack.Screen name="onboarding" options={{headerShown: false}}/>
                             <Stack.Screen name="catalog/[fixtureId]" options={{title: 'Moment Catalog'}}/>
                             <Stack.Screen name="microflow" options={{headerShown: false}}/>
+                            <Stack.Screen name="auth/callback" options={{headerShown: false}}/>
                             <Stack.Screen name="modal" options={{presentation: 'modal', title: 'Modal'}}/>
                         </Stack>
                         <StatusBar style="light"/>
