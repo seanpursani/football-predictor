@@ -1,31 +1,91 @@
-# Welcome to your Expo app 👋
+# LeColpo — Mobile App
 
-This is an [Expo](https://expo.dev) project created with [
-`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Built with [Expo](https://expo.dev) and [Expo Router](https://docs.expo.dev/router/introduction).
 
 ## Get started
 
 1. Install dependencies
 
    ```bash
-   npm install
+   pnpm install
    ```
 
-2. Start the app
+2. Copy the environment file and fill in your values
 
    ```bash
-   npx expo start
+   cp .env.example .env.local
    ```
 
-In the output, you'll find options to open the app in a
+   > Get the Supabase URL and anon key by running `pnpm supabase status` inside `apps/supabase`.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3. Start the app
 
-You can start developing by editing the files inside the **app** directory. This project
-uses [file-based routing](https://docs.expo.dev/router/introduction).
+   ```bash
+   pnpm start
+   ```
+
+## Running on a physical device (Expo Go)
+
+`localhost` is not reachable from a phone — use `start:device` which auto-detects
+your machine's LAN IP and patches `EXPO_PUBLIC_SUPABASE_URL` at startup:
+
+```bash
+pnpm start:device              # phone on the same WiFi as your machine
+pnpm start:device:tunnel       # phone on a different network (uses ngrok tunnel for Metro)
+```
+
+> **Prerequisite for tunnel:** `pnpm add -D @expo/ngrok` (one-time, dev only).
+
+Your LAN IP is detected automatically — no manual edits to `.env.local` needed.
+
+## Run modes at a glance
+
+| Command | Use when |
+|---|---|
+| `pnpm start` | Simulator or browser (`-w`) |
+| `pnpm start:device` | Physical device — same WiFi |
+| `pnpm start:device:tunnel` | Physical device — different network |
+| `pnpm start:tunnel` | Expo tunnel only (Metro), no env patching |
+| `pnpm start:clear` | Cache issues — clears Metro cache on startup |
+| `pnpm start:log` | Debugging — tees all output to `expo-debug.log` |
+
+## Debugging
+
+### Terminal logs
+
+All `console.*` output is forwarded by Metro to the terminal. Every log line from
+this project is prefixed with `[HH:MM:SS.mmm] [LEVEL] [module]` so you can grep
+for a specific area:
+
+```
+[12:34:56.789] [INFO ] [auth] Starting Google sign-in
+[12:34:57.012] [INFO ] [auth] Redirecting to OAuth URL
+[12:34:59.345] [INFO ] [auth] Session established {"userId": "..."}
+```
+
+### Capturing logs to a file
+
+Run `pnpm start:log` to tee all Metro output into `expo-debug.log` (gitignored).
+Paste or share this file when reporting issues to an AI agent.
+
+```bash
+pnpm start:log
+# ... reproduce the issue ...
+cat expo-debug.log | grep "\[auth\]"
+```
+
+### Error tracking (Sentry)
+
+All auth errors are automatically captured to Sentry with structured tags
+(`flow`, `provider`, `context`). No manual reporting needed — check the
+[Sentry dashboard](https://sentry.io) for `lecolpo-mobile`.
+
+### Expo Go log viewer
+
+Shake the device inside Expo Go → **"View Logs"** to see Metro-forwarded console
+output directly on the phone.
+
+---
 
 ## Get a fresh project
 
