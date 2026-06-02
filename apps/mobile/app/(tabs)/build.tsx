@@ -14,6 +14,7 @@ import {
   useCaptainMutation,
   useSaveSquadMutation,
 } from '@/src/queries/useSquadQuery';
+import { useCatalogQuery } from '@/src/queries/useCatalogQuery';
 import { GameweekHeader } from '@/src/components/shared/GameweekHeader';
 import { DeadlineStrip } from '@/src/components/shared/DeadlineStrip';
 import { FixtureCard } from '@/src/components/build/FixtureCard';
@@ -45,6 +46,13 @@ export default function BuildScreen() {
   const removePick = useRemovePickMutation(userId, currentGameweekId);
   const captainMutation = useCaptainMutation(userId, currentGameweekId);
   const saveSquad = useSaveSquadMutation(userId, currentGameweekId);
+
+  // Fetch catalog for the fixture of the active pick target so CaptainPopup
+  // can display the event name instead of the fallback "Pick #N" label.
+  const { data: captainCatalog } = useCatalogQuery(captainPickTarget?.fixtureId ?? null);
+  const captainMomentType =
+    captainCatalog?.find((c) => c.id === captainPickTarget?.gameWeekMomentId)
+      ?.momentType ?? null;
 
   const showToast = useCallback((message: string) => {
     setToastMessage(message);
@@ -137,8 +145,9 @@ export default function BuildScreen() {
         {phase === 'building' && (
           <View style={styles.saveBar}>
             <TouchableOpacity
-              style={styles.saveButton}
+              style={[styles.saveButton, saveSquad.isPending && styles.saveButtonPending]}
               onPress={handleSave}
+              disabled={saveSquad.isPending}
               accessibilityRole="button"
               accessibilityLabel="Save squad"
             >
@@ -151,7 +160,7 @@ export default function BuildScreen() {
       <CaptainPopup
         visible={captainPickTarget !== null}
         pick={captainPickTarget}
-        momentType={null}
+        momentType={captainMomentType}
         onSelectCaptain={(pick) => {
           if (userId && currentGameweekId) {
             captainMutation.mutate(
@@ -204,6 +213,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingVertical: 14,
     alignItems: 'center',
+  },
+  saveButtonPending: {
+    opacity: 0.4,
   },
   saveButtonText: {
     ...Typography.label,

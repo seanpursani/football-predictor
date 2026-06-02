@@ -8,4 +8,5 @@ export { scoringResults } from './scoringResults';
 export { leaderboardEntries } from './leaderboards';
 export { miniLeagues, leagueMemberships } from './leagues';
 export { scoringErrors, userGameweekStates } from './admin';
+export { players, gameWeekMomentPlayers } from './players';
 

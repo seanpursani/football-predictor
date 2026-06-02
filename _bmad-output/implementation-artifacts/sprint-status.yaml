@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-last_updated: 2026-05-21 # story 5-5 review complete, all patches applied, status → done
+last_updated: 2026-06-02 # epic-6 in-progress; 6-1 ready-for-dev
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -43,16 +43,16 @@ story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 development_status:
   # Epic 1: Foundation — Project Scaffold & Infrastructure
-  epic-1: in-progress
+  epic-1: done
   1-1-monorepo-and-mobile-app-scaffold: done
   1-2-design-system-foundation: done
   1-3-supabase-project-and-database-schema: done
   1-4-mobile-infrastructure-data-layer-and-navigation-skeleton: done
   1-5-cicd-pipeline-and-error-monitoring: done
-  epic-1-retrospective: optional
+  epic-1-retrospective: done
 
   # Epic 2: Account, Authentication & Onboarding
-  epic-2: in-progress
+  epic-2: done
   2-1-social-login-apple-and-google: done
   2-2-user-profile-display-name: done
   2-3-push-notification-permission-and-token-registration: done
@@ -61,33 +61,33 @@ development_status:
   epic-2-retrospective: done
 
   # Epic 3: Gameweek Data Pipeline
-  epic-3: in-progress
+  epic-3: done
   3-0-odds-to-points-formula-design-and-calibration: done
   3-1-external-api-client-infrastructure: done
   3-2-odds-ingestion-and-moment-catalog-generation: done
   3-3-match-event-ingestion-and-gameweek-completion-detection: done
   3-4-gameweek-lifecycle-scheduling-and-development-seed-data: done
-  epic-3-retrospective: optional
+  epic-3-retrospective: done
 
   # Epic 4: Scoring Engine & Results Processing
-  epic-4: in-progress
+  epic-4: done
   4-1-scoring-engine-full-multi-layer-scoring-logic: done
   4-2-cross-match-streak-calculator: done
   4-3-scoring-orchestrator-results-persistence-and-push-notification: done
-  epic-4-retrospective: optional
+  epic-4-retrospective: done
 
   # Epic 5: Match Builder — Full Squad Building
-  epic-5: in-progress
+  epic-5: done
   5-1-app-state-machine-and-gameweek-phase-detection: done
   5-2-build-view-fixture-cards-and-match-moment-selection: done
   5-3-squad-management-captain-remove-and-save: done
   5-4-precision-pick-micro-flow: done
   5-5-moments-view-squad-review-and-locked-state: done
-  epic-5-retrospective: optional
+  epic-5-retrospective: done
 
   # Epic 6: Score Reveal & Results
-  epic-6: backlog
-  6-1-revealcard-component-and-animation-states: backlog
+  epic-6: in-progress
+  6-1-revealcard-component-and-animation-states: ready-for-dev
   6-2-reveal-sequence-results-screen-and-streak-visualisation: backlog
   epic-6-retrospective: optional
 
