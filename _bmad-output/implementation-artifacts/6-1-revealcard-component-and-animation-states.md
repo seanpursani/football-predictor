@@ -1,6 +1,6 @@
 # Story 6.1: RevealCard Component & Animation States
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -34,41 +34,41 @@ so that hits, misses, jackpots, and captain moments each feel meaningfully diffe
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create `apps/mobile/src/components/reveal/` directory and `RevealCard.tsx` (AC: 1–10)
-  - [ ] Define `RevealState` union type and `RevealCardProps` interface (exact API below)
-  - [ ] Copy `EVENT_ICON_MAP` locally — do NOT import from `build/` or `moments/`
-  - [ ] Implement `pending` static rendering (opacity `0.4`, no animation)
-  - [ ] Implement `revealing` transient animation: `withSpring` scale + `withTiming` opacity
-  - [ ] Implement `hit` terminal: lime bg fade + ✓ icon + haptic Light
-  - [ ] Implement `miss` terminal: grey bg fade + ✗ icon + no haptic + dimmed text
-  - [ ] Implement `captain-hit` terminal: gold double-flash + crown pulse + ✓ icon + haptic Medium
-  - [ ] Implement `jackpot` terminal: card scale burst + gold bg + ⚡ icon + haptic Success
-  - [ ] Implement `firstView={false}` fast path: skip all animations, render final state, skip haptics
-  - [ ] Implement `reduceMotion={true}` path: instant final state, haptics still fire
-  - [ ] Implement streak badge: `isStreakChained` + `streakBonusPoints` props → pulse + badge
-  - [ ] Wire `onRevealComplete` callback after terminal animation settles
-  - [ ] Ensure all animated style computations in `useAnimatedStyle` worklets (UI thread)
+- [x] Task 1: Create `apps/mobile/src/components/reveal/` directory and `RevealCard.tsx` (AC: 1–10)
+  - [x] Define `RevealState` union type and `RevealCardProps` interface (exact API below)
+  - [x] Copy `EVENT_ICON_MAP` locally — do NOT import from `build/` or `moments/`
+  - [x] Implement `pending` static rendering (opacity `0.4`, no animation)
+  - [x] Implement `revealing` transient animation: `withSpring` scale + `withTiming` opacity
+  - [x] Implement `hit` terminal: lime bg fade + ✓ icon + haptic Light
+  - [x] Implement `miss` terminal: grey bg fade + ✗ icon + no haptic + dimmed text
+  - [x] Implement `captain-hit` terminal: gold double-flash + crown pulse + ✓ icon + haptic Medium
+  - [x] Implement `jackpot` terminal: card scale burst + gold bg + ⚡ icon + haptic Success
+  - [x] Implement `firstView={false}` fast path: skip all animations, render final state, skip haptics
+  - [x] Implement `reduceMotion={true}` path: instant final state, haptics still fire
+  - [x] Implement streak badge: `isStreakChained` + `streakBonusPoints` props → pulse + badge
+  - [x] Wire `onRevealComplete` callback after terminal animation settles
+  - [x] Ensure all animated style computations in `useAnimatedStyle` worklets (UI thread)
 
-- [ ] Task 2: Create `apps/mobile/src/components/reveal/index.ts` barrel export (AC: all)
-  - [ ] `export { RevealCard } from './RevealCard';`
-  - [ ] `export type { RevealCardProps, RevealState } from './RevealCard';`
+- [x] Task 2: Create `apps/mobile/src/components/reveal/index.ts` barrel export (AC: all)
+  - [x] `export { RevealCard } from './RevealCard';`
+  - [x] `export type { RevealCardProps, RevealState } from './RevealCard';`
 
-- [ ] Task 3: Write `apps/mobile/src/components/reveal/RevealCard.test.tsx` (AC: 11)
-  - [ ] Add `expo-haptics` mock at top of test file (see mock block in Dev Notes)
-  - [ ] Snapshot: `pending`, `revealing`, `hit`, `miss`, `captain-hit`, `jackpot` (6 tests)
-  - [ ] Snapshot: `firstView={false}` for each terminal state (5 tests)
-  - [ ] Snapshot: `reduceMotion={true}` for `hit`, `captain-hit`, `jackpot` (3 tests)
-  - [ ] Unit: haptic fires for `hit` (Light), `captain-hit` (Medium), `jackpot` (Success)
-  - [ ] Unit: NO haptic for `miss` or `pending`
-  - [ ] Unit: haptic fires when `reduceMotion={true}` + `hit`
-  - [ ] Unit: NO animation triggered + NO haptic when `firstView={false}`
-  - [ ] Unit: streak badge shows `"+10"`, `"+20"`, `"+30"` for respective `streakBonusPoints`
-  - [ ] Unit: streak badge absent when `isStreakChained={false}` or `streakBonusPoints={null}`
+- [x] Task 3: Write `apps/mobile/src/components/reveal/RevealCard.test.tsx` (AC: 11)
+  - [x] Add `expo-haptics` mock at top of test file (see mock block in Dev Notes)
+  - [x] Snapshot: `pending`, `revealing`, `hit`, `miss`, `captain-hit`, `jackpot` (6 tests)
+  - [x] Snapshot: `firstView={false}` for each terminal state (5 tests)
+  - [x] Snapshot: `reduceMotion={true}` for `hit`, `captain-hit`, `jackpot` (3 tests)
+  - [x] Unit: haptic fires for `hit` (Light), `captain-hit` (Medium), `jackpot` (Success)
+  - [x] Unit: NO haptic for `miss` or `pending`
+  - [x] Unit: haptic fires when `reduceMotion={true}` + `hit`
+  - [x] Unit: NO animation triggered + NO haptic when `firstView={false}`
+  - [x] Unit: streak badge shows `"+10"`, `"+20"`, `"+30"` for respective `streakBonusPoints`
+  - [x] Unit: streak badge absent when `isStreakChained={false}` or `streakBonusPoints={null}`
 
-- [ ] Task 4: Update sprint status (AC: all)
-  - [ ] Mark all tasks complete in this story file
-  - [ ] Update `sprint-status.yaml`: `6-1-revealcard-component-and-animation-states: review`
-  - [ ] Update `epic-6: in-progress`
+- [x] Task 4: Update sprint status (AC: all)
+  - [x] Mark all tasks complete in this story file
+  - [x] Update `sprint-status.yaml`: `6-1-revealcard-component-and-animation-states: review`
+  - [x] Update `epic-6: in-progress`
 
 ## Dev Notes
 
@@ -350,6 +350,16 @@ No changes to: `MomentsPickRow.tsx`, `useRevealStore.ts`, `moments.tsx`, `build.
 - Animation library version: react-native-reanimated `~4.1.1` [Source: apps/mobile/package.json]
 - Previous story 5.5 learnings: [Source: _bmad-output/implementation-artifacts/5-5-moments-view-squad-review-and-locked-state.md#Dev-Agent-Record]
 
+### Review Findings
+
+- [x] [Review][Decision] captain-hit flash count: resolved → Option B (true ×2 flash: `0→0.2→0→0.2→0→0.15`); matches AC5 literal text; more emotionally distinct for captain moments.
+- [x] [Review][Decision] `onRevealComplete` not fired when `firstView=false` — resolved → Option A (keep as-is); `firstView=false` is a static re-view, no sequence to advance; Story 6.2 should not pass `onRevealComplete` in that mode.
+- [x] [Review][Patch] Event icon color ternary always returns `textMuted` — fixed: non-miss states now use `COLOURS.textPrimary` [RevealCard.tsx:338-340]
+- [x] [Review][Patch] `captain-hit` case missing `onRevealComplete` callback — fixed: fires via `withTiming` callback at end of flash sequence (reduceMotion=false) or directly (reduceMotion=true) [RevealCard.tsx]
+- [x] [Review][Patch] Double-write of `bgOpacity` in `hit` case — fixed: restructured to single conditional assignment [RevealCard.tsx]
+- [x] [Review][Patch] Double-write of `bgOpacity` in `miss` case — fixed: restructured to single conditional assignment [RevealCard.tsx]
+- [x] [Review][Defer] `reduceMotion` and other props excluded from `useEffect` deps (suppressed) [RevealCard.tsx:240] — deferred, pre-existing pattern
+
 ## Dev Agent Record
 
 ### Agent Model Used
@@ -358,7 +368,28 @@ GitHub Copilot (GPT-4.1)
 
 ### Debug Log References
 
+- Haptic firing moved from `runOnJS` in animation callbacks to direct JS-thread call at top of `useEffect`. The `react-native-reanimated/mock` doesn't execute animation callbacks, so haptics must fire synchronously on the JS thread — guarded by `firstView` check.
+
 ### Completion Notes List
+
+- ✅ Created `apps/mobile/src/components/reveal/RevealCard.tsx` — full component with all 6 states (`pending`, `revealing`, `hit`, `miss`, `captain-hit`, `jackpot`), `firstView={false}` fast path, `reduceMotion={true}` instant path, streak badge, and `onRevealComplete` callback.
+- ✅ All Reanimated v4 animations in `useAnimatedStyle` worklets (UI thread). No legacy `Animated` API used.
+- ✅ `EVENT_ICON_MAP` and `COLOURS` constants defined inline — no imports from `build/` or `moments/`.
+- ✅ `AccessibilityInfo.isReduceMotionEnabled()` NOT called inside component — `reduceMotion` accepted as prop.
+- ✅ Haptics fire directly in `useEffect` (JS thread), gated by `firstView === true`.
+- ✅ Created `apps/mobile/src/components/reveal/index.ts` barrel export.
+- ✅ Created `apps/mobile/src/components/reveal/RevealCard.test.tsx` — 30 tests: 14 snapshots + 16 unit tests.
+- ✅ Full test suite: **191 tests pass** (161 baseline + 30 new). Zero regressions.
+- ✅ TypeScript: no new errors in `reveal/` files (pre-existing errors in unrelated files only).
 
 ### File List
 
+- `apps/mobile/src/components/reveal/RevealCard.tsx` (NEW)
+- `apps/mobile/src/components/reveal/index.ts` (NEW)
+- `apps/mobile/src/components/reveal/RevealCard.test.tsx` (NEW)
+- `_bmad-output/implementation-artifacts/6-1-revealcard-component-and-animation-states.md` (MODIFIED — tasks, status, dev record)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (MODIFIED — story → review)
+
+### Change Log
+
+- 2026-06-03: Implemented Story 6.1 — RevealCard component with all 6 animation states, firstView/reduceMotion paths, streak badge, haptic feedback, and full test suite (30 new tests). Story status → review.

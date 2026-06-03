@@ -1,5 +1,9 @@
 # Deferred Work
 
+## Deferred from: code review of 6-1-revealcard-component-and-animation-states (2026-06-03)
+
+- `useEffect` deps array suppresses exhaustive-deps lint warning (eslint-disable comment); `reduceMotion`, `firstView`, `isStreakChained`, `streakBonusPoints`, and `onRevealComplete` are used inside the effect but excluded from deps. Low practical risk since these props are effectively static after mount, but could cause stale closures if the component is ever lifted to a context where props change mid-session. [`RevealCard.tsx:240`]
+
 ## Deferred from: code review of 5-5-moments-view-squad-review-and-locked-state (2026-05-21)
 
 - `totalPicks={20}` hardcoded in `GameweekHeader` call in `moments.tsx` — correct value should come from gameweek config; consistent with current stub pattern but would show wrong data if picks-per-gameweek changes. [`moments.tsx`]
