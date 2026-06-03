@@ -1,5 +1,10 @@
 # Deferred Work
 
+## Deferred from: code review of 6-2-reveal-sequence-results-screen-and-streak-visualisation (2026-06-03)
+
+- Unmounted `setTimeout` in `RevealSequence.handleRevealComplete` — `setTimeout(() => advanceReveal(), 600)` is never cleared on unmount. Self-healing: `resetReveal()` on next mount resets Zustand state. Pre-existing fire-and-forget timer pattern across the codebase. [`RevealSequence.tsx:178`]
+- Pre-existing TypeScript errors in `RevealCard.test.tsx` — `onRevealComplete` does not exist in the `Partial<RevealCardProps>` type used in makeRevealCardProps helpers. Not introduced by Story 6.2; carry-over from Story 6.1 type narrowing. [`RevealCard.test.tsx:248,254,260,266,272`]
+
 ## Deferred from: code review of 6-1-revealcard-component-and-animation-states (2026-06-03)
 
 - `useEffect` deps array suppresses exhaustive-deps lint warning (eslint-disable comment); `reduceMotion`, `firstView`, `isStreakChained`, `streakBonusPoints`, and `onRevealComplete` are used inside the effect but excluded from deps. Low practical risk since these props are effectively static after mount, but could cause stale closures if the component is ever lifted to a context where props change mid-session. [`RevealCard.tsx:240`]

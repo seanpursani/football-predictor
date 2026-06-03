@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import type {Gameweek, UserGameweekState} from '@lecolpo/types';
 import {supabase} from '@/src/lib/supabase';
 
@@ -65,3 +65,35 @@ export function useUserGameweekStateQuery(gameweekId: number | null | undefined,
         staleTime: 60_000,
     });
 }
+
+export function useMarkRevealSeenMutation() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({
+            userId,
+            gameweekId,
+        }: {
+            userId: string;
+            gameweekId: number;
+        }) => {
+            const {error} = await supabase
+                .from('user_gameweek_states')
+                .upsert(
+                    {user_id: userId, gameweek_id: gameweekId, has_seen_reveal: true},
+                    {onConflict: 'user_id,gameweek_id'},
+                );
+            if (error) {
+                console.error('useMarkRevealSeenMutation error:', error);
+                throw error;
+            }
+        },
+        onSuccess: (_, {userId, gameweekId}) => {
+            // Phase re-derives automatically — the reveal state query invalidation
+            // triggers _layout.tsx useEffect → deriveGameweekPhase → setPhase('locked')
+            queryClient.invalidateQueries({
+                queryKey: ['gameweek', 'reveal-state', gameweekId, userId],
+            });
+        },
+    });
+}
+
