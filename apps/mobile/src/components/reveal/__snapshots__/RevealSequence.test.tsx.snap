@@ -1,0 +1,2163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RevealSequence snapshots renders firstView=false (all cards in final resolved state) 1`] = `
+<RCTScrollView
+  style={
+    {
+      "backgroundColor": "#080808",
+      "flex": 1,
+    }
+  }
+>
+  <View>
+    <View
+      accessibilityLabel="Goal, hit, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="6"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-0"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "#B4FF32",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="7"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "#B4FF32",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 1,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="8"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 1,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#FFFFFF",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#B4FF32",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "backgroundColor": "#303030",
+          "height": 1,
+          "marginHorizontal": 16,
+        }
+      }
+    />
+    <View
+      accessibilityLabel="Goal, miss, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="9"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-1"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "#303030",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="10"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "#303030",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 1,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="11"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 1,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#7A7A7A",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#7A7A7A",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#7A7A7A",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#7A7A7A",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;
+
+exports[`RevealSequence snapshots renders initial state (firstView=true, card 0 revealing, rest pending) 1`] = `
+<RCTScrollView
+  style={
+    {
+      "backgroundColor": "#080808",
+      "flex": 1,
+    }
+  }
+>
+  <View>
+    <View
+      accessibilityLabel="Goal, revealing, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="0"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-0"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="1"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 1,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="2"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 1,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text />
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#B4FF32",
+          "height": 12,
+          "marginVertical": -2,
+          "width": 2,
+        }
+      }
+    />
+    <View
+      accessibilityLabel="Goal, pending, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="3"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-1"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="4"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 0.4,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="5"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 0.4,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text />
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;
+
+exports[`RevealSequence snapshots renders with reduceMotion=true (all cards final, no sequence) 1`] = `
+<RCTScrollView
+  style={
+    {
+      "backgroundColor": "#080808",
+      "flex": 1,
+    }
+  }
+>
+  <View>
+    <View
+      accessibilityLabel="Goal, hit, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="12"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-0"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="13"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 1,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="14"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 1,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#FFFFFF",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#B4FF32",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#B4FF32",
+          "height": 12,
+          "marginVertical": -2,
+          "width": 2,
+        }
+      }
+    />
+    <View
+      accessibilityLabel="Goal, hit, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="15"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-1"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="16"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 0.4,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="17"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 0.4,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#FFFFFF",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#B4FF32",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "borderTopColor": "#1E1E1E",
+          "borderTopWidth": 1,
+          "padding": 24,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#7A7A7A",
+            "fontSize": 14,
+            "marginBottom": 4,
+          }
+        }
+      >
+        Gameweek Score
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#B4FF32",
+            "fontSize": 48,
+            "fontVariant": [
+              "tabular-nums",
+            ],
+            "fontWeight": "700",
+            "marginBottom": 24,
+          }
+        }
+      >
+        200
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#7A7A7A",
+            "fontSize": 14,
+            "textAlign": "center",
+          }
+        }
+        testID="no-league-prompt"
+      >
+        No league yet — create one or join a friend's
+      </Text>
+    </View>
+  </View>
+</RCTScrollView>
+`;
+
+exports[`RevealSequence: chain connector visible for consecutive correct moments renders chain connectors between consecutive correct moment picks 1`] = `
+<RCTScrollView
+  style={
+    {
+      "backgroundColor": "#080808",
+      "flex": 1,
+    }
+  }
+>
+  <View>
+    <View
+      accessibilityLabel="Goal, hit, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="47"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-0"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="48"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 1,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="49"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 1,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#FFFFFF",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#B4FF32",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignSelf": "center",
+          "backgroundColor": "#B4FF32",
+          "height": 12,
+          "marginVertical": -2,
+          "width": 2,
+        }
+      }
+    />
+    <View
+      accessibilityLabel="Goal, hit, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+      }
+      jestAnimatedStyle={
+        {
+          "value": {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        }
+      }
+      jestInlineStyle={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+        ]
+      }
+      nativeID="50"
+      style={
+        [
+          {
+            "backgroundColor": "#141414",
+            "borderBottomColor": "#1E1E1E",
+            "borderBottomWidth": 1,
+            "flexDirection": "column",
+            "overflow": "hidden",
+          },
+          {
+            "transform": [
+              {
+                "scale": 1,
+              },
+            ],
+          },
+        ]
+      }
+      testID="reveal-card-1"
+    >
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          }
+        }
+        jestInlineStyle={{}}
+        nativeID="51"
+        pointerEvents="none"
+        style={
+          [
+            {
+              "backgroundColor": "transparent",
+              "bottom": 0,
+              "left": 0,
+              "opacity": 0,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+            },
+          ]
+        }
+      />
+      <View
+        collapsable={false}
+        jestAnimatedProps={
+          {
+            "value": {},
+          }
+        }
+        jestAnimatedStyle={
+          {
+            "value": {
+              "opacity": 0.4,
+            },
+          }
+        }
+        jestInlineStyle={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+          ]
+        }
+        nativeID="52"
+        style={
+          [
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "minHeight": 44,
+              "paddingHorizontal": 16,
+              "paddingVertical": 12,
+            },
+            {
+              "opacity": 0.4,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "gap": 8,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#FFFFFF",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+          <Text
+            style={
+              [
+                {
+                  "flexShrink": 1,
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            Goal
+          </Text>
+          <View
+            style={
+              {
+                "backgroundColor": "rgba(167,139,250,0.15)",
+                "borderRadius": 4,
+                "paddingHorizontal": 8,
+                "paddingVertical": 2,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#A78BFA",
+                  "fontFamily": "Inter_500Medium",
+                  "fontSize": 13,
+                  "lineHeight": 18,
+                }
+              }
+            >
+              MOMENT
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "gap": 6,
+            }
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "fontFamily": "Inter_400Regular",
+                  "fontSize": 15,
+                  "fontVariant": [
+                    "tabular-nums",
+                  ],
+                  "lineHeight": 22,
+                },
+                {
+                  "color": "#FFFFFF",
+                },
+              ]
+            }
+          >
+            100
+          </Text>
+          <Text
+            allowFontScaling={false}
+            selectable={false}
+            style={
+              [
+                {
+                  "color": "#B4FF32",
+                  "fontSize": 20,
+                },
+                undefined,
+                {
+                  "fontFamily": "ionicons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "borderTopColor": "#1E1E1E",
+          "borderTopWidth": 1,
+          "padding": 24,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#7A7A7A",
+            "fontSize": 14,
+            "marginBottom": 4,
+          }
+        }
+      >
+        Gameweek Score
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#B4FF32",
+            "fontSize": 48,
+            "fontVariant": [
+              "tabular-nums",
+            ],
+            "fontWeight": "700",
+            "marginBottom": 24,
+          }
+        }
+      >
+        200
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#7A7A7A",
+            "fontSize": 14,
+            "textAlign": "center",
+          }
+        }
+        testID="no-league-prompt"
+      >
+        No league yet — create one or join a friend's
+      </Text>
+    </View>
+  </View>
+</RCTScrollView>
+`;

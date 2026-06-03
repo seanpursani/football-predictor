@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  AccessibilityInfo,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -12,18 +11,22 @@ import type { Prediction, Fixture } from '@lecolpo/types';
 
 import { useAuthState } from '@/src/hooks/useAuthState';
 import { useGameweekStore } from '@/src/stores/useGameweekStore';
-import { useRevealStore } from '@/src/stores/useRevealStore';
 import { useSquadQuery } from '@/src/queries/useSquadQuery';
 import { useFixturesQuery } from '@/src/queries/useFixturesQuery';
-import { useGameweekQuery } from '@/src/queries/useGameweekQuery';
+import { useGameweekQuery, useMarkRevealSeenMutation } from '@/src/queries/useGameweekQuery';
 import { useCatalogQuery } from '@/src/queries/useCatalogQuery';
+import { useResultsQuery } from '@/src/queries/useResultsQuery';
+import { useLeagueQuery } from '@/src/queries/useLeagueQuery';
 import { GameweekHeader } from '@/src/components/shared/GameweekHeader';
 import { SkeletonRow } from '@/src/components/shared/SkeletonRow';
 import { FixtureGroupSection } from '@/src/components/moments/FixtureGroupSection';
 import { MomentsPickRow } from '@/src/components/moments/MomentsPickRow';
 import { BoldnessHeroCard } from '@/src/components/moments/BoldnessHeroCard';
+import { RevealCard } from '@/src/components/reveal/RevealCard';
+import { RevealSequence } from '@/src/components/reveal/RevealSequence';
 import { Typography } from '@/src/lib/typography';
 import { deriveBoldnessTier, TIER_NAMES } from '@/src/utils/boldness';
+import type { ResultsRow } from '@/src/queries/useResultsQuery';
 
 // Per-fixture component for Moment tab — avoids hooks-in-loops
 interface MomentTabFixtureGroupProps {
@@ -67,6 +70,29 @@ function MomentTabFixtureGroup({ fixture, picks }: MomentTabFixtureGroupProps) {
   );
 }
 
+// Helper: derive RevealState for a result in the results phase (firstView=false)
+function deriveResultRevealState(
+  result: ResultsRow,
+): 'hit' | 'miss' | 'captain-hit' | 'jackpot' {
+  if (!result.isCorrect) return 'miss';
+  if (result.jackpotBonus > 0) return 'jackpot';
+  if (result.captainMultiplier === 2) return 'captain-hit';
+  return 'hit';
+}
+
+// Helper: chain connector between consecutive correct moment picks
+function showChainConnector(results: ResultsRow[], index: number): boolean {
+  if (index === 0) return false;
+  const prev = results[index - 1];
+  const curr = results[index];
+  return (
+    prev.predictionType === 'moment' &&
+    curr.predictionType === 'moment' &&
+    prev.isCorrect &&
+    curr.isCorrect
+  );
+}
+
 export default function MomentsScreen() {
   const insets = useSafeAreaInsets();
   const { session } = useAuthState();
@@ -74,20 +100,17 @@ export default function MomentsScreen() {
 
   const gameweekId = useGameweekStore((s) => s.currentGameweekId);
   const phase = useGameweekStore((s) => s.phase);
-  const setReduceMotion = useRevealStore((s) => s.setReduceMotion);
 
   const { data: gameweek } = useGameweekQuery();
   const { data: picks = [], isLoading } = useSquadQuery(userId, gameweekId);
   const { data: fixtures = [] } = useFixturesQuery(gameweekId);
 
-  const [activeTab, setActiveTab] = useState<'match' | 'moment'>('match');
+  // Results and reveal hooks — called unconditionally (hooks order)
+  const { data: results = [], isLoading: resultsLoading } = useResultsQuery(userId, gameweekId);
+  const markRevealSeen = useMarkRevealSeenMutation();
+  const { data: leagues = [] } = useLeagueQuery(userId);
 
-  // AC#4: one-time reduce motion read on mount
-  useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled()
-      .then((value) => setReduceMotion(value))
-      .catch(() => {});
-  }, [setReduceMotion]);
+  const [activeTab, setActiveTab] = useState<'match' | 'moment'>('match');
 
   // Build fixture lookup map — must be before early return (hooks order)
   const fixturesById = React.useMemo(() => {
@@ -151,11 +174,7 @@ export default function MomentsScreen() {
   }, [sortedMomentPicks]);
 
   // Accumulate possible points from FixtureGroupSection catalog callbacks
-  // Reset when gameweekId changes to avoid stale data from previous gameweek
   const [fixtureTotals, setFixtureTotals] = useState<Map<number, number>>(new Map());
-  useEffect(() => {
-    setFixtureTotals(new Map());
-  }, [gameweekId]);
 
   const handleCatalogLoaded = useCallback((fixtureId: number, points: number) => {
     setFixtureTotals((prev) => {
@@ -173,11 +192,165 @@ export default function MomentsScreen() {
 
   const boldnessTier = deriveBoldnessTier(possiblePoints);
 
+  // Sort results for results phase display
+  const sortedResults = React.useMemo(() => {
+    const safeResults = results ?? [];
+    const matchPicks = safeResults
+      .filter((r) => r.predictionType === 'match')
+      .sort((a, b) => {
+        const fa = fixturesById.get(a.fixtureId);
+        const fb = fixturesById.get(b.fixtureId);
+        return (fa?.kickoffAt.getTime() ?? 0) - (fb?.kickoffAt.getTime() ?? 0);
+      });
+    const momentPicks = safeResults
+      .filter((r) => r.predictionType === 'moment')
+      .sort((a, b) => {
+        const fa = fixturesById.get(a.fixtureId);
+        const fb = fixturesById.get(b.fixtureId);
+        const fixtureDiff = (fa?.kickoffAt.getTime() ?? 0) - (fb?.kickoffAt.getTime() ?? 0);
+        if (fixtureDiff !== 0) return fixtureDiff;
+        return (a.predictedMinute ?? 999) - (b.predictedMinute ?? 999);
+      });
+    return [...matchPicks, ...momentPicks];
+  }, [results, fixturesById]);
+
+  // Phase detection
+  const isRevealPhase = phase === 'reveal';
+  const isResultsPhase = phase === 'locked' && gameweek?.scoringStatus === 'complete';
+
   // Phase null guard — after all hooks
   if (phase === null) {
     return <SafeAreaView style={{ flex: 1, backgroundColor: '#080808' }} />;
   }
 
+  // ── Reveal phase: full-screen RevealSequence ──────────────────────────────
+  if (isRevealPhase) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#080808' }} edges={['top']}>
+        <GameweekHeader
+          gameweekNumber={gameweek?.gameweekNumber ?? 0}
+          usedPicks={picks.length}
+          totalPicks={20}
+          phase={phase ?? 'building'}
+        />
+        {resultsLoading ? (
+          <View>
+            <SkeletonRow height={56} />
+            <SkeletonRow height={56} />
+            <SkeletonRow height={56} />
+          </View>
+        ) : (
+          <RevealSequence
+            results={results ?? []}
+            fixtures={fixtures}
+            leagues={leagues ?? []}
+            leaderboardEntries={[]}
+            onAllRevealed={() => {
+              if (userId && gameweekId) {
+                markRevealSeen.mutate({ userId, gameweekId });
+              }
+            }}
+          />
+        )}
+      </SafeAreaView>
+    );
+  }
+
+  // ── Results phase: static cards (return visit after reveal_seen=true) ────
+  if (isResultsPhase) {
+    const matchResults = sortedResults.filter((r) => r.predictionType === 'match');
+    const momentResults = sortedResults.filter((r) => r.predictionType === 'moment');
+
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#080808' }} edges={['top']}>
+        <GameweekHeader
+          gameweekNumber={gameweek?.gameweekNumber ?? 0}
+          usedPicks={picks.length}
+          totalPicks={20}
+          phase={phase ?? 'locked'}
+        />
+
+        {/* Tab strip */}
+        <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#1E1E1E' }}>
+          {(['match', 'moment'] as const).map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 10,
+                minHeight: 44,
+                borderBottomWidth: activeTab === tab ? 2 : 0,
+                borderBottomColor: activeTab === tab ? '#B4FF32' : 'transparent',
+                backgroundColor: activeTab === tab ? '#141414' : 'transparent',
+              }}
+              onPress={() => setActiveTab(tab)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: activeTab === tab }}
+            >
+              <Text style={{ ...Typography.label, color: activeTab === tab ? '#FFFFFF' : '#7A7A7A' }}>
+                {tab === 'match' ? 'Match' : 'Moment'}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <ScrollView style={{ flex: 1 }}>
+          {activeTab === 'match' &&
+            matchResults.map((result) => (
+              <RevealCard
+                key={result.id}
+                revealState={deriveResultRevealState(result)}
+                eventName={result.eventName}
+                eventType={result.eventType}
+                predictionType={result.predictionType}
+                pointsValue={result.totalPoints}
+                isCaptain={result.isCaptain}
+                firstView={false}
+                reduceMotion={false}
+                isStreakChained={result.streakBonus > 0}
+                streakBonusPoints={
+                  result.streakBonus > 0 ? (result.streakBonus as 10 | 20 | 30) : null
+                }
+              />
+            ))}
+
+          {activeTab === 'moment' &&
+            momentResults.map((result, idx) => (
+              <React.Fragment key={result.id}>
+                {/* Chain connector between consecutive correct moment picks */}
+                {showChainConnector(momentResults, idx) && (
+                  <View
+                    style={{
+                      width: 2,
+                      height: 12,
+                      backgroundColor: '#B4FF32',
+                      alignSelf: 'center',
+                      marginVertical: -2,
+                    }}
+                  />
+                )}
+                <RevealCard
+                  revealState={deriveResultRevealState(result)}
+                  eventName={result.eventName}
+                  eventType={result.eventType}
+                  predictionType={result.predictionType}
+                  pointsValue={result.totalPoints}
+                  isCaptain={result.isCaptain}
+                  firstView={false}
+                  reduceMotion={false}
+                  isStreakChained={result.streakBonus > 0}
+                  streakBonusPoints={
+                    result.streakBonus > 0 ? (result.streakBonus as 10 | 20 | 30) : null
+                  }
+                />
+              </React.Fragment>
+            ))}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  // ── Building / Locked phase ───────────────────────────────────────────────
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#080808' }} edges={['top']}>
       <GameweekHeader
