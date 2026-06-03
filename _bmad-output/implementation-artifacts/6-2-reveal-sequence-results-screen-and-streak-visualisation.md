@@ -1,6 +1,6 @@
 # Story 6.2: Reveal Sequence, Results Screen & Streak Visualisation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -617,10 +617,10 @@ GitHub Copilot (GPT-4.1)
 
 ### Review Findings
 
-- [ ] [Review][Decision] BoldnessHeroCard absent in isResultsPhase — `isResultsPhase` has its own early return that omits `BoldnessHeroCard`. In normal `locked` phase (before reveal) it shows when `lastMatchEnd` is set. After `reveal_seen=true` the user enters `isResultsPhase` (also `locked`) and the card silently disappears. Spec does not address this. Is this intentional (results view replaces boldness card) or a regression? Clarify before patching.
-- [ ] [Review][Patch] Running score counter not visible during reveal (AC2) [`apps/mobile/src/components/reveal/RevealSequence.tsx`]
-- [ ] [Review][Patch] `fixtureTotals` reset effect removed — regression in building/locked phases [`apps/mobile/app/(tabs)/moments.tsx`]
-- [ ] [Review][Patch] Streak break divider missing from isResultsPhase moment tab (AC3/FR34) [`apps/mobile/app/(tabs)/moments.tsx`]
+- [x] [Review][Decision] BoldnessHeroCard absent in isResultsPhase — confirmed intentional. Results view replaces boldness card; not a regression.
+- [x] [Review][Patch] Running score counter not visible during reveal (AC2) — fixed: persistent score header added above ScrollView in RevealSequence.tsx; visible throughout the reveal sequence, hidden on return visits (firstView=false). [`apps/mobile/src/components/reveal/RevealSequence.tsx`]
+- [x] [Review][Patch] `fixtureTotals` reset effect removed — fixed: `useEffect(() => setFixtureTotals(new Map()), [gameweekId])` restored in moments.tsx. [`apps/mobile/app/(tabs)/moments.tsx`]
+- [x] [Review][Patch] Streak break divider missing from isResultsPhase moment tab (AC3/FR34) — fixed: `showStreakBreak` helper added and wired in the isResultsPhase moment tab. [`apps/mobile/app/(tabs)/moments.tsx`]
 - [x] [Review][Defer] Unmounted setTimeout in handleRevealComplete (self-healing via resetReveal on mount) [`apps/mobile/src/components/reveal/RevealSequence.tsx:178`] — deferred, pre-existing
 - [x] [Review][Defer] Pre-existing TS errors in RevealCard.test.tsx (onRevealComplete property, Story 6.1) [`apps/mobile/src/components/reveal/RevealCard.test.tsx`] — deferred, pre-existing
 
