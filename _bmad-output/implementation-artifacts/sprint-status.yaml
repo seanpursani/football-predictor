@@ -35,11 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-30
-<<<<<<< Updated upstream
-  last_updated: 2026-06-03 # epic-6 in-progress; 6-1 done; 6-2 done
-=======
-  last_updated: 2026-06-09 # epic-6 in-progress; 6-1 done; 6-2 done (review complete)
->>>>>>> Stashed changes
+last_updated: 2026-06-09 # epic-6 done; retrospective complete
 project: football-prediction-app
 project_key: NOKEY
 tracking_system: file-system
@@ -90,10 +86,10 @@ development_status:
   epic-5-retrospective: done
 
   # Epic 6: Score Reveal & Results
-  epic-6: in-progress
+  epic-6: done
   6-1-revealcard-component-and-animation-states: done
   6-2-reveal-sequence-results-screen-and-streak-visualisation: done
-  epic-6-retrospective: optional
+  epic-6-retrospective: done
 
   # Epic 7: Leaderboards
   epic-7: backlog
