@@ -600,6 +600,7 @@ GitHub Copilot (GPT-4.1)
 - ✅ Task 5: `moments.tsx` updated. Removed stale `AccessibilityInfo.isReduceMotionEnabled()` useEffect (now owned by `_layout.tsx`). Added `useResultsQuery`, `useMarkRevealSeenMutation`, `useLeagueQuery` hooks unconditionally. `isRevealPhase` renders full-screen `RevealSequence`. `isResultsPhase` renders static `RevealCard`s (firstView=false) with streak chain connectors. Building/locked phases unchanged.
 - ✅ Task 6: `RevealSequence.test.tsx` created — 15 new tests (3 snapshots, 12 unit). All 211 tests pass (196 baseline + 15 new). 18 snapshots total.
 - ✅ Task 7: sprint-status.yaml updated to `review`.
+- ✅ Review patches applied: running score counter (AC2), fixtureTotals reset regression, streak break divider in isResultsPhase (AC3/FR34). Decision: BoldnessHeroCard absence in isResultsPhase is intentional. All 211 tests pass.
 - ✅ `useLeagueQuery` signature updated to accept `string | null`.
 
 ### File List
@@ -617,10 +618,17 @@ GitHub Copilot (GPT-4.1)
 
 ### Review Findings
 
+<<<<<<< Updated upstream
 - [x] [Review][Decision] BoldnessHeroCard absent in isResultsPhase — confirmed intentional. Results view replaces boldness card; not a regression.
 - [x] [Review][Patch] Running score counter not visible during reveal (AC2) — fixed: persistent score header added above ScrollView in RevealSequence.tsx; visible throughout the reveal sequence, hidden on return visits (firstView=false). [`apps/mobile/src/components/reveal/RevealSequence.tsx`]
 - [x] [Review][Patch] `fixtureTotals` reset effect removed — fixed: `useEffect(() => setFixtureTotals(new Map()), [gameweekId])` restored in moments.tsx. [`apps/mobile/app/(tabs)/moments.tsx`]
 - [x] [Review][Patch] Streak break divider missing from isResultsPhase moment tab (AC3/FR34) — fixed: `showStreakBreak` helper added and wired in the isResultsPhase moment tab. [`apps/mobile/app/(tabs)/moments.tsx`]
+=======
+- [x] [Review][Decision] BoldnessHeroCard absent in isResultsPhase — Decision: intentional. The results phase is a scored-results view; BoldnessHeroCard shows potential points (pre-reveal context) which is irrelevant after scoring is complete. Results view intentionally replaces it.
+- [x] [Review][Patch] Running score counter not visible during reveal (AC2) [`apps/mobile/src/components/reveal/RevealSequence.tsx`] — Fixed: added `runningScoreBar` displayed when `firstView && !reduceMotion && sequenceState === 'running'`, showing `displayScore` incrementing per card.
+- [x] [Review][Patch] `fixtureTotals` reset effect removed — regression in building/locked phases [`apps/mobile/app/(tabs)/moments.tsx`] — Fixed: added `useEffect(() => { setFixtureTotals(new Map()); }, [gameweekId])` to reset on gameweek change.
+- [x] [Review][Patch] Streak break divider missing from isResultsPhase moment tab (AC3/FR34) [`apps/mobile/app/(tabs)/moments.tsx`] — Fixed: added `showStreakBreak` helper and rendered `<View style={{ height: 1, backgroundColor: '#303030', marginHorizontal: 16 }} />` between moment picks where correctness changes.
+>>>>>>> Stashed changes
 - [x] [Review][Defer] Unmounted setTimeout in handleRevealComplete (self-healing via resetReveal on mount) [`apps/mobile/src/components/reveal/RevealSequence.tsx:178`] — deferred, pre-existing
 - [x] [Review][Defer] Pre-existing TS errors in RevealCard.test.tsx (onRevealComplete property, Story 6.1) [`apps/mobile/src/components/reveal/RevealCard.test.tsx`] — deferred, pre-existing
 

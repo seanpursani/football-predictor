@@ -190,6 +190,7 @@ export function RevealSequence({
   };
 
   return (
+<<<<<<< Updated upstream
     <View style={styles.wrapper} testID={testID}>
       {/* Running score counter — visible throughout the reveal, hidden on return visits */}
       {firstView && (
@@ -200,6 +201,16 @@ export function RevealSequence({
       )}
 
       <ScrollView style={styles.container}>
+=======
+    <ScrollView style={styles.container} testID={testID}>
+      {/* Running score counter — visible during first-view animated reveal (AC2) */}
+      {firstView && !reduceMotion && sequenceState === 'running' && (
+        <View style={styles.runningScoreBar}>
+          <Text style={styles.runningScoreLabel}>Score</Text>
+          <Text style={styles.runningScoreValue}>{displayScore}</Text>
+        </View>
+      )}
+>>>>>>> Stashed changes
       {sortedResults.map((result, idx) => (
         <React.Fragment key={result.id}>
           {/* Chain connector between consecutive correct moment picks */}
@@ -315,6 +326,21 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: COLOURS.divider,
     marginHorizontal: 16,
+  },
+  runningScoreBar: {
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  runningScoreLabel: {
+    fontSize: 12,
+    color: COLOURS.textMuted,
+    marginBottom: 2,
+  },
+  runningScoreValue: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: COLOURS.lime,
+    fontVariant: ['tabular-nums'],
   },
   summarySection: {
     padding: 24,

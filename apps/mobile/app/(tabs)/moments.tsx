@@ -93,7 +93,11 @@ function showChainConnector(results: ResultsRow[], index: number): boolean {
   );
 }
 
+<<<<<<< Updated upstream
 // Helper: faint divider where the streak breaks (correct → incorrect or vice versa)
+=======
+// Helper: divider where streak breaks between moment picks
+>>>>>>> Stashed changes
 function showStreakBreak(results: ResultsRow[], index: number): boolean {
   if (index === 0) return false;
   const prev = results[index - 1];
@@ -346,6 +350,7 @@ export default function MomentsScreen() {
                     }}
                   />
                 )}
+<<<<<<< Updated upstream
                 {/* Streak break divider where correct/incorrect transitions (AC3/FR34) */}
                 {showStreakBreak(momentResults, idx) && (
                   <View
@@ -355,6 +360,11 @@ export default function MomentsScreen() {
                       marginHorizontal: 16,
                     }}
                   />
+=======
+                {/* Streak break divider (AC3/FR34) */}
+                {showStreakBreak(momentResults, idx) && (
+                  <View style={{ height: 1, backgroundColor: '#303030', marginHorizontal: 16 }} />
+>>>>>>> Stashed changes
                 )}
                 <RevealCard
                   revealState={deriveResultRevealState(result)}

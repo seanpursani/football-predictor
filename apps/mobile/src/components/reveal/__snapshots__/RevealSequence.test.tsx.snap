@@ -553,6 +553,7 @@ exports[`RevealSequence snapshots renders initial state (firstView=true, card 0 
     }
   }
 >
+<<<<<<< Updated upstream
   <View
     style={
       {
@@ -560,6 +561,51 @@ exports[`RevealSequence snapshots renders initial state (firstView=true, card 0 
         "borderBottomColor": "#1E1E1E",
         "borderBottomWidth": 1,
         "paddingVertical": 16,
+=======
+  <View>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "paddingVertical": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#7A7A7A",
+            "fontSize": 12,
+            "marginBottom": 2,
+          }
+        }
+      >
+        Score
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#B4FF32",
+            "fontSize": 32,
+            "fontVariant": [
+              "tabular-nums",
+            ],
+            "fontWeight": "700",
+          }
+        }
+      >
+        0
+      </Text>
+    </View>
+    <View
+      accessibilityLabel="Goal, revealing, 100 points"
+      accessibilityRole="text"
+      collapsable={false}
+      jestAnimatedProps={
+        {
+          "value": {},
+        }
+>>>>>>> Stashed changes
       }
     }
     testID="running-score-header"
