@@ -177,9 +177,9 @@ describe('RevealSequence: score counter', () => {
       makeResult({ id: 1, totalPoints: 150 }),
       makeResult({ id: 2, totalPoints: 200 }),
     ];
-    const { getByText } = renderSequence({ results });
-    // Summary section should show final score
-    expect(getByText('350')).toBeTruthy();
+    const { getAllByText } = renderSequence({ results });
+    // Both the running score header and the summary section show the final score
+    expect(getAllByText('350').length).toBeGreaterThanOrEqual(1);
   });
 });
 

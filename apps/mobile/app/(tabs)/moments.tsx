@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -93,6 +93,22 @@ function showChainConnector(results: ResultsRow[], index: number): boolean {
   );
 }
 
+<<<<<<< Updated upstream
+// Helper: faint divider where the streak breaks (correct → incorrect or vice versa)
+=======
+// Helper: divider where streak breaks between moment picks
+>>>>>>> Stashed changes
+function showStreakBreak(results: ResultsRow[], index: number): boolean {
+  if (index === 0) return false;
+  const prev = results[index - 1];
+  const curr = results[index];
+  return (
+    prev.predictionType === 'moment' &&
+    curr.predictionType === 'moment' &&
+    prev.isCorrect !== curr.isCorrect
+  );
+}
+
 export default function MomentsScreen() {
   const insets = useSafeAreaInsets();
   const { session } = useAuthState();
@@ -183,6 +199,11 @@ export default function MomentsScreen() {
       return next;
     });
   }, []);
+
+  // Reset accumulated fixture totals when the active gameweek changes
+  useEffect(() => {
+    setFixtureTotals(new Map());
+  }, [gameweekId]);
 
   const possiblePoints = React.useMemo(() => {
     let total = 0;
@@ -328,6 +349,22 @@ export default function MomentsScreen() {
                       marginVertical: -2,
                     }}
                   />
+                )}
+<<<<<<< Updated upstream
+                {/* Streak break divider where correct/incorrect transitions (AC3/FR34) */}
+                {showStreakBreak(momentResults, idx) && (
+                  <View
+                    style={{
+                      height: 1,
+                      backgroundColor: '#303030',
+                      marginHorizontal: 16,
+                    }}
+                  />
+=======
+                {/* Streak break divider (AC3/FR34) */}
+                {showStreakBreak(momentResults, idx) && (
+                  <View style={{ height: 1, backgroundColor: '#303030', marginHorizontal: 16 }} />
+>>>>>>> Stashed changes
                 )}
                 <RevealCard
                   revealState={deriveResultRevealState(result)}

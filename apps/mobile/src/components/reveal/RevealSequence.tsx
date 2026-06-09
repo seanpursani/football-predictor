@@ -190,7 +190,27 @@ export function RevealSequence({
   };
 
   return (
+<<<<<<< Updated upstream
+    <View style={styles.wrapper} testID={testID}>
+      {/* Running score counter — visible throughout the reveal, hidden on return visits */}
+      {firstView && (
+        <View style={styles.scoreHeader} testID="running-score-header">
+          <Text style={styles.scoreHeaderLabel}>Score</Text>
+          <Text style={styles.scoreHeaderValue} testID="running-score">{displayScore}</Text>
+        </View>
+      )}
+
+      <ScrollView style={styles.container}>
+=======
     <ScrollView style={styles.container} testID={testID}>
+      {/* Running score counter — visible during first-view animated reveal (AC2) */}
+      {firstView && !reduceMotion && sequenceState === 'running' && (
+        <View style={styles.runningScoreBar}>
+          <Text style={styles.runningScoreLabel}>Score</Text>
+          <Text style={styles.runningScoreValue}>{displayScore}</Text>
+        </View>
+      )}
+>>>>>>> Stashed changes
       {sortedResults.map((result, idx) => (
         <React.Fragment key={result.id}>
           {/* Chain connector between consecutive correct moment picks */}
@@ -227,7 +247,6 @@ export function RevealSequence({
       {/* Post-reveal summary */}
       {sequenceState === 'complete' && (
         <View style={styles.summarySection}>
-          {/* Running / final score */}
           <Text style={styles.finalScoreLabel}>Gameweek Score</Text>
           <Text style={styles.finalScoreValue}>{displayScore}</Text>
 
@@ -261,13 +280,37 @@ export function RevealSequence({
           )}
         </View>
       )}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: COLOURS.bg,
+  },
+  scoreHeader: {
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLOURS.borderSubtle,
+  },
+  scoreHeaderLabel: {
+    fontSize: 12,
+    color: COLOURS.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 2,
+  },
+  scoreHeaderValue: {
+    fontSize: 36,
+    fontWeight: '700',
+    color: COLOURS.lime,
+    fontVariant: ['tabular-nums'],
+  },
   container: {
     flex: 1,
     backgroundColor: COLOURS.bg,
@@ -283,6 +326,21 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: COLOURS.divider,
     marginHorizontal: 16,
+  },
+  runningScoreBar: {
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  runningScoreLabel: {
+    fontSize: 12,
+    color: COLOURS.textMuted,
+    marginBottom: 2,
+  },
+  runningScoreValue: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: COLOURS.lime,
+    fontVariant: ['tabular-nums'],
   },
   summarySection: {
     padding: 24,
